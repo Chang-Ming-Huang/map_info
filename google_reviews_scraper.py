@@ -588,6 +588,10 @@ class GoogleReviewsScraper:
         # 等待頁面載入
         time.sleep(3)
         
+        # 前置作業：先滾動左側區塊20次
+        print("前置作業：開始滾動左側區塊20次")
+        self.pre_scroll_left_panel()
+        
         # 步驟0：點擊「更多評論」按鈕展開所有評論
         print("步驟0：嘗試點擊「更多評論」按鈕展開所有評論")
         self.click_show_more_reviews_button()
@@ -646,6 +650,152 @@ class GoogleReviewsScraper:
         print(f"\n爬取完成！共獲得 {len(downloaded_reviews)} 則評論")
         return downloaded_reviews[:target_reviews]  # 確保不超過目標數量
     
+    def pre_scroll_left_panel(self):
+        """前置作業：滾動左側區塊30次，每次滾動後檢查並點擊「更多評論」按鈕"""
+        try:
+            print("正在執行前置滾動作業...")
+            
+            # 找到可滾動的左側面板元素
+            scrollable_selectors = [
+                "div[role='main']",                    # Google Maps 主要內容區域
+                ".m6QErb .DxyBCb",                    # 評論列表容器
+                ".section-scrollbox",                  # 捲動區塊
+                ".siAUzd",                            # 側邊欄內容
+                ".m6QErb",                            # 整個左側面板
+                "div[data-value='Sort']",             # 包含評論的區域
+                ".TFQHme",                            # 另一個可能的容器
+                "div.m6QErb.DxyBCb.kA9KIf.dS8AEf"     # 具體的評論容器
+            ]
+            
+            scrollable_element = None
+            for selector in scrollable_selectors:
+                try:
+                    elements = self.driver.find_elements(By.CSS_SELECTOR, selector)
+                    if elements:
+                        elem = elements[0]
+                        scroll_height = self.driver.execute_script("return arguments[0].scrollHeight", elem)
+                        client_height = self.driver.execute_script("return arguments[0].clientHeight", elem)
+                        
+                        if scroll_height > client_height:
+                            scrollable_element = elem
+                            print(f"找到可滾動的左側面板: {selector}")
+                            break
+                except Exception as e:
+                    continue
+            
+            if not scrollable_element:
+                print("⚠️  未找到可滾動的左側面板，使用整個頁面")
+                scrollable_element = self.driver.find_element(By.TAG_NAME, "body")
+            
+            # 執行30次滾動，每次滾動後檢查「更多評論」按鈕
+            scroll_distance = 300  # 每次滾動距離
+            more_button_clicks = 0  # 記錄點擊「更多評論」按鈕的次數
+            
+            for i in range(30):
+                try:
+                    print(f"前置滾動 {i+1}/30")
+                    
+                    # 記錄滾動前位置
+                    old_scroll_top = self.driver.execute_script("return arguments[0].scrollTop", scrollable_element)
+                    
+                    # 執行滾動
+                    self.driver.execute_script(f"arguments[0].scrollTop += {scroll_distance}", scrollable_element)
+                    
+                    # 等待內容載入
+                    time.sleep(random.uniform(0.5, 1.0))
+                    
+                    # 檢查滾動是否成功
+                    new_scroll_top = self.driver.execute_script("return arguments[0].scrollTop", scrollable_element)
+                    
+                    if new_scroll_top != old_scroll_top:
+                        print(f"✅ 滾動成功: {old_scroll_top} -> {new_scroll_top}")
+                    else:
+                        print(f"⚠️  滾動位置未改變，可能已到底部")
+                    
+                    # 每次滾動後檢查是否有「更多評論」按鈕
+                    print(f"  檢查是否有「更多評論」按鈕...")
+                    button_found = self.check_and_click_more_reviews_button()
+                    if button_found:
+                        more_button_clicks += 1
+                        print(f"  ✅ 找到並點擊「更多評論」按鈕 (第{more_button_clicks}次)")
+                    else:
+                        print(f"  ❌ 未找到「更多評論」按鈕")
+                        
+                except Exception as e:
+                    print(f"前置滾動第 {i+1} 次時發生錯誤: {e}")
+                    continue
+            
+            print(f"✅ 前置滾動作業完成，已滾動30次，點擊「更多評論」按鈕{more_button_clicks}次")
+            
+            # 等待頁面穩定
+            time.sleep(2)
+            
+        except Exception as e:
+            print(f"前置滾動作業發生錯誤: {e}")
+            print("繼續執行後續步驟...")
+    
+    def check_and_click_more_reviews_button(self):
+        """檢查並點擊「更多評論」按鈕，返回是否找到並點擊成功"""
+        try:
+            # 「更多評論」按鈕的選擇器
+            more_reviews_selectors = [
+                "button[aria-label*='更多評論']",                      # 主要選擇器
+                "button[aria-label*='More reviews']",                 # 英文版本
+                ".m6QErb .j3fM2b button[aria-label*='更多']",         # 更具體的路徑
+                ".m6QErb .j3fM2b button.M77dve",                     # 使用class
+                "button.M77dve[aria-label*='更多評論']",               # 組合選擇器
+                "button[jsaction*='pane.wfvdle67']",                 # 使用jsaction
+            ]
+            
+            for selector in more_reviews_selectors:
+                try:
+                    buttons = self.driver.find_elements(By.CSS_SELECTOR, selector)
+                    
+                    if buttons:
+                        button = buttons[0]
+                        
+                        # 檢查按鈕是否可見和可點擊
+                        if button.is_displayed() and button.is_enabled():
+                            # 滾動到按鈕位置
+                            self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", button)
+                            time.sleep(0.5)
+                            
+                            # 點擊按鈕
+                            button.click()
+                            
+                            # 等待頁面載入更多評論
+                            time.sleep(1.5)
+                            return True
+                    
+                except Exception as e:
+                    continue
+            
+            # 備用方案：使用XPath尋找包含「更多評論」文字的按鈕
+            try:
+                xpath_selectors = [
+                    "//span[@class='wNNZR' and contains(text(), '更多評論')]/../..",
+                    "//button[contains(@aria-label, '更多評論')]",
+                    "//button[contains(text(), '更多評論')]"
+                ]
+                
+                for xpath in xpath_selectors:
+                    buttons = self.driver.find_elements(By.XPATH, xpath)
+                    if buttons:
+                        button = buttons[0]
+                        if button.is_displayed() and button.is_enabled():
+                            self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", button)
+                            time.sleep(0.5)
+                            button.click()
+                            time.sleep(1.5)
+                            return True
+            except:
+                pass
+            
+            return False
+            
+        except Exception as e:
+            return False
+
     def click_show_more_reviews_button(self):
         """點擊「更多評論」按鈕展開所有評論"""
         try:
