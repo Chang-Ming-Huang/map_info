@@ -10,6 +10,7 @@ from enum import Enum
 import time
 import json
 import pandas as pd
+import re
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -26,8 +27,8 @@ from image_handler import ReviewImageHandler
 
 class UserConfig(Enum):
     """用戶層配置 - 簡單直觀"""
-    WANTED_REVIEWS = 10       # 期望的評論數量
-    ENABLE_IMAGES = True      # 是否下載圖片
+    WANTED_REVIEWS = 30      # 期望的評論數量
+    ENABLE_IMAGES = False      # 是否下載圖片
 
 class ScrapingConfig(Enum):
     """技術層設定參數"""
@@ -37,8 +38,85 @@ class ScrapingConfig(Enum):
     SCROLL_DELAY = (1, 2)     # 滾動延遲秒數範圍 (min, max)
     SCROLL_DISTANCE = 300     # 每次滾動距離 (像素)
 
+class ScrapingMode:
+    """爬取模式配置"""
+    def __init__(self):
+        self.mode = 0  # 預設模式
+        self.filter_keyword = ""  # 過濾關鍵字
+        
+    def select_mode(self):
+        """互動式選擇爬取模式"""
+        print("\n" + "="*50)
+        print("🚀 Google Maps 評論爬蟲 - 模式選擇")
+        print("="*50)
+        print("可用模式：")
+        print("  0 - 預設模式（按照設定抓取指定數量的評論）")
+        print("  1 - 關鍵字過濾模式（只抓取包含特定字串的評論）")
+        print("-"*50)
+        
+        while True:
+            try:
+                user_input = input("請選擇模式 (0 或 1，直接按 Enter 使用預設模式): ").strip()
+                
+                if user_input == "" or user_input == "0":
+                    self.mode = 0
+                    print(f"✅ 已選擇預設模式，將抓取 {UserConfig.WANTED_REVIEWS.value} 則評論")
+                    break
+                elif user_input == "1":
+                    self.mode = 1
+                    self._setup_keyword_filter()
+                    break
+                else:
+                    print("❌ 無效輸入，請輸入 0 或 1")
+            except KeyboardInterrupt:
+                print("\n程式已取消")
+                exit(0)
+        
+        print("="*50)
+        return self.mode
+    
+    def _setup_keyword_filter(self):
+        """設定關鍵字過濾"""
+        print("\n📝 關鍵字過濾模式設定")
+        print("-"*30)
+        
+        while True:
+            keyword = input("請輸入要搜尋的關鍵字（評論內容必須包含此字串）: ").strip()
+            if keyword:
+                self.filter_keyword = keyword
+                print(f"✅ 已設定關鍵字過濾：'{keyword}'")
+                print("📌 注意：中文將進行精確比對，英文將忽略大小寫")
+                break
+            else:
+                print("❌ 關鍵字不能為空，請重新輸入")
+    
+    def should_include_review(self, review_text):
+        """判斷評論是否符合過濾條件"""
+        if self.mode == 0:
+            return True  # 預設模式：包含所有評論
+        
+        if self.mode == 1:
+            return self._match_keyword(review_text, self.filter_keyword)
+        
+        return True
+    
+    def _match_keyword(self, text, keyword):
+        """字串比對功能"""
+        if not text or not keyword:
+            return False
+        
+        # 檢查是否包含中文字符
+        has_chinese = bool(re.search(r'[\u4e00-\u9fff]', keyword))
+        
+        if has_chinese:
+            # 中文：精確比對
+            return keyword in text
+        else:
+            # 英文：忽略大小寫比對
+            return keyword.lower() in text.lower()
+
 class GoogleReviewsScraper:
-    def __init__(self, headless=None, download_images=None):
+    def __init__(self, headless=None, download_images=None, scraping_mode=None):
         """初始化爬蟲"""
         self.headless = headless if headless is not None else ScrapingConfig.HEADLESS_MODE.value
         self.download_images = download_images if download_images is not None else UserConfig.ENABLE_IMAGES.value
@@ -47,6 +125,7 @@ class GoogleReviewsScraper:
         self.image_handler = None
         self.processed_reviews = set()  # 用於去重的集合
         self.downloaded_images = {}  # URL -> 檔案路徑的映射，用於圖片去重
+        self.scraping_mode = scraping_mode if scraping_mode is not None else ScrapingMode()  # 爬取模式
         
     def setup_driver(self):
         """設定 Chrome WebDriver"""
@@ -979,9 +1058,14 @@ class GoogleReviewsScraper:
                 # 提取評論資料
                 review_data = self.extract_single_review_data(review_element, len(new_reviews) + 1)
                 if review_data:
-                    processed_review_ids.add(review_id)
-                    new_reviews.append(review_data)
-                    print(f"✅ 已處理第 {len(new_reviews)} 則新評論: {review_data['reviewer_name']}")
+                    # 檢查是否符合過濾條件
+                    if self.scraping_mode.should_include_review(review_data['review_text']):
+                        processed_review_ids.add(review_id)
+                        new_reviews.append(review_data)
+                        print(f"✅ 已處理第 {len(new_reviews)} 則新評論: {review_data['reviewer_name']}")
+                    else:
+                        processed_review_ids.add(review_id)  # 標記為已處理但不加入結果
+                        print(f"⏭️  評論不符合過濾條件，跳過: {review_data['reviewer_name']}")
                 
             except Exception as e:
                 print(f"處理評論 {i+1} 時發生錯誤: {e}")
@@ -1212,11 +1296,19 @@ def main():
     # 築宜系統傢俱-桃園店的 Google Maps URL
     url = "https://www.google.com/maps/place/%E7%AF%89%E5%AE%9C%E7%B3%BB%E7%B5%B1%E5%82%A2%E4%BF%B1-%E6%A1%83%E5%9C%92%E5%BA%97/@24.9948316,121.2836128,3a,75y,90t/data=!3m8!1e2!3m6!1sCIHM0ogKEICAgMDI_JbaNw!2e10!3e12!6shttps:%2F%2Flh3.googleusercontent.com%2Fgeougc-cs%2FAB3l90BQ0Z3Ft45dwrZpZ3dAesq9EZc92j1JF1ZzwDmybfFROE6vD1Xva0dZiFykQOuB_p46fUs8_g5LWTN_7q90gQPktgMXn3038OwdnbxfL6oxG7jLtM6LxBJViBJPhsUdjZhLhe2z!7i1477!8i1108!4m8!3m7!1s0x34681f295669592d:0xd8650cf553030107!8m2!3d24.9948316!4d121.2836128!9m1!1b1!16s%2Fg%2F11rb4r3796?entry=ttu&g_ep=EgoyMDI1MDkwOS4wIKXMDSoASAFQAw%3D%3D"
     
-    # 創建爬蟲實例（使用 ENUM 預設值）
-    scraper = GoogleReviewsScraper()  # 使用 ScrapingConfig 中的預設值
+    # 創建並設定爬取模式
+    scraping_mode = ScrapingMode()
+    selected_mode = scraping_mode.select_mode()
     
-    print(f"開始爬取築宜系統傢俱-桃園店的 Google Maps 評論")
-    print(f"目標設定: 期望 {UserConfig.WANTED_REVIEWS.value} 則評論, 下載圖片={UserConfig.ENABLE_IMAGES.value}")
+    # 創建爬蟲實例（使用 ENUM 預設值和選定的模式）
+    scraper = GoogleReviewsScraper(scraping_mode=scraping_mode)
+    
+    print(f"\n開始爬取築宜系統傢俱-桃園店的 Google Maps 評論")
+    if selected_mode == 0:
+        print(f"🎯 模式: 預設模式 - 期望 {UserConfig.WANTED_REVIEWS.value} 則評論")
+    else:
+        print(f"🎯 模式: 關鍵字過濾模式 - 搜尋包含 '{scraping_mode.filter_keyword}' 的評論")
+    print(f"📷 下載圖片: {UserConfig.ENABLE_IMAGES.value}")
     
     # 記錄開始時間
     start_time = datetime.now()
