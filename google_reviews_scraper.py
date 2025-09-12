@@ -27,8 +27,8 @@ from image_handler import ReviewImageHandler
 
 class UserConfig(Enum):
     """用戶層配置 - 簡單直觀"""
-    WANTED_REVIEWS = 30      # 期望的評論數量
-    ENABLE_IMAGES = False      # 是否下載圖片
+    WANTED_REVIEWS = 10      # 期望的評論數量
+    ENABLE_IMAGES = True      # 是否下載圖片
 
 class ScrapingConfig(Enum):
     """技術層設定參數"""
@@ -127,6 +127,7 @@ class GoogleReviewsScraper:
         self.downloaded_images = {}  # URL -> 檔案路徑的映射，用於圖片去重
         self.scraping_mode = scraping_mode if scraping_mode is not None else ScrapingMode()  # 爬取模式
         self.timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')  # 統一的時間戳記
+        self.global_review_counter = 0  # 全域評論計數器
         
     def setup_driver(self):
         """設定 Chrome WebDriver"""
@@ -1041,6 +1042,7 @@ class GoogleReviewsScraper:
     def process_new_reviews(self, review_elements, processed_review_ids, remaining_target):
         """處理頁面上尚未下載的新評論"""
         new_reviews = []
+        processed_count = 0  # 記錄已處理的評論總數（包含過濾掉的）
         
         for i, review_element in enumerate(review_elements):
             if len(new_reviews) >= remaining_target:
@@ -1053,20 +1055,32 @@ class GoogleReviewsScraper:
                 if review_id in processed_review_ids:
                     continue  # 跳過已處理的評論
                 
+                processed_count += 1  # 增加處理計數
+                
                 # 展開評論（如果需要）
                 self.expand_review_if_needed(review_element)
                 
-                # 提取評論資料
-                review_data = self.extract_single_review_data(review_element, len(new_reviews) + 1)
+                # 使用全域計數器作為序號
+                self.global_review_counter += 1
+                current_review_number = self.global_review_counter
+                
+                # 先提取評論資料（不下載圖片）
+                review_data = self.extract_single_review_data(review_element, current_review_number, should_download_images=False)
                 if review_data:
                     # 檢查是否符合過濾條件
                     if self.scraping_mode.should_include_review(review_data['review_text']):
+                        # 符合條件才下載圖片
+                        if UserConfig.ENABLE_IMAGES.value:
+                            review_data_with_images = self.extract_single_review_data(review_element, current_review_number, should_download_images=True)
+                            if review_data_with_images:
+                                review_data = review_data_with_images  # 更新為包含圖片的版本
+                        
                         processed_review_ids.add(review_id)
                         new_reviews.append(review_data)
-                        print(f"✅ 已處理第 {len(new_reviews)} 則新評論: {review_data['reviewer_name']}")
+                        print(f"✅ 已處理第 {len(new_reviews)} 則新評論: {review_data['reviewer_name']} (序號: {current_review_number})")
                     else:
                         processed_review_ids.add(review_id)  # 標記為已處理但不加入結果
-                        print(f"⏭️  評論不符合過濾條件，跳過: {review_data['reviewer_name']}")
+                        print(f"⏭️  評論不符合過濾條件，跳過: {review_data['reviewer_name']} (序號: {current_review_number})")
                 
             except Exception as e:
                 print(f"處理評論 {i+1} 時發生錯誤: {e}")
@@ -1114,8 +1128,8 @@ class GoogleReviewsScraper:
         except:
             pass  # 如果展開失敗也不影響整體流程
     
-    def extract_single_review_data(self, review_element, review_sequence):
-        """從單個評論元素中提取數據並下載圖片"""
+    def extract_single_review_data(self, review_element, review_sequence, should_download_images=False):
+        """從單個評論元素中提取數據，只有符合條件時才下載圖片"""
         try:
             # 提取基本評論資訊
             reviewer_name = self.extract_reviewer_name(review_element)
@@ -1126,13 +1140,13 @@ class GoogleReviewsScraper:
             review_text = self.extract_review_text(review_element)
             review_date = self.extract_review_date(review_element)
             
-            # 處理圖片
+            # 處理圖片（只有符合條件時才下載）
             image_files = []
             total_images = 0
             images_downloaded = False
             image_directory = ""
             
-            if UserConfig.ENABLE_IMAGES.value:
+            if UserConfig.ENABLE_IMAGES.value and should_download_images:
                 image_directory = f"images/{self.timestamp}"
                 
                 # 提取圖片URL並下載
