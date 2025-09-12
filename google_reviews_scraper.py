@@ -105,14 +105,14 @@ class ScrapingMode:
         if not text or not keyword:
             return False
         
-        # 檢查是否包含中文字符
-        has_chinese = bool(re.search(r'[\u4e00-\u9fff]', keyword))
+        # 檢查關鍵字是否包含中文字符
+        has_chinese_in_keyword = bool(re.search(r'[\u4e00-\u9fff]', keyword))
         
-        if has_chinese:
-            # 中文：精確比對
+        if has_chinese_in_keyword:
+            # 關鍵字包含中文：精確比對
             return keyword in text
         else:
-            # 英文：忽略大小寫比對
+            # 關鍵字為英文：忽略大小寫比對
             return keyword.lower() in text.lower()
 
 class GoogleReviewsScraper:
@@ -126,6 +126,7 @@ class GoogleReviewsScraper:
         self.processed_reviews = set()  # 用於去重的集合
         self.downloaded_images = {}  # URL -> 檔案路徑的映射，用於圖片去重
         self.scraping_mode = scraping_mode if scraping_mode is not None else ScrapingMode()  # 爬取模式
+        self.timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')  # 統一的時間戳記
         
     def setup_driver(self):
         """設定 Chrome WebDriver"""
@@ -1132,8 +1133,7 @@ class GoogleReviewsScraper:
             image_directory = ""
             
             if UserConfig.ENABLE_IMAGES.value:
-                business_name = "築宜系統傢俱_桃園店"  # 固定店名
-                image_directory = f"images/{business_name}_{datetime.now().strftime('%Y%m%d')}"
+                image_directory = f"images/{self.timestamp}"
                 
                 # 提取圖片URL並下載
                 image_handler = ReviewImageHandler(self.driver)
@@ -1151,7 +1151,11 @@ class GoogleReviewsScraper:
                     images_downloaded = True
             
             # 組裝評論資料
-            review_data = {
+            return {
+                'business_name': '築宜系統傢俱',
+                'location': '桃園店',
+                'search_keyword': self.scraping_mode.filter_keyword if self.scraping_mode.mode == 1 else '',
+                'scraping_mode': self.scraping_mode.mode,
                 'reviewer_name': reviewer_name,
                 'rating': rating,
                 'review_text': review_text,
@@ -1351,8 +1355,7 @@ def main():
             print(f"內容: {review['review_text'][:100]}...")
         
         # 保存JSON結果
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        json_filename = f"築宜系統傢俱_桃園店_評論_{timestamp}.json"
+        json_filename = f"{scraper.timestamp}.json"
         
         print(f"\n正在保存結果到: {json_filename}")
         scraper.save_to_json(reviews, json_filename)
