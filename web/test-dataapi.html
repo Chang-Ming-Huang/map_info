@@ -73,10 +73,7 @@
         }
         
         .review-image img {
-            max-width: 200px;
-            height: auto;
-            border-radius: 6px;
-            margin-top: 10px;
+            cursor: pointer;
         }
         
         .log {
@@ -149,8 +146,18 @@
 
     <script src="shared/dataAPI.js"></script>
     <script src="shared/utils.js"></script>
+
+    <!-- Lightbox -->
+    <div id="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:2000; justify-content:center; align-items:center; cursor:pointer;">
+      <span id="lightbox-close" style="position:absolute; top:20px; right:40px; font-size:40px; color:white; cursor:pointer; transition:0.3s;">&times;</span>
+      <img id="lightbox-img" style="max-width:90%; max-height:80%; object-fit:contain; border-radius:8px;">
+    </div>
+
     <script>
         let logContent = '';
+        let allTestReviews = [];
+        let numTestReviewsToShow = 3;
+        const REVIEWS_PER_PAGE = 5;
         
         function log(message, type = 'info') {
             const timestamp = new Date().toLocaleTimeString();
@@ -158,7 +165,6 @@
             logContent += `[${timestamp}] ${prefix} ${message}\n`;
             document.getElementById('log').textContent = logContent;
             
-            // 滾動到底部
             const logElement = document.getElementById('log');
             logElement.scrollTop = logElement.scrollHeight;
         }
@@ -171,6 +177,7 @@
         
         function clearLog() {
             logContent = '';
+            allTestReviews = [];
             document.getElementById('log').textContent = '記錄已清除...';
             document.getElementById('statsContainer').innerHTML = '';
             document.getElementById('reviewsContainer').innerHTML = '';
@@ -184,28 +191,24 @@
                 const dataAPI = new DataAPI();
                 log('DataAPI 實例創建成功');
                 
-                // 測試獲取可用檔案列表
                 const availableFiles = dataAPI.getAvailableJsonFiles();
                 log(`找到 ${availableFiles.length} 個可能的 JSON 檔案: ${availableFiles.join(', ')}`);
                 
-                // 測試找到最新檔案
                 const latestFile = dataAPI.findLatestJsonFile(availableFiles);
                 log(`最新檔案: ${latestFile}`);
                 
-                // 測試載入評論
                 log('開始載入評論數據...');
                 const reviews = await dataAPI.loadLatestReviews();
                 log(`載入了 ${reviews.length} 則評論`, 'success');
                 
-                // 測試統計資訊
                 const stats = dataAPI.getReviewStats();
                 log(`統計: 總評論 ${stats.totalReviews}, 平均評分 ${stats.averageRating}, 總圖片 ${stats.totalImages}`);
                 
-                // 顯示統計
                 displayStats(stats);
                 
-                // 顯示評論樣本
-                displayReviewSamples(reviews.slice(0, 3));
+                allTestReviews = reviews;
+                numTestReviewsToShow = 3;
+                displayReviewSamples();
                 
                 setStatus('DataAPI 測試完成！', 'success');
                 log('DataAPI 測試完成', 'success');
@@ -224,11 +227,10 @@
                 const reviewManager = new ReviewManager();
                 log('ReviewManager 實例創建成功');
                 
-                const reviews = await reviewManager.loadReviews();
-                log(`ReviewManager 載入了 ${reviews.length} 則評論`, 'success');
+                await reviewManager.loadReviews();
+                log(`ReviewManager 載入了 ${reviewManager.reviews.length} 則評論`, 'success');
                 
-                // 測試顯示功能
-                reviewManager.displayReviews(reviews, 'reviewsContainer');
+                reviewManager.displayReviews('reviewsContainer');
                 log('評論顯示測試完成');
                 
                 setStatus('ReviewManager 測試完成！', 'success');
@@ -261,32 +263,44 @@
                 </div>
             `;
         }
+
+        function showMoreTestReviews() {
+            numTestReviewsToShow += REVIEWS_PER_PAGE;
+            displayReviewSamples();
+        }
         
-        function displayReviewSamples(reviews) {
+        function displayReviewSamples() {
             const container = document.getElementById('reviewsContainer');
+            const reviews = allTestReviews;
             
             if (!reviews || reviews.length === 0) {
                 container.innerHTML = '<p>沒有評論樣本</p>';
                 return;
             }
+
+            const reviewsToDisplay = reviews.slice(0, numTestReviewsToShow);
             
-            const reviewsHTML = reviews.map((review, index) => {
+            const reviewsHTML = reviewsToDisplay.map((review, index) => {
                 const stars = '★'.repeat(review.rating || 5);
                 
                 let imageHtml = '';
                 if (review.images && review.images.length > 0) {
+                    const imagesToShow = review.images.slice(0, 3);
+                    const imageElements = imagesToShow.map(imgSrc => `
+                        <img src="${imgSrc}" alt="評論圖片" style="max-width: 32%; height: auto; border-radius: 8px; display: inline-block;" 
+                             onerror="this.style.display='none';">
+                    `).join('');
+
                     imageHtml = `
-                        <div class="review-image">
-                            <strong>圖片路徑:</strong> ${review.images[0]}
-                            <br><img src="${review.images[0]}" alt="評論圖片" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                            <div style="display:none; color: #dc3545; margin-top: 5px;">❌ 圖片載入失敗</div>
-                            ${review.images.length > 1 ? `<p><strong>更多圖片:</strong> ${review.images.slice(1).join(', ')}</p>` : ''}
+                        <div class="review-image" style="margin-top: 15px; display: flex; gap: 2%; flex-wrap: wrap;">
+                            ${imageElements}
                         </div>
+                        ${review.images.length > 3 ? `<p><strong>更多圖片:</strong> +${review.images.length - 3} 張</p>` : ''}
                     `;
                 }
                 
                 return `
-                    <div class="review-card">
+                    <div class="review-card" data-review-id="sample-${index}">
                         <h3>樣本 ${index + 1}</h3>
                         <div class="review-stars">${stars}</div>
                         <p class="review-text">${review.review_text || review.text || '無評論內容'}</p>
@@ -300,8 +314,16 @@
                     </div>
                 `;
             }).join('');
+
+            let showMoreButtonHTML = '';
+            if (numTestReviewsToShow < reviews.length) {
+                showMoreButtonHTML = `<br><div style="text-align: center;"><button class="btn" onclick="showMoreTestReviews()">顯示更多評論</button></div>`;
+            }
             
-            container.innerHTML = reviewsHTML;
+            container.innerHTML = reviewsHTML + showMoreButtonHTML;
+
+            // 對新加入的評論文字進行截斷處理
+            setupReviewTruncation(container);
         }
         
         // 頁面載入完成後自動運行基本測試

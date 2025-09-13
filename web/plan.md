@@ -67,12 +67,13 @@
 ## 技術規格
 
 ### 前端框架
-- **HTML5** + **Tailwind CSS**
+- **HTML5**
 - **Vanilla JavaScript** (輕量化)
+- **CSS** (內聯或嵌入樣式)
 - **響應式設計** (mobile-first)
 
 ### 資料整合
-- 讀取JSON評論檔案
+- 動態讀取最新的 JSON 評論檔案
 - 動態載入圖片資源
 - 圖片懶加載優化
 
@@ -85,46 +86,57 @@
 ```
 web/
 ├── plan.md
-├── style-a/
-│   ├── index.html
-│   ├── style.css
-│   └── script.js
-├── style-b/
-│   ├── index.html
-│   ├── style.css
-│   └── script.js
-├── style-c/
-│   ├── index.html
-│   ├── style.css
-│   └── script.js
+├── README-服務器使用說明.md
+├── start-server.bat
+├── start-server.py
+├── test-dataapi.html
 ├── assets/
-│   ├── data/
-│   └── images/
-└── shared/
-    └── utils.js
+│   └── profile.jpg
+├── shared/
+│   ├── dataAPI.js
+│   └── utils.js
+├── style-bauhaus/
+│   └── ...
+├── style-brutalist/
+│   └── ...
+├── style-creative/
+│   └── ...
+├── style-dark-blue/
+│   └── ...
+├── style-ethereal/
+│   └── ...
+├── style-fintech/
+│   └── ...
+├── style-golden/
+│   └── ...
+├── style-industrial/
+│   └── ...
+├── style-volcanic/
+│   └── ...
+└── style-warm/
+    └── ...
 ```
 
 ## 開發階段
 
 ### Phase 1: 基礎架構
 - [x] 建立專案結構
-- [ ] 設定Tailwind CSS
-- [ ] 建立共用工具函數
+- [x] 建立共用工具函數 (`shared/utils.js`, `shared/dataAPI.js`)
+- [x] 建立本地測試伺服器 (`start-server.py`)
 
-### Phase 2: 三個風格原型
-- [ ] 方案A: 極簡商務風
-- [ ] 方案B: 溫暖專業風  
-- [ ] 方案C: 現代科技風
+### Phase 2: 多風格原型開發
+- [x] 實作多種風格頁面 (e.g., `style-bauhaus`, `style-brutalist`, etc.)
+- [x] 整合評論資料載入功能
 
-### Phase 3: 資料整合
-- [ ] JSON資料讀取功能
-- [ ] 圖片展示功能
-- [ ] 響應式優化
+### Phase 3: 資料整合與測試
+- [x] 實現 JSON 資料動態讀取
+- [x] 建立 `test-dataapi.html` 進行功能驗證
+- [x] 實現圖片路徑解析與顯示
 
-### Phase 4: 最終優化
-- [ ] 效能調整
+### Phase 4: 優化與說明
+- [ ] 效能調整 (e.g., 圖片壓縮)
 - [ ] 跨瀏覽器測試
-- [ ] 無障礙設計
+- [x] 撰寫服務器使用說明 (`README-服務器使用說明.md`)
 
 ## 設計靈感來源
 - 2025年網頁設計趨勢

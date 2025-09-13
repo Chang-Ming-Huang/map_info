@@ -16,13 +16,14 @@
 ## 🚀 啟動方法
 
 ### 方法一：使用 Python 腳本
+在專案根目錄 (`map_info`) 下執行：
 ```bash
-cd /path/to/web
-python start-server.py
+python web/start-server.py
 ```
+腳本會自動在瀏覽器中打開測試頁面。
 
 ### 方法二：使用 Windows 批處理（推薦）
-雙擊運行：`start-server.bat`
+進入 `web` 目錄，然後雙擊運行 `start-server.bat`。
 
 ## 📱 訪問地址
 
@@ -78,10 +79,3 @@ python start-server.py
 1. 確認根目錄中有 `.json` 文件
 2. 檢查文件名格式是否為 `YYYYMMDD_HHMMSS.json`
 3. 查看控制台的詳細錯誤信息
-
-## 📞 技術支援
-
-如果遇到其他問題，請檢查：
-1. 瀏覽器控制台的錯誤信息
-2. 服務器終端的日誌輸出
-3. 文件路徑和權限設置

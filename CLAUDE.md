@@ -6,14 +6,14 @@
 
 ```
 map_info/
-├── google_reviews_scraper.py    # 主要爬蟲程式 (58KB)
-├── image_handler.py             # 圖片處理模組 (14KB)
+├── google_reviews_scraper.py    # 主要爬蟲程式
+├── image_handler.py             # 圖片處理模組
 ├── requirements.txt             # 依賴套件清單
 ├── 使用說明.md                  # 完整使用說明
 ├── CLAUDE.md                    # 本開發記錄
 ├── images/                      # 圖片下載目錄
-│   └── 築宜系統傢俱_桃園店_*/   # 按日期分類的圖片
-└── *.json                       # 評論數據輸出檔案
+│   └── YYYYMMDD_HHMMSS/         # 按時間戳記分類的圖片
+└── YYYYMMDD_HHMMSS.json         # 評論數據輸出檔案
 ```
 
 ## 核心功能
@@ -34,7 +34,7 @@ python3 google_reviews_scraper.py
 ### 快速執行
 ```bash
 # Windows PowerShell
-python .\google_reviews_scraper.py
+python google_reviews_scraper.py
 
 # 配置調整 (可選)
 # 在程式中修改 UserConfig 和 ScrapingConfig
@@ -71,9 +71,9 @@ python .\google_reviews_scraper.py
 
 ### 輸出檔案
 ```
-築宜系統傢俱_桃園店_評論_20250913_002848.json  # 評論數據
-images/築宜系統傢俱_桃園店_20250913/           # 圖片目錄
-├── review_001_img_01.jpg ~ review_010_img_03.jpg
+YYYYMMDD_HHMMSS.json              # 評論數據 (例如: 20250913_012613.json)
+images/YYYYMMDD_HHMMSS/           # 圖片目錄 (例如: images/20250913_012613/)
+├── review_001_img_01.jpg ~ review_XXX_img_YY.jpg
 ```
 
 ## 開發歷程

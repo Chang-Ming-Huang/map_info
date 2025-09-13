@@ -1,0 +1,36 @@
+<button class="btn" onclick="testReviewManager()">測試 ReviewManager</button> 按下後
+
+目前看到的排版很棒，是我要的目標樣式，電腦版圖片跟圖片間在的間距很小
+
+<div class="review-image" style="margin-top: 15px; display: flex; gap: 2%; flex-wrap: wrap;">
+                        
+                    <img src="../../images/20250913_020338/review_002_img_01.jpg" alt="評論圖片" style="max-width: 32%; height: auto; border-radius: 8px; display: inline-block;" onerror="this.style.display='none'">
+                
+                    <img src="../../images/20250913_020338/review_002_img_02.jpg" alt="評論圖片" style="max-width: 32%; height: auto; border-radius: 8px; display: inline-block;" onerror="this.style.display='none'">
+                
+                    <img src="../../images/20250913_020338/review_002_img_03.jpg" alt="評論圖片" style="max-width: 32%; height: auto; border-radius: 8px; display: inline-block;" onerror="this.style.display='none'">
+                
+                    </div>
+
+
+
+
+<button class="btn" onclick="testDataAPI()">測試 DataAPI</button>
+
+點下去之後，電腦版的圖片跟圖片間的間距很大
+
+<div style="margin-top: 15px; display: flex; gap: 2%; flex-wrap: wrap;">
+                            
+                        <div class="review-image" style="width: 32%; aspect-ratio: 1 / 1;">
+                            <img src="../../images/20250913_020338/review_002_img_01.jpg" alt="評論圖片" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;" onerror="this.parentElement.style.display='none';">
+                        </div>
+                    
+                        <div class="review-image" style="width: 32%; aspect-ratio: 1 / 1;">
+                            <img src="../../images/20250913_020338/review_002_img_02.jpg" alt="評論圖片" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;" onerror="this.parentElement.style.display='none';">
+                        </div>
+                    
+                        <div class="review-image" style="width: 32%; aspect-ratio: 1 / 1;">
+                            <img src="../../images/20250913_020338/review_002_img_03.jpg" alt="評論圖片" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;" onerror="this.parentElement.style.display='none';">
+                        </div>
+                    
+                        </div>

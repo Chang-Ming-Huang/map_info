@@ -71,7 +71,7 @@ class LegacyReviewManager {
 
         const reviewsHTML = reviews.slice(0, this.reviewsPerPage).map(review => {
             const stars = '★'.repeat(review.rating || 5);
-            const reviewText = this.truncateText(review.review_text || review.text || '', 150);
+            const reviewText = review.review_text || review.text || '';
             const authorName = review.reviewer_name || review.author_name || 'Anonymous';
             const reviewDate = review.review_date || review.relative_time_description || '';
 
@@ -190,11 +190,123 @@ function animateOnScroll() {
     elements.forEach(el => observer.observe(el));
 }
 
+// Lightbox功能
+function initializeLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    if (!lightbox) return;
+
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeBtn = document.getElementById('lightbox-close');
+    
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let isDragging = false;
+
+    function openLightbox(src) {
+        lightboxImg.src = src;
+        lightbox.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        lightbox.style.display = 'none';
+        lightboxImg.src = '';
+        document.body.style.overflow = 'auto';
+    }
+
+    document.body.addEventListener('touchstart', function(e) {
+        if (e.target.tagName === 'IMG' && (e.target.closest('.review-image') || e.target.closest('.review-images'))) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            isDragging = false;
+        }
+    }, { passive: true });
+
+    document.body.addEventListener('touchmove', function(e) {
+        if (touchStartX === 0 && touchStartY === 0) return;
+        const deltaX = Math.abs(e.touches[0].clientX - touchStartX);
+        const deltaY = Math.abs(e.touches[0].clientY - touchStartY);
+        if (deltaX > 10 || deltaY > 10) {
+            isDragging = true;
+        }
+    }, { passive: true });
+
+    document.body.addEventListener('touchend', function(e) {
+        if (!isDragging && e.target.tagName === 'IMG' && (e.target.closest('.review-image') || e.target.closest('.review-images'))) {
+            if (!e.target.closest('#lightbox')) {
+                e.preventDefault();
+                openLightbox(e.target.src);
+            }
+        }
+        // Reset
+        touchStartX = 0;
+        touchStartY = 0;
+        isDragging = false;
+    });
+
+    // Fallback for mouse clicks on desktop
+    document.body.addEventListener('click', function(e) {
+        // Check if it's a touch device; if so, touchend already handled it.
+        if ('ontouchstart' in window) return;
+        
+        if (e.target.tagName === 'IMG' && (e.target.closest('.review-image') || e.target.closest('.review-images'))) {
+            if (!e.target.closest('#lightbox')) {
+                e.preventDefault();
+                openLightbox(e.target.src);
+            }
+        }
+    });
+
+    closeBtn.addEventListener('click', closeLightbox);
+
+    lightbox.addEventListener('click', function(e) {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+}
+
+// 評論文字截斷與展開功能
+function setupReviewTruncation(containerElement) {
+    const TRUNCATE_CHAR_LIMIT = 100; // 可調整的字元限制
+
+    containerElement.querySelectorAll('.review-text').forEach(textElement => {
+        // 如果已經處理過，則跳過
+        if (textElement.dataset.isTruncated) {
+            return;
+        }
+
+        const fullText = textElement.innerHTML.trim();
+        textElement.dataset.fullText = fullText;
+
+        if (fullText.length > TRUNCATE_CHAR_LIMIT) {
+            const truncatedText = fullText.substring(0, TRUNCATE_CHAR_LIMIT);
+            textElement.innerHTML = `
+                ${truncatedText}... 
+                <a href="#" class="show-more-link" style="color: #007bff; text-decoration: none; font-weight: bold;">看全文</a>
+            `;
+            textElement.dataset.isTruncated = 'true';
+        }
+    });
+}
+
 // 初始化函數
 function initializeApp() {
     setupLazyLoading();
     animateOnScroll();
+    initializeLightbox(); // 初始化 lightbox
     
+    // 為「看全文」連結設定全域點擊事件監聽
+    document.body.addEventListener('click', function(e) {
+        if (e.target.classList.contains('show-more-link')) {
+            e.preventDefault();
+            const textElement = e.target.closest('.review-text');
+            if (textElement && textElement.dataset.fullText) {
+                textElement.innerHTML = textElement.dataset.fullText;
+            }
+        }
+    });
+
     // 設定平滑滾動連結
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {

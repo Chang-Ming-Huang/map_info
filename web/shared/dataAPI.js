@@ -195,14 +195,15 @@ class EnhancedReviewManager {
     constructor() {
         this.dataAPI = new DataAPI();
         this.reviews = [];
-        this.currentPage = 1;
-        this.reviewsPerPage = 6;
+        this.reviewsToShow = 3;
+        this.reviewsPerPage = 5;
     }
 
     // 載入最新的評論數據
     async loadReviews() {
         try {
             this.reviews = await this.dataAPI.loadLatestReviews();
+            this.reviewsToShow = 3; // Reset on new load
             return this.reviews;
         } catch (error) {
             console.error('載入評論失敗:', error);
@@ -210,35 +211,40 @@ class EnhancedReviewManager {
         }
     }
 
-    // 顯示評論（兼容現有的顯示函數）
-    displayReviews(reviews, containerId) {
+    // 顯示評論
+    displayReviews(containerId) {
         const container = document.getElementById(containerId);
         if (!container) {
             console.error(`找不到容器: ${containerId}`);
             return;
         }
 
-        if (!reviews || reviews.length === 0) {
+        if (!this.reviews || this.reviews.length === 0) {
             container.innerHTML = '<p style="text-align: center; color: #666;">目前沒有評論資料</p>';
             return;
         }
 
-        const reviewsHTML = reviews.slice(0, this.reviewsPerPage).map(review => {
+        const reviewsToDisplay = this.reviews.slice(0, this.reviewsToShow);
+
+        const reviewsHTML = reviewsToDisplay.map(review => {
             const stars = '★'.repeat(review.rating || 5);
-            const reviewText = this.truncateText(review.review_text || review.text || '', 150);
+            const reviewText = review.review_text || review.text || '';
             const authorName = review.reviewer_name || review.author_name || 'Anonymous';
             const reviewDate = review.review_date || review.relative_time_description || '';
 
-            // 處理圖片顯示
             let imageHtml = '';
             if (review.images && review.images.length > 0) {
-                const firstImage = review.images[0];
+                const imagesToShow = review.images.slice(0, 3);
+                const imageElements = imagesToShow.map(imgSrc => `
+                    <img src="${imgSrc}" alt="評論圖片" style="max-width: 32%; height: auto; border-radius: 8px; display: inline-block;" 
+                         onerror="this.style.display='none'">
+                `).join('');
+
                 imageHtml = `
-                    <div class="review-image" style="margin-top: 15px;">
-                        <img src="${firstImage}" alt="評論圖片" style="max-width: 100%; height: auto; border-radius: 8px;" 
-                             onerror="this.style.display='none'">
-                        ${review.images.length > 1 ? `<p style="font-size: 0.8em; color: #666; margin-top: 5px;">+${review.images.length - 1} 張圖片</p>` : ''}
+                    <div class="review-image" style="margin-top: 15px; display: flex; gap: 2%; flex-wrap: wrap;">
+                        ${imageElements}
                     </div>
+                    ${review.images.length > 3 ? `<p style="font-size: 0.8em; color: #666; margin-top: 5px;">+${review.images.length - 3} 張圖片</p>` : ''}
                 `;
             }
 
@@ -252,14 +258,26 @@ class EnhancedReviewManager {
             `;
         }).join('');
 
-        container.innerHTML = reviewsHTML;
+        let showMoreButtonHTML = '';
+        if (this.reviewsToShow < this.reviews.length) {
+            showMoreButtonHTML = `<br><div style="text-align: center;"><button class="btn show-more-reviews" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">顯示更多評論</button></div>`;
+        }
+
+        container.innerHTML = reviewsHTML + showMoreButtonHTML;
+
+        if (typeof setupReviewTruncation === 'function') {
+            setupReviewTruncation(container);
+        }
+        
+        const showMoreBtn = container.querySelector('.show-more-reviews');
+        if (showMoreBtn) {
+            showMoreBtn.onclick = () => this.showMoreReviews(containerId);
+        }
     }
 
-    // 截斷文字
-    truncateText(text, maxLength = 150) {
-        if (!text) return '';
-        if (text.length <= maxLength) return text;
-        return text.substring(0, maxLength) + '...';
+    showMoreReviews(containerId) {
+        this.reviewsToShow += this.reviewsPerPage;
+        this.displayReviews(containerId);
     }
 
     // 獲取統計信息
