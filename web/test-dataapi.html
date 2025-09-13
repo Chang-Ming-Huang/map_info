@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataAPI 測試頁面</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .review-card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            background: white;
+        }
+        
+        .review-stars {
+            color: #ffc107;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .review-text {
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+        
+        .review-author {
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+            margin-top: 15px;
+        }
+        
+        .review-image img {
+            max-width: 200px;
+            height: auto;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+        
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .status.success { background: #d4edda; border-left: 4px solid #28a745; }
+        .status.warning { background: #fff3cd; border-left: 4px solid #ffc107; }
+        .status.error { background: #f8d7da; border-left: 4px solid #dc3545; }
+        
+        .test-buttons {
+            margin: 20px 0;
+        }
+        
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        .btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 DataAPI 測試頁面</h1>
+        <p>這個頁面用來測試 DataAPI 是否能正確載入最新的 JSON 評論數據和圖片。</p>
+        
+        <div class="test-buttons">
+            <button class="btn" onclick="testDataAPI()">測試 DataAPI</button>
+            <button class="btn" onclick="testReviewManager()">測試 ReviewManager</button>
+            <button class="btn" onclick="clearLog()">清除記錄</button>
+        </div>
+        
+        <div id="status" class="status"></div>
+        
+        <div class="stats" id="statsContainer">
+            <!-- 統計數據將顯示在這裡 -->
+        </div>
+        
+        <h2>📊 載入記錄</h2>
+        <div id="log" class="log">等待測試...</div>
+        
+        <h2>📝 評論顯示測試</h2>
+        <div id="reviewsContainer">
+            <!-- 評論將顯示在這裡 -->
+        </div>
+    </div>
+
+    <script src="shared/dataAPI.js"></script>
+    <script src="shared/utils.js"></script>
+    <script>
+        let logContent = '';
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = type === 'error' ? '❌' : type === 'warning' ? '⚠️' : type === 'success' ? '✅' : 'ℹ️';
+            logContent += `[${timestamp}] ${prefix} ${message}\n`;
+            document.getElementById('log').textContent = logContent;
+            
+            // 滾動到底部
+            const logElement = document.getElementById('log');
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+        
+        function setStatus(message, type = 'info') {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+        }
+        
+        function clearLog() {
+            logContent = '';
+            document.getElementById('log').textContent = '記錄已清除...';
+            document.getElementById('statsContainer').innerHTML = '';
+            document.getElementById('reviewsContainer').innerHTML = '';
+        }
+        
+        async function testDataAPI() {
+            log('開始測試 DataAPI...', 'info');
+            setStatus('正在測試 DataAPI...', 'warning');
+            
+            try {
+                const dataAPI = new DataAPI();
+                log('DataAPI 實例創建成功');
+                
+                // 測試獲取可用檔案列表
+                const availableFiles = dataAPI.getAvailableJsonFiles();
+                log(`找到 ${availableFiles.length} 個可能的 JSON 檔案: ${availableFiles.join(', ')}`);
+                
+                // 測試找到最新檔案
+                const latestFile = dataAPI.findLatestJsonFile(availableFiles);
+                log(`最新檔案: ${latestFile}`);
+                
+                // 測試載入評論
+                log('開始載入評論數據...');
+                const reviews = await dataAPI.loadLatestReviews();
+                log(`載入了 ${reviews.length} 則評論`, 'success');
+                
+                // 測試統計資訊
+                const stats = dataAPI.getReviewStats();
+                log(`統計: 總評論 ${stats.totalReviews}, 平均評分 ${stats.averageRating}, 總圖片 ${stats.totalImages}`);
+                
+                // 顯示統計
+                displayStats(stats);
+                
+                // 顯示評論樣本
+                displayReviewSamples(reviews.slice(0, 3));
+                
+                setStatus('DataAPI 測試完成！', 'success');
+                log('DataAPI 測試完成', 'success');
+                
+            } catch (error) {
+                log(`DataAPI 測試失敗: ${error.message}`, 'error');
+                setStatus('DataAPI 測試失敗', 'error');
+            }
+        }
+        
+        async function testReviewManager() {
+            log('開始測試 ReviewManager...', 'info');
+            setStatus('正在測試 ReviewManager...', 'warning');
+            
+            try {
+                const reviewManager = new ReviewManager();
+                log('ReviewManager 實例創建成功');
+                
+                const reviews = await reviewManager.loadReviews();
+                log(`ReviewManager 載入了 ${reviews.length} 則評論`, 'success');
+                
+                // 測試顯示功能
+                reviewManager.displayReviews(reviews, 'reviewsContainer');
+                log('評論顯示測試完成');
+                
+                setStatus('ReviewManager 測試完成！', 'success');
+                log('ReviewManager 測試完成', 'success');
+                
+            } catch (error) {
+                log(`ReviewManager 測試失敗: ${error.message}`, 'error');
+                setStatus('ReviewManager 測試失敗', 'error');
+            }
+        }
+        
+        function displayStats(stats) {
+            const container = document.getElementById('statsContainer');
+            container.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-value">${stats.totalReviews}</div>
+                    <div class="stat-label">總評論數</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stats.averageRating}</div>
+                    <div class="stat-label">平均評分</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stats.totalImages}</div>
+                    <div class="stat-label">總圖片數</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stats.latestJsonFile ? '✓' : '✗'}</div>
+                    <div class="stat-label">JSON 檔案</div>
+                </div>
+            `;
+        }
+        
+        function displayReviewSamples(reviews) {
+            const container = document.getElementById('reviewsContainer');
+            
+            if (!reviews || reviews.length === 0) {
+                container.innerHTML = '<p>沒有評論樣本</p>';
+                return;
+            }
+            
+            const reviewsHTML = reviews.map((review, index) => {
+                const stars = '★'.repeat(review.rating || 5);
+                
+                let imageHtml = '';
+                if (review.images && review.images.length > 0) {
+                    imageHtml = `
+                        <div class="review-image">
+                            <strong>圖片路徑:</strong> ${review.images[0]}
+                            <br><img src="${review.images[0]}" alt="評論圖片" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div style="display:none; color: #dc3545; margin-top: 5px;">❌ 圖片載入失敗</div>
+                            ${review.images.length > 1 ? `<p><strong>更多圖片:</strong> ${review.images.slice(1).join(', ')}</p>` : ''}
+                        </div>
+                    `;
+                }
+                
+                return `
+                    <div class="review-card">
+                        <h3>樣本 ${index + 1}</h3>
+                        <div class="review-stars">${stars}</div>
+                        <p class="review-text">${review.review_text || review.text || '無評論內容'}</p>
+                        ${imageHtml}
+                        <div class="review-author">
+                            <strong>評論者:</strong> ${review.reviewer_name || review.author_name || 'Anonymous'}<br>
+                            <strong>日期:</strong> ${review.review_date || review.relative_time_description || '未知'}<br>
+                            <strong>評分:</strong> ${review.rating || 'N/A'}/5<br>
+                            <strong>圖片數量:</strong> ${review.total_images || 0}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = reviewsHTML;
+        }
+        
+        // 頁面載入完成後自動運行基本測試
+        document.addEventListener('DOMContentLoaded', () => {
+            log('測試頁面載入完成', 'success');
+            log('請點擊上方按鈕開始測試 DataAPI 功能');
+        });
+    </script>
+</body>
+</html>
