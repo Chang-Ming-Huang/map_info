@@ -89,12 +89,12 @@ web/
 ├── README-服務器使用說明.md
 ├── start-server.bat
 ├── start-server.py
-├── test-dataapi.html
 ├── assets/
 │   └── profile.jpg
-├── shared/
-│   ├── dataAPI.js
-│   └── utils.js
+├── shared/                     # 共用模組目錄
+│   ├── dataAPI.js             # 數據載入模組
+│   ├── utils.js               # 工具函數模組
+│   └── reviews.html           # 評論展示模組
 ├── style-bauhaus/
 │   └── ...
 ├── style-brutalist/
@@ -128,12 +128,50 @@ web/
 - [x] 實作多種風格頁面 (e.g., `style-bauhaus`, `style-brutalist`, etc.)
 - [x] 整合評論資料載入功能
 
-### Phase 3: 資料整合與測試
+### Phase 3: 資料整合與模組開發
 - [x] 實現 JSON 資料動態讀取
-- [x] 建立 `test-dataapi.html` 進行功能驗證
+- [x] 建立評論展示模組 (`shared/reviews.html`)
 - [x] 實現圖片路徑解析與顯示
+- [x] 模組化評論功能（移除測試界面，保留核心功能）
 
-### Phase 4: 優化與說明
+### Phase 4: 模組化與整合
+- [x] 評論功能模組化（移除測試界面，專注核心功能）
+- [x] 檔案重新命名和重新組織（`reviews.html` 移至 `shared/`）
+- [x] 更新文檔以反映最新架構
+- [ ] 評論模組主題整合實驗
+
+#### 評論模組整合實驗計劃
+
+**實驗風格選擇**：
+- **首選：style-dark-blue** - 深藍奢華風 + Tailwind CSS
+  - 已有評論區架構 (`#reviews-container`)
+  - 具備現成的卡片樣式 (`luxury-card`)
+  - 技術成熟，易於客製化
+
+- **次選：style-ethereal** - 空靈極簡風 + 純 CSS
+  - 已有評論區架構 (`#reviewsContainer`)
+  - 完整的 CSS 變數系統 (`--accent-sage` 等)
+  - 設計風格適合評論模組
+
+**整合步驟**：
+1. **模組插入**: 將 `shared/reviews.html` 核心內容整合到各主題 `index.html`
+2. **路徑調整**: 更新 JavaScript 引用為 `../shared/dataAPI.js`
+3. **樣式客製化**:
+   - Dark-blue: 應用 `luxury-card` 樣式到評論卡片
+   - Ethereal: 使用主題變數重新設計評論區
+4. **功能測試**: 驗證載入、Lightbox、分頁等功能正常
+5. **視覺整合**: 確保評論區與整頁設計風格一致
+
+**成功標準**：
+- 評論自動載入並正確顯示
+- 圖片 Lightbox 功能正常
+- 評論樣式與主題完全融合
+- 響應式設計在各裝置正常運作
+
+**推廣計劃**：
+實驗成功後，建立整合模板並批量應用到其餘 8 個風格資料夾
+
+### Phase 5: 優化與說明
 - [ ] 效能調整 (e.g., 圖片壓縮)
 - [ ] 跨瀏覽器測試
 - [x] 撰寫服務器使用說明 (`README-服務器使用說明.md`)
