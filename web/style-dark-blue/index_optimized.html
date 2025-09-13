@@ -125,6 +125,73 @@
             background-repeat: no-repeat;
             background-size: cover;
         }
+
+        /* 統一文字系統 */
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 2rem;
+        }
+
+        .section-subtitle {
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-description {
+            font-weight: 300;
+            line-height: 1.7;
+            text-wrap: balance;
+            word-break: keep-all;
+        }
+
+        .balanced-text {
+            max-width: 48rem;
+            margin: 0 auto;
+            text-align: center;
+            line-height: 1.7;
+            text-wrap: balance;
+            word-break: keep-all;
+        }
+
+        .content-container {
+            max-width: 48rem;
+            margin: 0 auto;
+        }
+
+        /* 響應式文字調整 */
+        @media (max-width: 640px) {
+            .balanced-text,
+            .content-container {
+                max-width: 90%;
+            }
+
+            .section-description {
+                font-size: 1.1rem;
+                line-height: 1.6;
+            }
+        }
+
+        @media (min-width: 641px) and (max-width: 1024px) {
+            .balanced-text,
+            .content-container {
+                max-width: 42rem;
+            }
+        }
+
+        /* 個人照片樣式 */
+        .profile-image {
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .profile-image:hover {
+            transform: scale(1.05);
+            border-color: rgba(245, 158, 11, 0.6);
+            box-shadow: 0 20px 40px rgba(245, 158, 11, 0.3);
+        }
     </style>
 </head>
 <body class="font-sans luxury-gradient text-white overflow-x-hidden">
@@ -139,11 +206,21 @@
                     <a href="#reviews" class="text-platinum hover:text-gold transition-colors font-medium tracking-wide">客戶評價</a>
                     <a href="#contact" class="text-platinum hover:text-gold transition-colors font-medium tracking-wide">聯絡我們</a>
                 </div>
-                <button class="md:hidden text-platinum hover:text-gold">
+                <button id="mobile-menu-button" class="md:hidden text-platinum hover:text-gold transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
+            </div>
+
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="md:hidden hidden">
+                <div class="px-2 pt-2 pb-3 space-y-1 bg-deep-blue/95 backdrop-blur-md border-t border-gold/20">
+                    <a href="#home" class="block px-3 py-2 text-platinum hover:text-gold transition-colors font-medium tracking-wide">首頁</a>
+                    <a href="#about" class="block px-3 py-2 text-platinum hover:text-gold transition-colors font-medium tracking-wide">關於我們</a>
+                    <a href="#reviews" class="block px-3 py-2 text-platinum hover:text-gold transition-colors font-medium tracking-wide">客戶評價</a>
+                    <a href="#contact" class="block px-3 py-2 text-platinum hover:text-gold transition-colors font-medium tracking-wide">聯絡我們</a>
+                </div>
             </div>
         </div>
     </nav>
@@ -165,10 +242,11 @@
                         <span class="text-gold">Designer</span>
                     </h1>
                     <div class="w-24 h-1 gold-gradient mb-8"></div>
-                    <p class="text-xl text-platinum mb-10 leading-relaxed font-light">
+                    <p class="text-xl text-platinum mb-10 balanced-text">
                         築宜系統傢俱 桃園店<br>
-                        以奢華工藝與精緻設計，為您打造獨一無二的高端居家空間，<br>
-                        每一個細節都展現著卓越品味與非凡質感。
+                        超過 30 位客戶一致推薦的匠心設計師<br>
+                        以敏銳洞察力與細膩美感，精心雕琢每個空間細節<br>
+                        創造超越期待的品味居家體驗
                     </p>
                     <div class="flex flex-col sm:flex-row gap-6">
                         <button class="luxury-btn text-white px-10 py-4 font-semibold tracking-wider relative">
@@ -182,11 +260,12 @@
                 <div class="animate-fade-in" style="animation-delay: 0.3s;">
                     <div class="relative">
                         <div class="luxury-card p-12 text-center">
-                            <div class="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-gold to-champagne rounded-full flex items-center justify-center">
-                                <span class="text-4xl text-deep-blue">👑</span>
+                            <div class="w-40 h-40 mx-auto mb-8 rounded-full overflow-hidden border-4 border-gold/30 shadow-2xl profile-image">
+                                <img src="../assets/profile.jpg" alt="Nick - 築宜系統傢俱設計師" class="w-full h-full object-cover object-center">
                             </div>
-                            <h3 class="font-serif text-2xl font-bold text-gold mb-4">奢華定制</h3>
-                            <p class="text-platinum">專屬您的高端居家體驗</p>
+                            <h3 class="font-serif text-2xl font-bold text-gold mb-4">專業設計師</h3>
+                            <p class="text-platinum">Nick</p>
+                            <p class="text-champagne text-sm mt-2">超過 30 位客戶一致推薦</p>
                         </div>
                         <div class="absolute -top-6 -right-6 w-12 h-12 bg-gold/20 rounded-full"></div>
                         <div class="absolute -bottom-6 -left-6 w-8 h-8 bg-champagne/30 rounded-full"></div>
@@ -204,9 +283,11 @@
             <div class="text-center mb-20">
                 <div class="text-gold mb-6 text-lg font-medium tracking-widest uppercase">關於我們</div>
                 <h2 class="font-serif text-4xl md:text-6xl font-bold mb-8 elegant-underline">築宜系統傢俱</h2>
-                <p class="text-xl text-platinum max-w-4xl mx-auto leading-relaxed">
-                    承襲歐洲精工傳統，融合現代設計美學，為追求品味生活的您，<br>
-                    創造兼具功能性與藝術性的頂級居家環境
+                <p class="text-xl text-platinum balanced-text">
+                    專業設計師 Nick 帶領築宜團隊<br>
+                    憑藉深厚美學涵養與精湛工藝<br>
+                    為追求品味生活的您<br>
+                    打造兼具美感與機能的頂級居家藝術品
                 </p>
             </div>
             
@@ -215,9 +296,9 @@
                     <div class="w-20 h-20 mx-auto mb-8 bg-gradient-to-br from-gold to-champagne rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                         <span class="text-3xl text-deep-blue">💎</span>
                     </div>
-                    <h3 class="font-serif text-2xl font-bold mb-6 text-gold">精工工藝</h3>
+                    <h3 class="font-serif text-2xl font-bold mb-6 text-gold">匠心獨運</h3>
                     <p class="text-platinum leading-relaxed">
-                        採用頂級材料與精密工藝，每一件作品都是藝術品級的完美呈現，展現無與倫比的質感與耐久性
+                        以工匠精神雕琢每個細節，透過專業監督與即時溝通，確保每個環節都達到最高品質標準，讓您的空間蛻變成藝術品
                     </p>
                 </div>
                 
@@ -225,9 +306,9 @@
                     <div class="w-20 h-20 mx-auto mb-8 bg-gradient-to-br from-gold to-champagne rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                         <span class="text-3xl text-deep-blue">✨</span>
                     </div>
-                    <h3 class="font-serif text-2xl font-bold mb-6 text-gold">個人定制</h3>
+                    <h3 class="font-serif text-2xl font-bold mb-6 text-gold">美學洞察</h3>
                     <p class="text-platinum leading-relaxed">
-                        深度了解您的生活方式與美學偏好，量身打造專屬設計方案，讓每個空間都成為您品味的延伸
+                        擁有敏銳的美感直覺，深刻理解您的生活品味與需求，將抽象的想法轉化為具體的設計方案，創造專屬於您的空間語言
                     </p>
                 </div>
                 
@@ -235,9 +316,9 @@
                     <div class="w-20 h-20 mx-auto mb-8 bg-gradient-to-br from-gold to-champagne rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                         <span class="text-3xl text-deep-blue">🏆</span>
                     </div>
-                    <h3 class="font-serif text-2xl font-bold mb-6 text-gold">卓越服務</h3>
+                    <h3 class="font-serif text-2xl font-bold mb-6 text-gold">全案統籌</h3>
                     <p class="text-platinum leading-relaxed">
-                        從設計諮詢到完工交付，提供全程專業服務，確保每個細節都符合您的期待，超越您的想像
+                        如指揮家般協調各專業工藝師傅，統籌水電、木作、油漆等各環節，為您提供無縫接軌的頂級服務體驗
                     </p>
                 </div>
             </div>
@@ -252,8 +333,10 @@
             <div class="text-center mb-20">
                 <div class="text-gold mb-6 text-lg font-medium tracking-widest uppercase">客戶見證</div>
                 <h2 class="font-serif text-4xl md:text-6xl font-bold mb-8 elegant-underline">尊貴體驗</h2>
-                <p class="text-xl text-platinum">
-                    每一份信任，都是我們持續精進的動力
+                <p class="text-xl text-platinum balanced-text">
+                    超過 30 位尊貴客戶一致讚譽<br>
+                    每個五星評價都是品質與服務的完美見證<br>
+                    讓我們用心創造的每個作品，成為您滿意的居家體驗
                 </p>
             </div>
             
@@ -271,8 +354,10 @@
             <div class="text-center mb-20">
                 <div class="text-gold mb-6 text-lg font-medium tracking-widest uppercase">聯絡我們</div>
                 <h2 class="font-serif text-4xl md:text-6xl font-bold mb-8 elegant-underline">開啟對話</h2>
-                <p class="text-xl text-platinum">
-                    讓我們一起創造您夢想中的完美空間
+                <p class="text-xl text-platinum balanced-text">
+                    讓我們一起創造您夢想中的完美空間<br>
+                    從第一次諮詢開始，直到看見您滿意的笑容<br>
+                    每一步都是我們用心服務的承諾
                 </p>
             </div>
             
@@ -286,7 +371,7 @@
                             </div>
                             <div>
                                 <div class="text-platinum font-medium">展示中心</div>
-                                <div class="text-champagne">桃園市中壢區環北路390號</div>
+                                <div class="text-champagne">桃園市桃園區文中路 413 號 1 樓</div>
                             </div>
                         </div>
                         <div class="flex items-center">
@@ -295,7 +380,7 @@
                             </div>
                             <div>
                                 <div class="text-platinum font-medium">專線電話</div>
-                                <div class="text-champagne">03-123-4567</div>
+                                <div class="text-champagne">03-360-3611</div>
                             </div>
                         </div>
                         <div class="flex items-center">
@@ -304,7 +389,7 @@
                             </div>
                             <div>
                                 <div class="text-platinum font-medium">營業時間</div>
-                                <div class="text-champagne">週一至週日 09:00-18:00</div>
+                                <div class="text-champagne">週二至週六 10:00-19:00</div>
                             </div>
                         </div>
                     </div>
@@ -346,6 +431,12 @@
 
     <script src="../shared/dataAPI.js"></script>
     <script src="../shared/utils.js"></script>
+    <!-- Lightbox -->
+    <div id="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:2000; justify-content:center; align-items:center; cursor:pointer;">
+        <span id="lightbox-close" style="position:absolute; top:20px; right:40px; font-size:40px; color:white; cursor:pointer; transition:0.3s;">&times;</span>
+        <img id="lightbox-img" style="max-width:90%; max-height:80%; object-fit:contain; border-radius:8px;">
+    </div>
+
     <script>
         let allReviews = [];
         let numReviewsToShow = 6;
@@ -353,15 +444,18 @@
 
         async function loadReviews() {
             try {
+                console.log('🚀 開始載入評論...');
                 const dataAPI = new DataAPI();
                 const reviews = await dataAPI.loadLatestReviews();
+                console.log('📋 載入到的評論數量:', reviews.length);
+                console.log('📄 第一則評論:', reviews[0]);
 
                 allReviews = reviews;
                 numReviewsToShow = 6;
                 displayReviews();
 
             } catch (error) {
-                console.error('載入評論失敗:', error);
+                console.error('❌ 載入評論失敗:', error);
                 document.getElementById('reviews-container').innerHTML = '<p class="text-platinum text-center">載入評論時發生錯誤，請稍後再試</p>';
             }
         }
@@ -390,16 +484,16 @@
                     const imagesToShow = review.images.slice(0, 2);
                     const imageElements = imagesToShow.map(imgSrc => `
                         <div class="aspect-square bg-deep-blue/30 border border-gold/20 overflow-hidden group-hover:border-gold/40 transition-colors">
-                            <img src="${imgSrc}" alt="評論圖片" class="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform"
+                            <img src="${imgSrc}" alt="評論圖片" class="w-full h-full object-cover transition-all duration-500 hover:scale-105 cursor-pointer"
                                  onclick="openLightbox('${imgSrc}')" onerror="this.style.display='none';">
                         </div>
                     `).join('');
 
                     imageHtml = `
-                        <div class="grid grid-cols-2 gap-3 mt-6">
+                        <div class="review-image grid grid-cols-2 gap-3 mt-6">
                             ${imageElements}
                         </div>
-                        ${review.images.length > 2 ? `<p class="text-champagne text-sm mt-3"><strong>更多圖片:</strong> +${review.images.length - 2} 張</p>` : ''}
+                        ${review.images.length > 2 ? `<p class="text-champagne text-sm mt-3" style="display: none;"><strong>更多圖片:</strong> +${review.images.length - 2} 張</p>` : ''}
                     `;
                 }
 
@@ -412,12 +506,12 @@
                             <div>
                                 <h4 class="font-semibold text-white">${review.reviewer_name || review.author_name || 'Anonymous'}</h4>
                                 <div class="flex items-center mt-1">
-                                    <span class="text-gold text-lg">${stars}</span>
+                                    <div class="text-gold text-lg">${stars}</div>
                                     <span class="ml-3 text-sm text-champagne">${review.review_date || review.relative_time_description || '未知'}</span>
                                 </div>
                             </div>
                         </div>
-                        <p class="text-platinum leading-relaxed mb-4">${review.review_text || review.text || '無評論內容'}</p>
+                        <p class="review-text text-platinum leading-relaxed mb-6">${review.review_text || review.text || '無評論內容'}</p>
                         ${imageHtml}
                     </div>
                 `;
@@ -425,7 +519,7 @@
 
             let showMoreButtonHTML = '';
             if (numReviewsToShow < reviews.length) {
-                showMoreButtonHTML = `<div class="text-center mt-12"><button onclick="showMoreReviews()" class="luxury-btn text-white px-10 py-4 font-semibold tracking-wider relative">顯示更多評論</button></div>`;
+                showMoreButtonHTML = `<div class="col-span-full flex justify-center mt-8"><button onclick="showMoreReviews()" class="bg-gradient-to-r from-gold to-champagne text-deep-blue px-8 py-3 rounded-lg font-semibold hover:from-champagne hover:to-gold transition-all duration-300">顯示更多評論</button></div>`;
             }
 
             container.innerHTML = reviewsHTML + showMoreButtonHTML;
@@ -433,40 +527,42 @@
             setupReviewTruncation(container);
         }
 
+        // 手機版選單控制
+        function initMobileMenu() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+
+                // 點擊選單項目後關閉選單
+                const menuItems = mobileMenu.querySelectorAll('a');
+                menuItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
+
+                // 點擊外部關閉選單
+                document.addEventListener('click', function(event) {
+                    if (!mobileMenuButton.contains(event.target) && !mobileMenu.contains(event.target)) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
         // Lightbox functionality
         function openLightbox(imageSrc) {
-            const lightbox = document.getElementById('lightbox') || createLightbox();
+            const lightbox = document.getElementById('lightbox');
             const lightboxImg = document.getElementById('lightbox-img');
 
             lightboxImg.src = imageSrc;
             lightbox.style.display = 'flex';
 
             document.body.style.overflow = 'hidden';
-        }
-
-        function createLightbox() {
-            const lightbox = document.createElement('div');
-            lightbox.id = 'lightbox';
-            lightbox.style.cssText = 'display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:2000; justify-content:center; align-items:center; cursor:pointer;';
-
-            const closeBtn = document.createElement('span');
-            closeBtn.innerHTML = '&times;';
-            closeBtn.style.cssText = 'position:absolute; top:20px; right:40px; font-size:40px; color:white; cursor:pointer; transition:0.3s;';
-            closeBtn.onclick = closeLightbox;
-
-            const img = document.createElement('img');
-            img.id = 'lightbox-img';
-            img.style.cssText = 'max-width:90%; max-height:80%; object-fit:contain; border-radius:8px;';
-
-            lightbox.appendChild(closeBtn);
-            lightbox.appendChild(img);
-            document.body.appendChild(lightbox);
-
-            lightbox.onclick = function(e) {
-                if (e.target === lightbox) closeLightbox();
-            };
-
-            return lightbox;
         }
 
         function closeLightbox() {
@@ -477,9 +573,26 @@
             }
         }
 
+        // 設置 Lightbox 事件監聽
+        document.addEventListener('DOMContentLoaded', function() {
+            const lightboxClose = document.getElementById('lightbox-close');
+            const lightbox = document.getElementById('lightbox');
+
+            if (lightboxClose) {
+                lightboxClose.onclick = closeLightbox;
+            }
+
+            if (lightbox) {
+                lightbox.onclick = function(e) {
+                    if (e.target === lightbox) closeLightbox();
+                };
+            }
+        });
+
         // 頁面載入完成後執行
         document.addEventListener('DOMContentLoaded', function() {
             loadReviews();
+            initMobileMenu();
         });
     </script>
 </body>

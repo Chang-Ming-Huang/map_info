@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客戶評論 - 築宜系統傢俱</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .review-card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .review-stars {
+            color: #ffc107;
+            font-size: 1.2rem;
+        }
+
+        .review-text {
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        .review-author {
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+            margin-top: 15px;
+        }
+
+        .review-image img {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="reviewsContainer">
+            <!-- 評論將顯示在這裡 -->
+        </div>
+    </div>
+
+    <script src="dataAPI.js"></script>
+    <script src="utils.js"></script>
+    <script>
+        let allReviews = [];
+        let numReviewsToShow = 6;
+        const REVIEWS_PER_PAGE = 3;
+
+        async function loadReviews() {
+            try {
+                const dataAPI = new DataAPI();
+                const reviews = await dataAPI.loadLatestReviews();
+
+                allReviews = reviews;
+                numReviewsToShow = 6;
+                displayReviews();
+
+            } catch (error) {
+                console.error('載入評論失敗:', error);
+                document.getElementById('reviewsContainer').innerHTML = '<p style="text-align: center; color: #666;">載入評論時發生錯誤，請稍後再試</p>';
+            }
+        }
+
+        function showMoreReviews() {
+            numReviewsToShow += REVIEWS_PER_PAGE;
+            displayReviews();
+        }
+
+        function displayReviews() {
+            const container = document.getElementById('reviewsContainer');
+            const reviews = allReviews;
+
+            if (!reviews || reviews.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666;">目前沒有評論資料</p>';
+                return;
+            }
+
+            const reviewsToDisplay = reviews.slice(0, numReviewsToShow);
+
+            const reviewsHTML = reviewsToDisplay.map((review, index) => {
+                const stars = '★'.repeat(review.rating || 5);
+
+                let imageHtml = '';
+                if (review.images && review.images.length > 0) {
+                    const imagesToShow = review.images.slice(0, 2);
+                    const imageElements = imagesToShow.map(imgSrc => `
+                        <div style="display: inline-block; margin-right: 10px; margin-bottom: 10px;">
+                            <img src="${imgSrc}" alt="評論圖片" style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px; cursor: pointer;"
+                                 onclick="openLightbox('${imgSrc}')" onerror="this.style.display='none';">
+                        </div>
+                    `).join('');
+
+                    imageHtml = `
+                        <div class="review-image" style="margin-top: 15px;">
+                            ${imageElements}
+                        </div>
+                        ${review.images.length > 2 ? `<p style="color: #666; font-size: 0.9rem; margin-top: 10px;"><strong>更多圖片:</strong> +${review.images.length - 2} 張</p>` : ''}
+                    `;
+                }
+
+                return `
+                    <div class="review-card" data-review-id="review-${index}">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #F59E0B, #FDE68A); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                <span style="color: white; font-weight: bold; font-size: 1.2rem;">${(review.reviewer_name || review.author_name || 'A').charAt(0)}</span>
+                            </div>
+                            <div>
+                                <h4 style="margin: 0; font-size: 1.1rem; color: #333;">${review.reviewer_name || review.author_name || 'Anonymous'}</h4>
+                                <div style="margin-top: 5px;">
+                                    <span class="review-stars">${stars}</span>
+                                    <span style="margin-left: 10px; color: #666; font-size: 0.9rem;">${review.review_date || review.relative_time_description || '未知'}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="review-text" style="color: #333; line-height: 1.6;">${review.review_text || review.text || '無評論內容'}</p>
+                        ${imageHtml}
+                    </div>
+                `;
+            }).join('');
+
+            let showMoreButtonHTML = '';
+            if (numReviewsToShow < reviews.length) {
+                showMoreButtonHTML = `<div style="text-align: center; margin-top: 30px;"><button onclick="showMoreReviews()" style="background: linear-gradient(135deg, #F59E0B, #D97706); color: white; border: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; cursor: pointer; transition: all 0.3s ease;">顯示更多評論</button></div>`;
+            }
+
+            container.innerHTML = reviewsHTML + showMoreButtonHTML;
+
+            setupReviewTruncation(container);
+        }
+
+        // Lightbox functionality
+        function openLightbox(imageSrc) {
+            const lightbox = document.getElementById('lightbox') || createLightbox();
+            const lightboxImg = document.getElementById('lightbox-img');
+
+            lightboxImg.src = imageSrc;
+            lightbox.style.display = 'flex';
+
+            document.body.style.overflow = 'hidden';
+        }
+
+        function createLightbox() {
+            const lightbox = document.createElement('div');
+            lightbox.id = 'lightbox';
+            lightbox.style.cssText = 'display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:2000; justify-content:center; align-items:center; cursor:pointer;';
+
+            const closeBtn = document.createElement('span');
+            closeBtn.innerHTML = '&times;';
+            closeBtn.style.cssText = 'position:absolute; top:20px; right:40px; font-size:40px; color:white; cursor:pointer; transition:0.3s;';
+            closeBtn.onclick = closeLightbox;
+
+            const img = document.createElement('img');
+            img.id = 'lightbox-img';
+            img.style.cssText = 'max-width:90%; max-height:80%; object-fit:contain; border-radius:8px;';
+
+            lightbox.appendChild(closeBtn);
+            lightbox.appendChild(img);
+            document.body.appendChild(lightbox);
+
+            lightbox.onclick = function(e) {
+                if (e.target === lightbox) closeLightbox();
+            };
+
+            return lightbox;
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            if (lightbox) {
+                lightbox.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // 頁面載入完成後執行
+        document.addEventListener('DOMContentLoaded', function() {
+            loadReviews();
+        });
+    </script>
+</body>
+</html>

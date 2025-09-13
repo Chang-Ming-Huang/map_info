@@ -29,7 +29,7 @@ python web/start-server.py
 
 服務器啟動後，可以訪問：
 
-- **測試頁面**：http://localhost:8000/web/test-dataapi.html
+- **評論模組頁面**：http://localhost:8000/web/shared/reviews.html
 - **各種風格頁面**：
   - http://localhost:8000/web/style-bauhaus/
   - http://localhost:8000/web/style-brutalist/
@@ -42,20 +42,21 @@ python web/start-server.py
   - http://localhost:8000/web/style-golden/
   - http://localhost:8000/web/style-warm/
 
-## 🧪 測試功能
+## 🧪 評論模組功能
 
-### DataAPI 測試功能包含：
-- ✅ JSON 文件自動檢測和載入
-- ✅ 圖片路徑解析和顯示測試
-- ✅ 圖片載入錯誤處理
-- ✅ 評論數據統計
-- ✅ 實時日誌記錄
+### 評論展示功能包含：
+- ✅ JSON 文件自動檢測和載入最新評論數據
+- ✅ 評論卡片顯示（姓名、評分、內容、日期）
+- ✅ 圖片路徑解析和顯示（支援 Lightbox 檢視）
+- ✅ 評論文字截斷和展開功能
+- ✅ 「顯示更多評論」分頁功能
+- ✅ 響應式設計和互動效果
 
 ### 預期結果：
-- 載入最新的 JSON 評論數據
-- 顯示評論文字、評分、日期
-- 載入和顯示評論圖片
-- 統計總評論數、平均評分、總圖片數
+- 自動載入最新的 JSON 評論數據
+- 以卡片形式顯示評論文字、星級評分、發布日期
+- 載入和顯示評論圖片（點擊放大檢視）
+- 支援評論內容截斷和「看全文」展開
 
 ## ⚠️ 注意事項
 

@@ -486,6 +486,13 @@
 
     <script src="../shared/dataAPI.js"></script>
     <script src="../shared/utils.js"></script>
+
+    <!-- Lightbox -->
+    <div id="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(44, 44, 44, 0.95); z-index:2000; justify-content:center; align-items:center; cursor:pointer;">
+        <span id="lightbox-close" style="position:absolute; top:20px; right:40px; font-size:40px; color:var(--primary-white); cursor:pointer; transition:0.3s; opacity:0.8;">&times;</span>
+        <img id="lightbox-img" style="max-width:90%; max-height:80%; object-fit:contain; border-radius:8px; border: 1px solid var(--accent-sage);">
+    </div>
+
     <script>
         // 自定義游標跟隨
         const cursor = document.getElementById('cursor');
@@ -546,21 +553,110 @@
             });
         });
 
+        let allReviews = [];
+        let numReviewsToShow = 3;
+        const REVIEWS_PER_PAGE = 3;
+
+        async function loadReviews() {
+            try {
+                const dataAPI = new DataAPI();
+                const reviews = await dataAPI.loadLatestReviews();
+
+                allReviews = reviews;
+                numReviewsToShow = 3;
+                displayReviews();
+
+            } catch (error) {
+                console.error('載入評論失敗:', error);
+                document.getElementById('reviewsContainer').innerHTML = '<p style="text-align: center; color: var(--text-charcoal); opacity: 0.6;">載入評論時發生錯誤，請稍後再試</p>';
+            }
+        }
+
+        function showMoreReviews() {
+            numReviewsToShow += REVIEWS_PER_PAGE;
+            displayReviews();
+        }
+
+        function displayReviews() {
+            const container = document.getElementById('reviewsContainer');
+            const reviews = allReviews;
+
+            if (!reviews || reviews.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--text-charcoal); opacity: 0.6;">目前沒有評論資料</p>';
+                return;
+            }
+
+            const reviewsToDisplay = reviews.slice(0, numReviewsToShow);
+
+            const reviewsHTML = reviewsToDisplay.map((review, index) => {
+                const stars = '★'.repeat(review.rating || 5);
+
+                let imageHtml = '';
+                if (review.images && review.images.length > 0) {
+                    const imagesToShow = review.images.slice(0, 2);
+                    const imageElements = imagesToShow.map(imgSrc => `
+                        <img src="${imgSrc}" alt="評論圖片" style="width: 48%; height: 120px; object-fit: cover; border: 1px solid var(--whisper-gray); cursor: pointer; transition: all 0.3s ease;"
+                             onmouseover="this.style.opacity='0.8'"
+                             onmouseout="this.style.opacity='1'"
+                             onerror="this.style.display='none';">
+                    `).join('');
+
+                    imageHtml = `
+                        <div class="review-image" style="display: flex; gap: 4%; margin-top: 30px;">
+                            ${imageElements}
+                        </div>
+                        ${review.images.length > 2 ? `<p style="color: var(--accent-sage); font-size: 0.9rem; margin-top: 15px; opacity: 0.8;"><strong>更多圖片:</strong> +${review.images.length - 2} 張</p>` : ''}
+                    `;
+                }
+
+                return `
+                    <div class="review-card" data-review-id="ethereal-${index}">
+                        <div class="review-stars">${stars}</div>
+                        <p class="review-text">${review.review_text || review.text || '無評論內容'}</p>
+                        ${imageHtml}
+                        <div class="review-author">${review.reviewer_name || review.author_name || 'Anonymous'} · ${review.review_date || review.relative_time_description || '未知'}</div>
+                    </div>
+                `;
+            }).join('');
+
+            let showMoreButtonHTML = '';
+            if (numReviewsToShow < reviews.length) {
+                showMoreButtonHTML = `
+                    <div style="text-align: center; margin-top: 80px;">
+                        <button onclick="showMoreReviews()" style="
+                            background: var(--subtle-mist);
+                            border: 2px solid var(--accent-sage);
+                            color: var(--text-charcoal);
+                            padding: 15px 40px;
+                            font-size: 1rem;
+                            cursor: pointer;
+                            transition: all 0.6s ease;
+                            letter-spacing: 1px;
+                        "
+                        onmouseover="this.style.background='var(--accent-sage)'; this.style.color='var(--primary-white)';"
+                        onmouseout="this.style.background='var(--subtle-mist)'; this.style.color='var(--text-charcoal)';">
+                            顯示更多評論
+                        </button>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = reviewsHTML + showMoreButtonHTML;
+
+            setupReviewTruncation(container);
+        }
+
         // 載入評論數據
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                const reviewManager = new ReviewManager();
-                const reviews = await reviewManager.loadReviews();
-                reviewManager.displayReviews(reviews, 'reviewsContainer');
-                
+                await loadReviews();
+
                 // 創造極少量的浮動粒子（符合極簡美學）
                 createMinimalParticles();
-                
+
                 console.log('🎨 Ethereal Minimalism loaded - A space for quiet contemplation');
             } catch (error) {
                 console.error('載入評論時出錯:', error);
-                // 顯示預設評論
-                displayDefaultReviews();
             }
         });
 
@@ -581,7 +677,7 @@
                         animation: minimal-drift ${20 + Math.random() * 10}s linear infinite;
                     `;
                     document.body.appendChild(particle);
-                    
+
                     setTimeout(() => particle.remove(), 30000);
                 }, i * 5000);
             }
@@ -597,38 +693,6 @@
             }
         `;
         document.head.appendChild(style);
-
-        function displayDefaultReviews() {
-            const defaultReviews = [
-                {
-                    author_name: "陳小姐",
-                    rating: 5,
-                    text: "Nick 設計師的空間規劃非常用心，整個系統櫃的配置既實用又美觀，完全符合我們想要的極簡風格。",
-                    relative_time_description: "2 個月前"
-                },
-                {
-                    author_name: "王先生",
-                    rating: 5,
-                    text: "設計師很有品味，收納規劃很到位，材質選用也很好，整體呈現的效果讓人很滿意。",
-                    relative_time_description: "1 個月前"
-                },
-                {
-                    author_name: "李太太",
-                    rating: 5,
-                    text: "從規劃到完工都很滿意，Nick 很有耐心地聽我們的需求，最終的成果超出預期。",
-                    relative_time_description: "3 週前"
-                }
-            ];
-
-            const container = document.getElementById('reviewsContainer');
-            container.innerHTML = defaultReviews.map(review => `
-                <div class="review-card">
-                    <div class="review-stars">${'★'.repeat(review.rating)}</div>
-                    <p class="review-text">${review.text}</p>
-                    <div class="review-author">${review.author_name} · ${review.relative_time_description}</div>
-                </div>
-            `).join('');
-        }
     </script>
 </body>
 </html>
