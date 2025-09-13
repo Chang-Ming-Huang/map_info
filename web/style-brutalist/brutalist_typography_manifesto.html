@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brutalist Typography Manifesto - AI Creative Laboratory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800;900&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brutalist-black: #000000;
+            --brutalist-white: #ffffff;
+            --brutalist-red: #ff0000;
+            --brutalist-gray: #666666;
+            --brutalist-light-gray: #cccccc;
+            --grid-size: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--brutalist-white);
+            color: var(--brutalist-black);
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+
+        /* Grid Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, var(--brutalist-light-gray) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--brutalist-light-gray) 1px, transparent 1px);
+            background-size: var(--grid-size) var(--grid-size);
+            opacity: 0.1;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Header Section */
+        .header {
+            padding: 0;
+            border-bottom: 4px solid var(--brutalist-black);
+            position: relative;
+        }
+
+        .nav-strip {
+            background: var(--brutalist-black);
+            color: var(--brutalist-white);
+            padding: 12px 24px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-strip a {
+            color: var(--brutalist-white);
+            text-decoration: none;
+            border: 2px solid transparent;
+            padding: 8px 16px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-strip a:hover {
+            border: 2px solid var(--brutalist-white);
+            background: var(--brutalist-white);
+            color: var(--brutalist-black);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 24px;
+            text-align: left;
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: clamp(4rem, 12vw, 12rem);
+            font-weight: 900;
+            line-height: 0.8;
+            letter-spacing: -0.04em;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .hero-title .highlight {
+            background: var(--brutalist-black);
+            color: var(--brutalist-white);
+            padding: 0 20px;
+            transform: skew(-5deg);
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        .hero-manifesto {
+            font-size: clamp(1.2rem, 3vw, 2.5rem);
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 60px;
+            max-width: 900px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 0;
+            border: 4px solid var(--brutalist-black);
+            margin: 80px 24px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .content-block {
+            border: 2px solid var(--brutalist-black);
+            padding: 60px 40px;
+            position: relative;
+            background: var(--brutalist-white);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .content-block:hover {
+            background: var(--brutalist-black);
+            color: var(--brutalist-white);
+            transform: translate(4px, 4px);
+        }
+
+        .content-block:nth-child(even) {
+            background: var(--brutalist-light-gray);
+        }
+
+        .content-block:nth-child(even):hover {
+            background: var(--brutalist-red);
+            color: var(--brutalist-white);
+        }
+
+        .block-number {
+            font-size: 3rem;
+            font-weight: 900;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            opacity: 0.3;
+        }
+
+        .block-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .block-content {
+            font-size: 1rem;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* Typography Showcase */
+        .typography-section {
+            padding: 120px 24px;
+            background: var(--brutalist-black);
+            color: var(--brutalist-white);
+        }
+
+        .typography-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .typography-title {
+            font-size: clamp(3rem, 8vw, 8rem);
+            font-weight: 100;
+            text-align: center;
+            margin-bottom: 80px;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        .type-samples {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 60px;
+        }
+
+        .type-sample {
+            text-align: center;
+            padding: 40px;
+            border: 2px solid var(--brutalist-white);
+            position: relative;
+        }
+
+        .type-sample .sample-text {
+            font-size: clamp(2rem, 6vw, 6rem);
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+
+        .type-sample .sample-meta {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .weight-100 { font-weight: 100; }
+        .weight-300 { font-weight: 300; }
+        .weight-500 { font-weight: 500; }
+        .weight-700 { font-weight: 700; }
+        .weight-900 { font-weight: 900; }
+
+        /* Data Section */
+        .data-section {
+            padding: 120px 24px;
+            background: var(--brutalist-white);
+        }
+
+        .data-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 0;
+            border: 4px solid var(--brutalist-black);
+        }
+
+        .data-item {
+            border: 2px solid var(--brutalist-black);
+            padding: 40px 30px;
+            text-align: center;
+            background: var(--brutalist-white);
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .data-item:hover {
+            background: var(--brutalist-red);
+            color: var(--brutalist-white);
+        }
+
+        .data-number {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .data-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--brutalist-black);
+            color: var(--brutalist-white);
+            padding: 80px 24px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-title {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 300;
+            margin-bottom: 40px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .footer-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            opacity: 0.8;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                margin: 40px 12px;
+            }
+            
+            .content-block {
+                padding: 40px 24px;
+            }
+            
+            .hero {
+                padding: 60px 12px;
+            }
+            
+            .data-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Glitch Effect */
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        .glitch {
+            animation: glitch 0.3s;
+        }
+
+        /* Cursor Effect */
+        .cursor-dot {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: var(--brutalist-red);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: all 0.1s ease;
+            mix-blend-mode: difference;
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor-dot"></div>
+
+    <header class="header">
+        <nav class="nav-strip">
+            <span>BRUTALIST.MANIFESTO.2025</span>
+            <a href="../index.html">← LABORATORY</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1 class="hero-title">
+            BRUTAL<span class="highlight">IST</span><br>
+            TYPO<span class="highlight">GRAPHY</span><br>
+            <span class="highlight">MANIFESTO</span>
+        </h1>
+        <p class="hero-manifesto">
+            破壞規則。拒絕完美。擁抱粗糙。<br>
+            這是字體的反叛，是設計的革命。<br>
+            在完美主義的廢墟上建立新的美學秩序。
+        </p>
+    </section>
+
+    <section class="content-grid">
+        <div class="content-block">
+            <div class="block-number">01</div>
+            <h3 class="block-title">反設計運動</h3>
+            <p class="block-content">
+                拒絕傳統的設計規範，擁抱不對稱、衝突和視覺噪音。
+                美不存在於和諧中，而是在張力和對抗中誕生。
+                每個元素都應該爭奪注意力，創造動態的視覺體驗。
+            </p>
+        </div>
+        
+        <div class="content-block">
+            <div class="block-number">02</div>
+            <h3 class="block-title">功能性暴露</h3>
+            <p class="block-content">
+                不隱藏結構，而是慶祝它。網格、邊框、分隔線——
+                讓骨架成為皮膚。透明的架構就是最誠實的設計。
+                用戶應該看到系統的工作方式，而不是被精美的外表蒙蔽。
+            </p>
+        </div>
+
+        <div class="content-block">
+            <div class="block-number">03</div>
+            <h3 class="block-title">極端對比</h3>
+            <p class="block-content">
+                黑與白。大與小。粗與細。
+                沒有中間地帶，沒有灰色妥協。
+                極端的對比創造極端的情感反應，
+                這正是我們要的——讓用戶無法忽視。
+            </p>
+        </div>
+
+        <div class="content-block">
+            <div class="block-number">04</div>
+            <h3 class="block-title">粗糙即美</h3>
+            <p class="block-content">
+                像素對齊是懦夫的遊戲。真正的美存在於
+                不完美的邊緣、突兀的轉折、意外的錯位。
+                讓設計呼吸，讓它有生命，讓它有瑕疵。
+            </p>
+        </div>
+
+        <div class="content-block">
+            <div class="block-number">05</div>
+            <h3 class="block-title">字體即武器</h3>
+            <p class="block-content">
+                字體不是裝飾，是宣言。每個字重、每個間距
+                都傳達態度。輕字重低聲耳語，粗字重大聲呐喊。
+                選擇你的武器，然後用力揮舞。
+            </p>
+        </div>
+
+        <div class="content-block">
+            <div class="block-number">06</div>
+            <h3 class="block-title">數位原住民</h3>
+            <p class="block-content">
+                不模仿印刷品，不懷念過去。
+                我們是數位原住民，用螢幕的語言說話。
+                像素、網格、響應式——這是我們的母語。
+            </p>
+        </div>
+    </section>
+
+    <section class="typography-section">
+        <div class="typography-container">
+            <h2 class="typography-title">字重測試實驗室</h2>
+            <div class="type-samples">
+                <div class="type-sample">
+                    <div class="sample-text weight-100">輕如羽毛的耳語</div>
+                    <div class="sample-meta">Weight: 100 • Style: Whisper</div>
+                </div>
+                <div class="type-sample">
+                    <div class="sample-text weight-300">優雅的陳述</div>
+                    <div class="sample-meta">Weight: 300 • Style: Statement</div>
+                </div>
+                <div class="type-sample">
+                    <div class="sample-text weight-500">平衡的力量</div>
+                    <div class="sample-meta">Weight: 500 • Style: Balance</div>
+                </div>
+                <div class="type-sample">
+                    <div class="sample-text weight-700">強烈的宣言</div>
+                    <div class="sample-meta">Weight: 700 • Style: Declaration</div>
+                </div>
+                <div class="type-sample">
+                    <div class="sample-text weight-900">絕對的統治</div>
+                    <div class="sample-meta">Weight: 900 • Style: Domination</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="data-section">
+        <div class="data-container">
+            <div class="data-grid">
+                <div class="data-item">
+                    <div class="data-number">2025</div>
+                    <div class="data-label">設計年份</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-number">900</div>
+                    <div class="data-label">最大字重</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-number">100%</div>
+                    <div class="data-label">對比度</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-number">0</div>
+                    <div class="data-label">妥協數量</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-number">∞</div>
+                    <div class="data-label">可能性</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-number">1</div>
+                    <div class="data-label">真理</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <h3 class="footer-title">粗糙即完美</h3>
+            <p class="footer-text">
+                在追求完美的世界裡，我們選擇擁抱不完美。<br>
+                在講究精緻的時代裡，我們選擇展示粗糙。<br>
+                這不是反叛，這是革命。<br><br>
+                <strong>歡迎來到後設計時代。</strong>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Custom cursor effect
+        const cursor = document.querySelector('.cursor-dot');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Hover effects for interactive elements
+        const interactiveElements = document.querySelectorAll('.content-block, .data-item, .nav-strip a');
+        
+        interactiveElements.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(2)';
+                cursor.style.background = '#ff0000';
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursor.style.background = '#ff0000';
+            });
+        });
+
+        // Random glitch effect
+        const glitchElements = document.querySelectorAll('.hero-title, .block-title');
+        
+        function triggerGlitch() {
+            const randomElement = glitchElements[Math.floor(Math.random() * glitchElements.length)];
+            randomElement.classList.add('glitch');
+            setTimeout(() => {
+                randomElement.classList.remove('glitch');
+            }, 300);
+        }
+
+        // Trigger glitch every 5-10 seconds
+        setInterval(triggerGlitch, Math.random() * 5000 + 5000);
+
+        // Responsive grid adjustment
+        function adjustGrid() {
+            const contentGrid = document.querySelector('.content-grid');
+            const dataGrid = document.querySelector('.data-grid');
+            
+            if (window.innerWidth <= 768) {
+                contentGrid.style.gridTemplateColumns = '1fr';
+                dataGrid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+            } else if (window.innerWidth <= 1024) {
+                contentGrid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(350px, 1fr))';
+                dataGrid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(200px, 1fr))';
+            } else {
+                contentGrid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(400px, 1fr))';
+                dataGrid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(250px, 1fr))';
+            }
+        }
+
+        window.addEventListener('resize', adjustGrid);
+        adjustGrid(); // Initial call
+
+        console.log('🔥 Brutalist Typography Manifesto loaded');
+        console.log('⚡ Anti-design principles activated');
+        console.log('💀 Traditional design rules destroyed');
+    </script>
+</body>
+</html>

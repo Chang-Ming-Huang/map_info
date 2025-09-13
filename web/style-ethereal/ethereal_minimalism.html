@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethereal Minimalism - 空靈極簡美學</title>
+    <style>
+        :root {
+            --primary-white: #fefefe;
+            --accent-sage: #9faa9e;
+            --text-charcoal: #2c2c2c;
+            --subtle-mist: #f8f9f8;
+            --whisper-gray: #e8eae8;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary-white);
+            color: var(--text-charcoal);
+            overflow-x: hidden;
+            cursor: none;
+            line-height: 1.7;
+        }
+
+        /* 自定義游標系統 */
+        .custom-cursor {
+            position: fixed;
+            width: 24px;
+            height: 24px;
+            border: 1px solid var(--accent-sage);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: all 0.15s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-dot {
+            position: fixed;
+            width: 3px;
+            height: 3px;
+            background: var(--accent-sage);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+        }
+
+        /* 主容器設計 */
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 80px 60px;
+        }
+
+        /* 標題區域 */
+        .title-section {
+            margin-bottom: 160px;
+        }
+
+        .main-title {
+            font-size: clamp(4rem, 9vw, 9rem);
+            font-weight: 100;
+            letter-spacing: -0.03em;
+            line-height: 0.9;
+            color: var(--text-charcoal);
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: ethereal-fade-in 1.5s ease forwards 0.3s;
+        }
+
+        .subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+            font-weight: 200;
+            color: var(--accent-sage);
+            letter-spacing: 0.1em;
+            opacity: 0;
+            animation: ethereal-fade-in 1.5s ease forwards 0.8s;
+        }
+
+        /* 內容卡片 */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 120px;
+            margin: 160px 0;
+            opacity: 0;
+            animation: ethereal-fade-in 1.5s ease forwards 1.3s;
+        }
+
+        .content-card {
+            background: transparent;
+            padding: 60px 0;
+            border-top: 1px solid var(--whisper-gray);
+            position: relative;
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent-sage);
+            transition: width 0.8s ease;
+        }
+
+        .content-card:hover::before {
+            width: 60px;
+        }
+
+        .content-card h3 {
+            font-size: clamp(1.3rem, 3vw, 2rem);
+            font-weight: 300;
+            margin-bottom: 30px;
+            color: var(--text-charcoal);
+        }
+
+        .content-card p {
+            font-size: 1rem;
+            color: var(--accent-sage);
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        /* 底部簽名 */
+        .signature {
+            text-align: center;
+            opacity: 0;
+            animation: ethereal-fade-in 1.5s ease forwards 1.8s;
+        }
+
+        .signature-text {
+            font-size: 0.9rem;
+            color: var(--accent-sage);
+            letter-spacing: 0.2em;
+            font-weight: 200;
+        }
+
+        /* 浮動幾何元素 */
+        .floating-geometry {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            border: 1px solid rgba(159, 170, 158, 0.1);
+            top: 20%;
+            right: 10%;
+            z-index: -1;
+            animation: gentle-float 12s ease-in-out infinite;
+        }
+
+        .floating-geometry::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80px;
+            height: 80px;
+            border: 1px solid rgba(159, 170, 158, 0.05);
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+
+        /* 動畫定義 */
+        @keyframes ethereal-fade-in {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
+
+        @keyframes gentle-float {
+            0%, 100% {
+                transform: rotate(0deg) translateY(0);
+            }
+            33% {
+                transform: rotate(2deg) translateY(-10px);
+            }
+            66% {
+                transform: rotate(-1deg) translateY(5px);
+            }
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 60px 40px;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 80px;
+                margin: 120px 0;
+            }
+
+            .floating-geometry {
+                display: none;
+            }
+        }
+
+        /* 呼吸背景 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                circle at 70% 30%, 
+                rgba(159, 170, 158, 0.02) 0%, 
+                transparent 50%
+            );
+            animation: ethereal-breathe 20s ease-in-out infinite;
+            z-index: -2;
+        }
+
+        @keyframes ethereal-breathe {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 自定義游標 -->
+    <div class="custom-cursor" id="cursor"></div>
+    <div class="cursor-dot" id="cursorDot"></div>
+
+    <!-- 浮動幾何 -->
+    <div class="floating-geometry"></div>
+
+    <div class="container">
+        <!-- 標題區域 -->
+        <section class="title-section">
+            <h1 class="main-title">空靈<br>極簡</h1>
+            <p class="subtitle">ETHEREAL MINIMALISM</p>
+        </section>
+
+        <!-- 內容網格 -->
+        <section class="content-grid">
+            <div class="content-card">
+                <h3>純淨意識</h3>
+                <p>在極簡的空間中，意識找到了最純粹的表達。每一個元素都經過精心考慮，每一處留白都承載著深刻的意義。這不僅是設計的哲學，更是生活的藝術。</p>
+            </div>
+
+            <div class="content-card">
+                <h3>靜謐力量</h3>
+                <p>真正的力量來自於靜謐。在這個充滿噪音的世界裡，我們創造了一個可以讓靈魂休息的空間。這裡沒有多餘的裝飾，只有最essential的美。</p>
+            </div>
+
+            <div class="content-card">
+                <h3>空間詩學</h3>
+                <p>空間本身就是詩歌。負空間與正空間的對話，創造了一種無聲的韻律。這是視覺的音樂，是形式的冥想。</p>
+            </div>
+
+            <div class="content-card">
+                <h3>時光凝結</h3>
+                <p>在這個設計中，時間彷彿靜止了。沒有急躁的動畫，沒有喧鬧的色彩，只有永恆的寧靜和優雅。這是對快節奏世界的溫柔反抗。</p>
+            </div>
+        </section>
+
+        <!-- 底部簽名 -->
+        <section class="signature">
+            <p class="signature-text">— AI CREATIVE LAB —</p>
+        </section>
+    </div>
+
+    <script>
+        // 自定義游標跟隨
+        const cursor = document.getElementById('cursor');
+        const cursorDot = document.getElementById('cursorDot');
+        
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0;
+        let cursorY = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        
+        function animateCursor() {
+            // 平滑跟隨效果
+            cursorX += (mouseX - cursorX) * 0.1;
+            cursorY += (mouseY - cursorY) * 0.1;
+            
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            
+            // 點立即跟隨
+            cursorDot.style.left = mouseX + 'px';
+            cursorDot.style.top = mouseY + 'px';
+            
+            requestAnimationFrame(animateCursor);
+        }
+        
+        animateCursor();
+
+        // 鼠標懸浮效果
+        const cards = document.querySelectorAll('.content-card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                cursor.style.width = '60px';
+                cursor.style.height = '60px';
+                cursor.style.borderWidth = '2px';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                cursor.style.width = '24px';
+                cursor.style.height = '24px';
+                cursor.style.borderWidth = '1px';
+            });
+        });
+
+        // 頁面載入完成後的微妙粒子效果
+        document.addEventListener('DOMContentLoaded', () => {
+            // 創造極少量的浮動粒子（符合極簡美學）
+            createMinimalParticles();
+        });
+
+        function createMinimalParticles() {
+            for(let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.style.cssText = `
+                        position: fixed;
+                        width: 2px;
+                        height: 2px;
+                        background: var(--accent-sage);
+                        top: ${Math.random() * 100}vh;
+                        left: ${Math.random() * 100}vw;
+                        opacity: 0.1;
+                        pointer-events: none;
+                        z-index: -1;
+                        animation: minimal-drift ${20 + Math.random() * 10}s linear infinite;
+                    `;
+                    document.body.appendChild(particle);
+                    
+                    setTimeout(() => particle.remove(), 30000);
+                }, i * 5000);
+            }
+        }
+
+        // 添加動畫樣式
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes minimal-drift {
+                from { transform: translateY(0) translateX(0); opacity: 0.1; }
+                50% { opacity: 0.05; }
+                to { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        console.log('🎨 Ethereal Minimalism loaded - A space for quiet contemplation');
+    </script>
+</body>
+</html>

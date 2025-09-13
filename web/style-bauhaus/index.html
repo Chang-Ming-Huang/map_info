@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nick - 築宜系統傢俱設計師 | 包豪斯幾何美學</title>
+    <style>
+        :root {
+            --bauhaus-white: #ffffff;
+            --bauhaus-black: #000000;
+            --bauhaus-red: #e53e3e;
+            --bauhaus-yellow: #ffd23f;
+            --bauhaus-blue: #3182ce;
+            --structure-gray: #f8f8f8;
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            background: var(--bauhaus-white);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.4;
+            letter-spacing: 0.01em;
+        }
+
+        /* 包豪斯網格系統 */
+        .bauhaus-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, var(--structure-gray) 1px, transparent 1px),
+                linear-gradient(0deg, var(--structure-gray) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.3;
+            z-index: -2;
+        }
+
+        /* Navigation */
+        .bauhaus-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: var(--bauhaus-white);
+            border-bottom: 4px solid var(--bauhaus-black);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 60px;
+            z-index: 1000;
+        }
+
+        .bauhaus-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--bauhaus-black);
+            text-decoration: none;
+        }
+
+        .bauhaus-logo::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: var(--bauhaus-red);
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 10px 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--bauhaus-red);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: 2px solid var(--bauhaus-black);
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 800px 1fr;
+            grid-template-rows: 80px 1fr;
+            position: relative;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            grid-column: 2;
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: clamp(4rem, 10vw, 8rem);
+            font-weight: 700;
+            color: var(--bauhaus-black);
+            margin-bottom: 30px;
+            line-height: 0.85;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            position: relative;
+        }
+
+        .title-designer {
+            display: block;
+            background: var(--bauhaus-red);
+            color: var(--bauhaus-white);
+            padding: 10px 30px;
+            margin-top: 20px;
+            width: fit-content;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+
+        .bauhaus-divider {
+            width: 200px;
+            height: 8px;
+            background: var(--bauhaus-yellow);
+            margin: 40px 0;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 0;
+            margin-top: 60px;
+        }
+
+        .btn-primary {
+            background: var(--bauhaus-black);
+            color: var(--bauhaus-white);
+            padding: 20px 40px;
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: 2px solid var(--bauhaus-black);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary {
+            background: var(--bauhaus-white);
+            color: var(--bauhaus-black);
+            padding: 20px 40px;
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: 2px solid var(--bauhaus-black);
+            border-left: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: var(--bauhaus-red);
+            border-color: var(--bauhaus-red);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bauhaus-yellow);
+        }
+
+        /* Geometric Elements */
+        .geometric-element {
+            position: absolute;
+            z-index: -1;
+        }
+
+        .circle-red {
+            top: 200px;
+            right: -100px;
+            width: 150px;
+            height: 150px;
+            background: var(--bauhaus-red);
+            border-radius: 50%;
+        }
+
+        .square-yellow {
+            bottom: 150px;
+            left: -50px;
+            width: 100px;
+            height: 100px;
+            background: var(--bauhaus-yellow);
+        }
+
+        .triangle-blue {
+            top: 50%;
+            right: 100px;
+            width: 0;
+            height: 0;
+            border-left: 40px solid transparent;
+            border-right: 40px solid transparent;
+            border-bottom: 70px solid var(--bauhaus-blue);
+        }
+
+        /* About Section */
+        .about-section {
+            background: var(--structure-gray);
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .about-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 60px;
+        }
+
+        .section-header {
+            margin-bottom: 80px;
+        }
+
+        .section-number {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--bauhaus-red);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            color: var(--bauhaus-black);
+            text-transform: uppercase;
+            letter-spacing: -0.01em;
+            margin-bottom: 30px;
+        }
+
+        .section-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            max-width: 600px;
+        }
+
+        .function-blocks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 80px;
+        }
+
+        .function-block {
+            position: relative;
+            padding: 50px 40px;
+            background: var(--bauhaus-white);
+            border: 3px solid var(--bauhaus-black);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .function-block:hover {
+            transform: translate(-5px, -5px);
+            box-shadow: 5px 5px 0 var(--bauhaus-red);
+        }
+
+        .block-number {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            width: 50px;
+            height: 50px;
+            background: var(--bauhaus-black);
+            color: var(--bauhaus-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .function-block:nth-child(2) .block-number {
+            background: var(--bauhaus-red);
+        }
+
+        .function-block:nth-child(3) .block-number {
+            background: var(--bauhaus-blue);
+        }
+
+        .block-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .block-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        /* Reviews Section */
+        .reviews-section {
+            padding: 120px 0;
+            background: var(--bauhaus-white);
+            position: relative;
+        }
+
+        .reviews-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 60px;
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 80px;
+        }
+
+        .review-card {
+            background: var(--bauhaus-white);
+            border: 3px solid var(--bauhaus-black);
+            padding: 40px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .review-card:nth-child(odd) {
+            border-color: var(--bauhaus-red);
+        }
+
+        .review-card:nth-child(even) {
+            border-color: var(--bauhaus-blue);
+        }
+
+        .review-card:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 3px 3px 0 var(--bauhaus-yellow);
+        }
+
+        .reviewer-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .reviewer-avatar {
+            width: 60px;
+            height: 60px;
+            background: var(--bauhaus-black);
+            color: var(--bauhaus-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-right: 20px;
+        }
+
+        .review-card:nth-child(odd) .reviewer-avatar {
+            background: var(--bauhaus-red);
+        }
+
+        .review-card:nth-child(even) .reviewer-avatar {
+            background: var(--bauhaus-blue);
+        }
+
+        .reviewer-info h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .review-rating {
+            display: flex;
+            gap: 2px;
+        }
+
+        .star {
+            color: var(--bauhaus-yellow);
+            font-size: 1rem;
+        }
+
+        .review-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .review-images {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .review-image {
+            aspect-ratio: 1;
+            background: var(--structure-gray);
+            border: 2px solid var(--bauhaus-black);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .review-image:hover {
+            border-color: var(--bauhaus-red);
+        }
+
+        .review-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: var(--bauhaus-black);
+            color: var(--bauhaus-white);
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 60px;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            margin-top: 80px;
+        }
+
+        .contact-info h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            color: var(--bauhaus-white);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            border-bottom: 2px solid var(--bauhaus-red);
+        }
+
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--bauhaus-red);
+            color: var(--bauhaus-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 25px;
+            flex-shrink: 0;
+        }
+
+        .contact-item:nth-child(even) .contact-icon {
+            background: var(--bauhaus-yellow);
+            color: var(--bauhaus-black);
+        }
+
+        .contact-details h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .contact-details p {
+            font-size: 1rem;
+            color: var(--bauhaus-white);
+            opacity: 0.9;
+        }
+
+        .contact-form {
+            background: var(--bauhaus-white);
+            color: var(--text-primary);
+            padding: 50px;
+            border: 4px solid var(--bauhaus-yellow);
+            position: relative;
+        }
+
+        .contact-form::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: 20px;
+            bottom: 20px;
+            border: 4px solid var(--bauhaus-red);
+            z-index: -1;
+        }
+
+        .contact-form h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 3px solid var(--bauhaus-black);
+            background: var(--bauhaus-white);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--bauhaus-red);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-btn {
+            background: var(--bauhaus-black);
+            color: var(--bauhaus-white);
+            padding: 15px 40px;
+            border: 3px solid var(--bauhaus-black);
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background: var(--bauhaus-red);
+            border-color: var(--bauhaus-red);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bauhaus-white);
+            border-top: 4px solid var(--bauhaus-black);
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 60px;
+        }
+
+        .footer-text {
+            font-size: 1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            color: var(--text-primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero-section {
+                grid-template-columns: 1fr;
+                padding: 80px 40px 0;
+            }
+
+            .hero-content {
+                grid-column: 1;
+                padding: 60px 0;
+            }
+
+            .bauhaus-nav {
+                padding: 0 40px;
+            }
+
+            .about-container,
+            .reviews-container,
+            .contact-container,
+            .footer-content {
+                padding: 0 40px;
+            }
+
+            .contact-grid {
+                gap: 50px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-section {
+                padding: 80px 20px 0;
+            }
+
+            .hero-content {
+                padding: 40px 0;
+            }
+
+            .bauhaus-nav {
+                padding: 0 20px;
+            }
+
+            .about-container,
+            .reviews-container,
+            .contact-container,
+            .footer-content {
+                padding: 0 20px;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .function-blocks {
+                grid-template-columns: 1fr;
+            }
+
+            .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .btn-secondary {
+                border-left: 2px solid var(--bauhaus-black);
+                border-top: none;
+            }
+
+            .contact-form {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Bauhaus Grid Background -->
+    <div class="bauhaus-grid"></div>
+
+    <!-- Navigation -->
+    <nav class="bauhaus-nav">
+        <a href="#" class="bauhaus-logo">築宜</a>
+        <ul class="nav-menu">
+            <li><a href="#home">首頁</a></li>
+            <li><a href="#about">關於</a></li>
+            <li><a href="#reviews">評價</a></li>
+            <li><a href="#contact">聯絡</a></li>
+        </ul>
+        <button class="mobile-menu-btn">≡</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                NICK
+                <span class="title-designer">DESIGNER</span>
+            </h1>
+            <p class="hero-subtitle">系統傢俱設計師</p>
+            <div class="bauhaus-divider"></div>
+            <p class="hero-description">
+                築宜系統傢俱 桃園店<br>
+                以包豪斯功能主義為設計核心，追求形式與功能的完美統一。<br>
+                運用幾何美學與理性設計，創造簡潔而富有力量的現代居住空間。
+            </p>
+            <div class="cta-buttons">
+                <a href="#reviews" class="btn-primary">查看作品</a>
+                <a href="#contact" class="btn-secondary">預約諮詢</a>
+            </div>
+        </div>
+
+        <!-- Geometric Elements -->
+        <div class="geometric-element circle-red"></div>
+        <div class="geometric-element square-yellow"></div>
+        <div class="geometric-element triangle-blue"></div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="about-container">
+            <div class="section-header">
+                <div class="section-number">01 - 設計理念</div>
+                <h2 class="section-title">功能美學</h2>
+                <div class="bauhaus-divider"></div>
+                <p class="section-description">
+                    遵循包豪斯學派的設計哲學，將功能性與美學完美結合。
+                    每一個設計元素都服務於實用性，同時追求純粹的視覺美感。
+                </p>
+            </div>
+
+            <div class="function-blocks">
+                <div class="function-block">
+                    <div class="block-number">01</div>
+                    <h3 class="block-title">功能主義</h3>
+                    <p class="block-description">
+                        形式追隨功能，每個設計決定都基於使用需求。
+                        去除多餘裝飾，專注於空間的實用性與效率。
+                    </p>
+                </div>
+
+                <div class="function-block">
+                    <div class="block-number">02</div>
+                    <h3 class="block-title">幾何美學</h3>
+                    <p class="block-description">
+                        運用簡潔的幾何形狀和線條，創造視覺上的秩序感。
+                        以數學比例構建和諧的空間關係。
+                    </p>
+                </div>
+
+                <div class="function-block">
+                    <div class="block-number">03</div>
+                    <h3 class="block-title">工藝品質</h3>
+                    <p class="block-description">
+                        結合傳統工藝與現代技術，追求製作的精確性。
+                        每個細節都體現對品質的堅持與匠人精神。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews" class="reviews-section">
+        <div class="reviews-container">
+            <div class="section-header">
+                <div class="section-number">02 - 客戶見證</div>
+                <h2 class="section-title">實用回饋</h2>
+                <div class="bauhaus-divider"></div>
+                <p class="section-description">
+                    每一份客戶回饋都是對功能主義設計理念的最好驗證
+                </p>
+            </div>
+
+            <div id="reviews-container" class="reviews-grid">
+                <!-- Reviews will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="contact-container">
+            <div class="section-header">
+                <div class="section-number" style="color: var(--bauhaus-yellow);">03 - 聯絡方式</div>
+                <h2 class="section-title" style="color: var(--bauhaus-white);">開始設計</h2>
+                <div class="bauhaus-divider"></div>
+                <p class="section-description" style="color: var(--bauhaus-white);">
+                    讓我們一起創造功能與美學並重的理想空間
+                </p>
+            </div>
+
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h3>築宜系統傢俱</h3>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">📍</div>
+                        <div class="contact-details">
+                            <h4>展示中心</h4>
+                            <p>桃園市中壢區環北路390號</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">📞</div>
+                        <div class="contact-details">
+                            <h4>專線電話</h4>
+                            <p>03-123-4567</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">⏰</div>
+                        <div class="contact-details">
+                            <h4>營業時間</h4>
+                            <p>週一至週日 09:00-18:00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <h3>預約設計諮詢</h3>
+                    <form>
+                        <div class="form-group">
+                            <label for="name">姓名</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">聯絡電話</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">需求說明</label>
+                            <textarea id="message" name="message" required></textarea>
+                        </div>
+
+                        <button type="submit" class="submit-btn">立即預約</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-text">© 2025 築宜系統傢俱 | 包豪斯美學，功能設計</p>
+        </div>
+    </footer>
+
+    <script src="../shared/utils.js"></script>
+    <script>
+        // 載入評論資料
+        async function loadReviews() {
+            const reviewManager = new ReviewManager();
+            const reviews = await reviewManager.loadReviews();
+            const container = document.getElementById('reviews-container');
+            
+            reviews.slice(0, 6).forEach((review, index) => {
+                const reviewCard = `
+                    <div class="review-card" style="animation: bauhaus-rise 0.8s ease ${index * 0.2}s both;">
+                        <div class="reviewer-header">
+                            <div class="reviewer-avatar">${review.reviewer_name.charAt(0)}</div>
+                            <div class="reviewer-info">
+                                <h4>${review.reviewer_name}</h4>
+                                <div class="review-rating">
+                                    ${reviewManager.generateStars(review.rating).replace(/text-yellow-400/g, 'star')}
+                                </div>
+                            </div>
+                        </div>
+                        <p class="review-text">${reviewManager.truncateText(review.review_text, 150)}</p>
+                        ${review.total_images > 0 ? `
+                            <div class="review-images">
+                                ${review.images.slice(0, 3).map(img => `
+                                    <div class="review-image">
+                                        <img src="../../images/20250913_020338/${img}" alt="客戶作品" data-src="../../images/20250913_020338/${img}">
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                container.innerHTML += reviewCard;
+            });
+
+            // 初始化懶加載
+            setupLazyLoading();
+        }
+
+        // 平滑滾動導航
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 頁面載入完成後執行
+        document.addEventListener('DOMContentLoaded', function() {
+            loadReviews();
+        });
+
+        // 添加包豪斯風格動畫
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes bauhaus-rise {
+                from {
+                    opacity: 0;
+                    transform: translateY(40px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

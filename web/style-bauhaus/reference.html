@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bauhaus Geometry - 包豪斯幾何美學</title>
+    <style>
+        :root {
+            --bauhaus-white: #ffffff;
+            --bauhaus-black: #000000;
+            --bauhaus-red: #e53e3e;
+            --bauhaus-yellow: #ffd23f;
+            --structure-gray: #f8f8f8;
+            --text-primary: #1a1a1a;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            background: var(--bauhaus-white);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.4;
+            letter-spacing: 0.01em;
+        }
+
+        /* 包豪斯網格系統 */
+        .bauhaus-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, var(--structure-gray) 1px, transparent 1px),
+                linear-gradient(0deg, var(--structure-gray) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.3;
+            z-index: -2;
+        }
+
+        /* 主容器 */
+        .bauhaus-container {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 800px 1fr;
+            grid-template-rows: 120px 1fr 80px;
+            gap: 0;
+            position: relative;
+        }
+
+        /* 頂部結構線 */
+        .structure-header {
+            grid-column: 1 / -1;
+            border-bottom: 4px solid var(--bauhaus-black);
+            display: flex;
+            align-items: center;
+            padding: 0 60px;
+        }
+
+        .bauhaus-logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--bauhaus-black);
+        }
+
+        /* 主要內容區域 */
+        .content-area {
+            grid-column: 2;
+            padding: 80px 0;
+            position: relative;
+        }
+
+        .bauhaus-title {
+            font-size: clamp(3.5rem, 8vw, 6rem);
+            font-weight: 700;
+            color: var(--bauhaus-black);
+            margin-bottom: 40px;
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            position: relative;
+        }
+
+        .title-accent {
+            display: inline-block;
+            background: var(--bauhaus-red);
+            color: var(--bauhaus-white);
+            padding: 0 20px;
+            margin-left: 10px;
+        }
+
+        .subtitle-section {
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .subtitle-text {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            font-weight: 300;
+            color: var(--text-primary);
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .bauhaus-divider {
+            width: 200px;
+            height: 8px;
+            background: var(--bauhaus-yellow);
+            margin: 40px 0;
+        }
+
+        /* 功能主義內容塊 */
+        .function-blocks {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 100px;
+        }
+
+        .function-block {
+            position: relative;
+            padding: 40px 30px;
+            background: var(--bauhaus-white);
+            border: 2px solid var(--bauhaus-black);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .function-block:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 3px 3px 0 var(--bauhaus-red);
+        }
+
+        .block-number {
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            width: 40px;
+            height: 40px;
+            background: var(--bauhaus-black);
+            color: var(--bauhaus-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .block-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--bauhaus-black);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .block-content {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* 幾何裝飾元素 */
+        .geometric-elements {
+            position: absolute;
+            top: 50%;
+            right: -100px;
+            transform: translateY(-50%);
+            z-index: -1;
+        }
+
+        .circle {
+            width: 120px;
+            height: 120px;
+            border: 8px solid var(--bauhaus-yellow);
+            border-radius: 50%;
+            margin-bottom: 40px;
+            animation: bauhaus-rotate 20s linear infinite;
+        }
+
+        .square {
+            width: 80px;
+            height: 80px;
+            background: var(--bauhaus-red);
+            margin-bottom: 40px;
+            animation: bauhaus-float 8s ease-in-out infinite;
+        }
+
+        .triangle {
+            width: 0;
+            height: 0;
+            border-left: 40px solid transparent;
+            border-right: 40px solid transparent;
+            border-bottom: 80px solid var(--bauhaus-black);
+            animation: bauhaus-float 6s ease-in-out infinite reverse;
+        }
+
+        /* 左側幾何元素 */
+        .left-geometry {
+            position: absolute;
+            top: 30%;
+            left: -80px;
+            z-index: -1;
+        }
+
+        .left-rectangle {
+            width: 60px;
+            height: 200px;
+            background: var(--bauhaus-yellow);
+            opacity: 0.8;
+            animation: bauhaus-slide 12s ease-in-out infinite;
+        }
+
+        /* 底部結構 */
+        .structure-footer {
+            grid-column: 1 / -1;
+            border-top: 2px solid var(--bauhaus-black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* 動畫定義 */
+        @keyframes bauhaus-rotate {
+            from { transform: translateY(-50%) rotate(0deg); }
+            to { transform: translateY(-50%) rotate(360deg); }
+        }
+
+        @keyframes bauhaus-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes bauhaus-slide {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(20px); }
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 1200px) {
+            .geometric-elements,
+            .left-geometry {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .bauhaus-container {
+                grid-template-columns: 1fr;
+                padding: 0 30px;
+            }
+
+            .content-area {
+                grid-column: 1;
+                padding: 60px 0;
+            }
+
+            .function-blocks {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .structure-header,
+            .structure-footer {
+                padding: 0 30px;
+            }
+        }
+
+        /* 精密對齊系統 */
+        .precision-marker {
+            position: absolute;
+            width: 20px;
+            height: 2px;
+            background: var(--bauhaus-red);
+        }
+
+        .marker-1 {
+            top: 50px;
+            left: 0;
+        }
+
+        .marker-2 {
+            bottom: 50px;
+            right: 0;
+        }
+
+        /* 文字層次系統 */
+        .hierarchy-demo {
+            margin-top: 60px;
+            padding: 40px;
+            border-left: 4px solid var(--bauhaus-yellow);
+        }
+
+        .h1-demo {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .h2-demo {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .body-demo {
+            font-size: 1rem;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- 包豪斯網格背景 -->
+    <div class="bauhaus-grid"></div>
+
+    <div class="bauhaus-container">
+        <!-- 結構頂部 -->
+        <header class="structure-header">
+            <div class="bauhaus-logo">BAUHAUS</div>
+        </header>
+
+        <!-- 主要內容區域 -->
+        <main class="content-area">
+            <!-- 精密對齊標記 -->
+            <div class="precision-marker marker-1"></div>
+            <div class="precision-marker marker-2"></div>
+
+            <!-- 標題區域 -->
+            <section class="title-section">
+                <h1 class="bauhaus-title">
+                    FORM
+                    <span class="title-accent">FOLLOWS</span>
+                    <br>FUNCTION
+                </h1>
+            </section>
+
+            <!-- 副標題區域 -->
+            <section class="subtitle-section">
+                <p class="subtitle-text">
+                    設計的本質在於功能性。每一個元素都有其存在的理由，每一條線都服務於整體的和諧。這是包豪斯的核心哲學：美來自於純粹的功能性表達。
+                </p>
+                <div class="bauhaus-divider"></div>
+            </section>
+
+            <!-- 功能主義內容塊 -->
+            <section class="function-blocks">
+                <div class="function-block">
+                    <div class="block-number">01</div>
+                    <h2 class="block-title">Functional Beauty</h2>
+                    <p class="block-content">
+                        美不是裝飾，而是功能的自然流露。當設計完美地服務於其目的時，美感便自然而然地產生。這是包豪斯學派的根本信念。
+                    </p>
+                </div>
+
+                <div class="function-block">
+                    <div class="block-number">02</div>
+                    <h2 class="block-title">Geometric Precision</h2>
+                    <p class="block-content">
+                        幾何學是設計的語言。圓形、方形、三角形不僅是形狀，更是表達理念的工具。精確的比例創造視覺的和諧。
+                    </p>
+                </div>
+
+                <div class="function-block">
+                    <div class="block-number">03</div>
+                    <h2 class="block-title">Universal Design</h2>
+                    <p class="block-content">
+                        好的設計應該是普世的，不受時代局限。簡潔的線條，純粹的色彩，理性的結構——這些元素創造永恆的美感。
+                    </p>
+                </div>
+
+                <div class="function-block">
+                    <div class="block-number">04</div>
+                    <h2 class="block-title">Modern Materials</h2>
+                    <p class="block-content">
+                        工業時代的材料為設計帶來新的可能性。鋼鐵、玻璃、混凝土不再是限制，而是表達現代性的媒介。
+                    </p>
+                </div>
+            </section>
+
+            <!-- 文字層次展示 -->
+            <section class="hierarchy-demo">
+                <h1 class="h1-demo">Typography Hierarchy</h1>
+                <h2 class="h2-demo">Secondary Information</h2>
+                <p class="body-demo">
+                    字體設計遵循嚴格的層次系統。每一級標題都有其特定的用途和視覺權重。這種系統化的方法確保信息的清晰傳達。
+                </p>
+            </section>
+        </main>
+
+        <!-- 幾何裝飾元素 -->
+        <div class="geometric-elements">
+            <div class="circle"></div>
+            <div class="square"></div>
+            <div class="triangle"></div>
+        </div>
+
+        <div class="left-geometry">
+            <div class="left-rectangle"></div>
+        </div>
+
+        <!-- 結構底部 -->
+        <footer class="structure-footer">
+            <div class="footer-text">— DESIGN IS NOT DECORATION —</div>
+        </footer>
+    </div>
+
+    <script>
+        // 包豪斯精確交互系統
+        document.addEventListener('DOMContentLoaded', () => {
+            // 功能塊的精確hover效果
+            const functionBlocks = document.querySelectorAll('.function-block');
+            
+            functionBlocks.forEach((block, index) => {
+                block.addEventListener('mouseenter', () => {
+                    // 創造精確的幾何反饋
+                    createGeometricFeedback(block, index);
+                });
+            });
+
+            // 滾動時的網格對齊效果
+            let scrollTimeout;
+            window.addEventListener('scroll', () => {
+                clearTimeout(scrollTimeout);
+                document.body.style.filter = 'contrast(1.05)';
+                
+                scrollTimeout = setTimeout(() => {
+                    document.body.style.filter = 'contrast(1)';
+                }, 150);
+            });
+
+            // 精密的點擊反饋
+            document.addEventListener('click', (e) => {
+                createPrecisionRipple(e.clientX, e.clientY);
+            });
+        });
+
+        function createGeometricFeedback(element, index) {
+            const colors = ['var(--bauhaus-red)', 'var(--bauhaus-yellow)', 'var(--bauhaus-black)'];
+            const shapes = ['circle', 'square', 'triangle'];
+            
+            const feedback = document.createElement('div');
+            feedback.style.cssText = `
+                position: absolute;
+                top: -10px;
+                right: -10px;
+                width: 20px;
+                height: 20px;
+                background: ${colors[index % colors.length]};
+                ${shapes[index % shapes.length] === 'circle' ? 'border-radius: 50%;' : ''}
+                pointer-events: none;
+                z-index: 100;
+                animation: bauhaus-feedback 0.6s ease-out forwards;
+            `;
+            
+            element.style.position = 'relative';
+            element.appendChild(feedback);
+            
+            setTimeout(() => feedback.remove(), 600);
+        }
+
+        function createPrecisionRipple(x, y) {
+            const ripple = document.createElement('div');
+            ripple.style.cssText = `
+                position: fixed;
+                left: ${x}px;
+                top: ${y}px;
+                width: 4px;
+                height: 4px;
+                background: var(--bauhaus-red);
+                transform: translate(-50%, -50%);
+                pointer-events: none;
+                z-index: 1000;
+                animation: precision-ripple 0.8s ease-out forwards;
+            `;
+            
+            document.body.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 800);
+        }
+
+        // 添加動畫樣式
+        const dynamicStyles = document.createElement('style');
+        dynamicStyles.textContent = `
+            @keyframes bauhaus-feedback {
+                0% { transform: scale(1) rotate(0deg); opacity: 1; }
+                100% { transform: scale(1.5) rotate(90deg); opacity: 0; }
+            }
+
+            @keyframes precision-ripple {
+                0% { 
+                    width: 4px; 
+                    height: 4px; 
+                    opacity: 1;
+                }
+                100% { 
+                    width: 40px; 
+                    height: 40px; 
+                    opacity: 0;
+                    border: 2px solid var(--bauhaus-red);
+                    background: transparent;
+                }
+            }
+        `;
+        document.head.appendChild(dynamicStyles);
+
+        console.log('🏗️ Bauhaus Geometry loaded - Form follows function');
+    </script>
+</body>
+</html>

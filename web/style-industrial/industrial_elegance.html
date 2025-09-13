@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Elegance - 工業雅致美學</title>
+    <style>
+        :root {
+            --steel-gray: #2f3640;
+            --warm-steel: #57606f;
+            --copper-accent: #c0775f;
+            --concrete-light: #f1f2f6;
+            --charcoal-deep: #1e272e;
+            --brass-highlight: #dda15e;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+
+        body {
+            font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+            background: var(--concrete-light);
+            color: var(--charcoal-deep);
+            overflow-x: hidden;
+            line-height: 1.5;
+            letter-spacing: 0.02em;
+        }
+
+        /* 工業紋理背景 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(47, 54, 64, 0.02) 2px,
+                    rgba(47, 54, 64, 0.02) 4px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 20px,
+                    rgba(47, 54, 64, 0.01) 20px,
+                    rgba(47, 54, 64, 0.01) 21px
+                );
+            z-index: -2;
+            animation: subtle-shift 30s linear infinite;
+        }
+
+        /* 主容器 */
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 100px 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* 標題系統 */
+        .header-section {
+            text-align: left;
+            margin-bottom: 120px;
+            width: 100%;
+            opacity: 0;
+            animation: industrial-slide-in 1.2s ease forwards 0.2s;
+        }
+
+        .main-title {
+            font-size: clamp(4rem, 10vw, 8rem);
+            font-weight: 200;
+            color: var(--steel-gray);
+            margin-bottom: 20px;
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: -0.03em;
+            position: relative;
+        }
+
+        .main-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--copper-accent), transparent);
+        }
+
+        .subtitle {
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            color: var(--warm-steel);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 300;
+            margin-top: 30px;
+        }
+
+        /* 規格表格系統 */
+        .specs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            width: 100%;
+            margin-bottom: 100px;
+        }
+
+        .spec-section {
+            opacity: 0;
+            transform: translateY(40px);
+            animation: industrial-slide-in 1s ease forwards;
+        }
+
+        .spec-section:nth-child(1) { animation-delay: 0.5s; }
+        .spec-section:nth-child(2) { animation-delay: 0.8s; }
+
+        .spec-header {
+            font-size: 1.1rem;
+            color: var(--copper-accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 40px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(192, 119, 95, 0.3);
+            font-weight: 400;
+        }
+
+        .spec-list {
+            list-style: none;
+        }
+
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(47, 54, 64, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .spec-item:hover {
+            background: rgba(192, 119, 95, 0.05);
+            margin: 0 -20px;
+            padding: 20px;
+        }
+
+        .spec-label {
+            font-size: 0.9rem;
+            color: var(--steel-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .spec-value {
+            font-size: 0.9rem;
+            color: var(--charcoal-deep);
+            font-weight: 500;
+            text-align: right;
+        }
+
+        /* 工業元件展示 */
+        .components-showcase {
+            width: 100%;
+            margin-bottom: 80px;
+            opacity: 0;
+            animation: industrial-slide-in 1s ease forwards 1.1s;
+        }
+
+        .components-header {
+            font-size: 1.1rem;
+            color: var(--copper-accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .component-card {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(47, 54, 64, 0.15);
+            padding: 40px 30px;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
+        }
+
+        .component-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--copper-accent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .component-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .component-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 30px rgba(47, 54, 64, 0.15);
+        }
+
+        .component-number {
+            font-size: 2.5rem;
+            color: var(--brass-highlight);
+            font-weight: 200;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+
+        .component-title {
+            font-size: 1rem;
+            color: var(--steel-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 15px;
+        }
+
+        .component-description {
+            font-size: 0.85rem;
+            color: var(--warm-steel);
+            line-height: 1.6;
+        }
+
+        /* 底部品牌標識 */
+        .brand-section {
+            text-align: center;
+            opacity: 0;
+            animation: industrial-slide-in 1s ease forwards 1.4s;
+        }
+
+        .brand-logo {
+            font-size: 1.5rem;
+            color: var(--steel-gray);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            position: relative;
+            font-weight: 300;
+        }
+
+        .brand-logo::before,
+        .brand-logo::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 60px;
+            height: 1px;
+            background: var(--copper-accent);
+        }
+
+        .brand-logo::before {
+            left: -80px;
+        }
+
+        .brand-logo::after {
+            right: -80px;
+        }
+
+        /* 裝飾性工業元素 */
+        .industrial-accent {
+            position: fixed;
+            width: 3px;
+            height: 100px;
+            background: var(--copper-accent);
+            opacity: 0.2;
+            z-index: -1;
+            animation: industrial-pulse 4s ease-in-out infinite;
+        }
+
+        .industrial-accent:nth-child(1) {
+            top: 20%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .industrial-accent:nth-child(2) {
+            top: 60%;
+            right: 8%;
+            animation-delay: 1s;
+        }
+
+        .industrial-accent:nth-child(3) {
+            top: 80%;
+            left: 50%;
+            transform: rotate(90deg);
+            animation-delay: 2s;
+        }
+
+        /* 動畫定義 */
+        @keyframes industrial-slide-in {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes subtle-shift {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(20px); }
+        }
+
+        @keyframes industrial-pulse {
+            0%, 100% {
+                opacity: 0.2;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.4;
+                transform: scale(1.02);
+            }
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 80px 40px;
+            }
+
+            .specs-grid {
+                grid-template-columns: 1fr;
+                gap: 60px;
+            }
+
+            .components-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .brand-logo::before,
+            .brand-logo::after {
+                width: 40px;
+            }
+
+            .brand-logo::before {
+                left: -55px;
+            }
+
+            .brand-logo::after {
+                right: -55px;
+            }
+        }
+
+        /* 金屬質感效果 */
+        .metallic-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(192, 119, 95, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(221, 161, 94, 0.02) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <!-- 金屬質感疊加 -->
+    <div class="metallic-overlay"></div>
+
+    <!-- 工業裝飾元素 -->
+    <div class="industrial-accent"></div>
+    <div class="industrial-accent"></div>
+    <div class="industrial-accent"></div>
+
+    <div class="container">
+        <!-- 標題區域 -->
+        <header class="header-section">
+            <h1 class="main-title">INDUSTRIAL<br>ELEGANCE</h1>
+            <p class="subtitle">Precision · Strength · Beauty</p>
+        </header>
+
+        <!-- 規格表格 -->
+        <section class="specs-grid">
+            <div class="spec-section">
+                <h2 class="spec-header">Design Specifications</h2>
+                <ul class="spec-list">
+                    <li class="spec-item">
+                        <span class="spec-label">Material</span>
+                        <span class="spec-value">Digital Steel</span>
+                    </li>
+                    <li class="spec-item">
+                        <span class="spec-label">Finish</span>
+                        <span class="spec-value">Brushed Copper</span>
+                    </li>
+                    <li class="spec-item">
+                        <span class="spec-label">Tolerance</span>
+                        <span class="spec-value">±0.1px</span>
+                    </li>
+                    <li class="spec-item">
+                        <span class="spec-label">Weight</span>
+                        <span class="spec-value">Minimalist</span>
+                    </li>
+                    <li class="spec-item">
+                        <span class="spec-label">Durability</span>
+                        <span class="spec-value">Timeless</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="spec-section">
+                <h2 class="spec-header">Performance Metrics</h2>
+                <ul class="spec-list">
+                    <li class="spec-item">
+                        <span class="spec-label">Load Speed</span>
+                        <span class="spec-value">Instant</span>
+                    </li>
+                    <li class="spec-item">
+                        <span class="spec-label">Responsiveness</span>
+                        <span class="spec-value">Fluid</span>
+                    </li>
+                    <li class="spec-item">
+                        <span class="spec-label">Compatibility</span>
+                        <span class="spec-value">Universal</span>
+                    </li>
+                    <li class="spec-item">
+                        <span class="spec-label">Maintenance</span>
+                        <span class="spec-value">Self-Sustaining</span>
+                    </li>
+                    <li class="spec-item">
+                        <span class="spec-label">Efficiency</span>
+                        <span class="spec-value">Optimized</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 元件展示 -->
+        <section class="components-showcase">
+            <h2 class="components-header">Core Components</h2>
+            <div class="components-grid">
+                <div class="component-card">
+                    <div class="component-number">01</div>
+                    <h3 class="component-title">Structural Framework</h3>
+                    <p class="component-description">
+                        精密的結構設計，每一個角度都經過計算。工業美學的基礎在於功能與形式的完美平衡，沒有多餘的裝飾，只有必要的美感。
+                    </p>
+                </div>
+
+                <div class="component-card">
+                    <div class="component-number">02</div>
+                    <h3 class="component-title">Interaction System</h3>
+                    <p class="component-description">
+                        簡潔而精確的互動邏輯。每一次點擊都有明確的反饋，每一個動畫都有實用的目的。這是機械精度在數位空間的體現。
+                    </p>
+                </div>
+
+                <div class="component-card">
+                    <div class="component-number">03</div>
+                    <h3 class="component-title">Visual Hierarchy</h3>
+                    <p class="component-description">
+                        如同工廠的流水線，信息的層次清晰而有序。重要的內容如焊接點一般突出，次要信息則如背景噪音般淡化。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 品牌標識 -->
+        <footer class="brand-section">
+            <div class="brand-logo">AI INDUSTRIAL LAB</div>
+        </footer>
+    </div>
+
+    <script>
+        // 精密的鼠標跟隨效果（工業風格）
+        let mouseTrailPoints = [];
+        const maxPoints = 8;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseTrailPoints.push({ x: e.clientX, y: e.clientY, time: Date.now() });
+            
+            if (mouseTrailPoints.length > maxPoints) {
+                mouseTrailPoints.shift();
+            }
+            
+            // 每10次鼠標移動才創建一個軌跡點（避免過度複雜）
+            if (mouseTrailPoints.length % 3 === 0) {
+                createPrecisionTrail(e.clientX, e.clientY);
+            }
+        });
+
+        function createPrecisionTrail(x, y) {
+            const trail = document.createElement('div');
+            trail.style.cssText = `
+                position: fixed;
+                left: ${x}px;
+                top: ${y}px;
+                width: 4px;
+                height: 4px;
+                background: var(--copper-accent);
+                transform: translate(-50%, -50%);
+                pointer-events: none;
+                z-index: 1000;
+                opacity: 0.6;
+                animation: precision-fade 1.5s ease-out forwards;
+            `;
+            
+            document.body.appendChild(trail);
+            
+            setTimeout(() => trail.remove(), 1500);
+        }
+
+        // 組件卡片的工業級hover效果
+        const componentCards = document.querySelectorAll('.component-card');
+        componentCards.forEach((card, index) => {
+            card.addEventListener('mouseenter', () => {
+                // 創建精密的聲波效果
+                createSonicWave(card);
+            });
+        });
+
+        function createSonicWave(element) {
+            const rect = element.getBoundingClientRect();
+            const wave = document.createElement('div');
+            
+            wave.style.cssText = `
+                position: fixed;
+                left: ${rect.left + rect.width / 2}px;
+                top: ${rect.top + rect.height / 2}px;
+                width: 2px;
+                height: 2px;
+                border: 1px solid var(--copper-accent);
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+                pointer-events: none;
+                z-index: 999;
+                animation: sonic-expand 0.6s ease-out forwards;
+            `;
+            
+            document.body.appendChild(wave);
+            setTimeout(() => wave.remove(), 600);
+        }
+
+        // 規格表項目的精密互動
+        const specItems = document.querySelectorAll('.spec-item');
+        specItems.forEach((item) => {
+            item.addEventListener('click', () => {
+                // 創建數據脈衝效果
+                createDataPulse(item);
+            });
+        });
+
+        function createDataPulse(element) {
+            const pulse = document.createElement('div');
+            pulse.style.cssText = `
+                position: absolute;
+                right: 0;
+                top: 50%;
+                width: 3px;
+                height: 20px;
+                background: var(--brass-highlight);
+                transform: translateY(-50%);
+                animation: data-pulse 0.3s ease forwards;
+            `;
+            
+            element.style.position = 'relative';
+            element.appendChild(pulse);
+            
+            setTimeout(() => pulse.remove(), 300);
+        }
+
+        // 添加工業級動畫樣式
+        const industrialStyles = document.createElement('style');
+        industrialStyles.textContent = `
+            @keyframes precision-fade {
+                0% {
+                    opacity: 0.6;
+                    transform: translate(-50%, -50%) scale(1);
+                }
+                100% {
+                    opacity: 0;
+                    transform: translate(-50%, -50%) scale(0.3);
+                }
+            }
+
+            @keyframes sonic-expand {
+                0% {
+                    width: 2px;
+                    height: 2px;
+                    opacity: 1;
+                }
+                100% {
+                    width: 60px;
+                    height: 60px;
+                    opacity: 0;
+                }
+            }
+
+            @keyframes data-pulse {
+                0% {
+                    transform: translateY(-50%) scaleY(0);
+                    opacity: 1;
+                }
+                50% {
+                    transform: translateY(-50%) scaleY(1);
+                    opacity: 0.8;
+                }
+                100% {
+                    transform: translateY(-50%) scaleY(0);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(industrialStyles);
+
+        // 系統狀態指示器（偶爾閃爍）
+        function createSystemIndicator() {
+            const indicators = document.querySelectorAll('.industrial-accent');
+            const randomIndicator = indicators[Math.floor(Math.random() * indicators.length)];
+            
+            randomIndicator.style.animation = 'none';
+            randomIndicator.style.opacity = '0.8';
+            
+            setTimeout(() => {
+                randomIndicator.style.animation = 'industrial-pulse 4s ease-in-out infinite';
+            }, 200);
+        }
+
+        // 每8-15秒隨機閃爍一個指示器
+        setInterval(createSystemIndicator, 8000 + Math.random() * 7000);
+
+        console.log('⚙️ Industrial Elegance loaded - Precision meets beauty');
+    </script>
+</body>
+</html>

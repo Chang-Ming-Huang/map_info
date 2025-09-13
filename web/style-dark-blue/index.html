@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nick - 築宜系統傢俱設計師</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-blue': '#0B1426',
+                        'royal-blue': '#1E40AF',
+                        'navy-blue': '#1E3A8A',
+                        'gold': '#F59E0B',
+                        'champagne': '#FDE68A',
+                        'platinum': '#E5E7EB'
+                    },
+                    fontFamily: {
+                        'serif': ['Playfair Display', 'serif'],
+                        'sans': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        .luxury-gradient {
+            background: linear-gradient(135deg, #0B1426 0%, #1E3A8A 50%, #1E40AF 100%);
+        }
+        
+        .gold-gradient {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+        }
+        
+        .glass-effect {
+            background: rgba(30, 64, 175, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+        
+        .luxury-card {
+            background: linear-gradient(145deg, rgba(30, 64, 175, 0.15), rgba(11, 20, 38, 0.8));
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .luxury-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(245, 158, 11, 0.2);
+            border-color: rgba(245, 158, 11, 0.6);
+        }
+        
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .elegant-underline {
+            position: relative;
+        }
+        
+        .elegant-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #F59E0B, #D97706);
+        }
+        
+        .luxury-btn {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .luxury-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+        
+        .luxury-btn:hover::before {
+            left: 100%;
+        }
+        
+        .luxury-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(245, 158, 11, 0.4);
+        }
+        
+        .ornament {
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.3) 0%, transparent 70%);
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body class="font-sans luxury-gradient text-white overflow-x-hidden">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full glass-effect z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="font-serif text-3xl font-bold text-gold">築宜</div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="text-platinum hover:text-gold transition-colors font-medium tracking-wide">首頁</a>
+                    <a href="#about" class="text-platinum hover:text-gold transition-colors font-medium tracking-wide">關於我們</a>
+                    <a href="#reviews" class="text-platinum hover:text-gold transition-colors font-medium tracking-wide">客戶評價</a>
+                    <a href="#contact" class="text-platinum hover:text-gold transition-colors font-medium tracking-wide">聯絡我們</a>
+                </div>
+                <button class="md:hidden text-platinum hover:text-gold">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-20 min-h-screen flex items-center relative overflow-hidden">
+        <!-- Decorative elements -->
+        <div class="absolute top-32 left-20 w-32 h-32 ornament rounded-full floating-animation"></div>
+        <div class="absolute bottom-40 right-32 w-24 h-24 ornament rounded-full floating-animation" style="animation-delay: 2s;"></div>
+        <div class="absolute top-1/2 left-1/4 w-2 h-2 bg-gold rounded-full animate-pulse"></div>
+        <div class="absolute top-1/3 right-1/4 w-1 h-1 bg-champagne rounded-full animate-pulse" style="animation-delay: 1s;"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="animate-fade-in">
+                    <div class="text-gold mb-6 text-lg font-medium tracking-widest uppercase">系統傢俱設計師</div>
+                    <h1 class="font-serif text-5xl md:text-8xl font-bold mb-8 leading-tight">
+                        <span class="text-white">Nick</span><br>
+                        <span class="text-gold">Designer</span>
+                    </h1>
+                    <div class="w-24 h-1 gold-gradient mb-8"></div>
+                    <p class="text-xl text-platinum mb-10 leading-relaxed font-light">
+                        築宜系統傢俱 桃園店<br>
+                        以奢華工藝與精緻設計，為您打造獨一無二的高端居家空間，<br>
+                        每一個細節都展現著卓越品味與非凡質感。
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-6">
+                        <button class="luxury-btn text-white px-10 py-4 font-semibold tracking-wider relative">
+                            查看作品集
+                        </button>
+                        <button class="border-2 border-gold text-gold px-10 py-4 font-semibold tracking-wider hover:bg-gold hover:text-deep-blue transition-all">
+                            預約諮詢
+                        </button>
+                    </div>
+                </div>
+                <div class="animate-fade-in" style="animation-delay: 0.3s;">
+                    <div class="relative">
+                        <div class="luxury-card p-12 text-center">
+                            <div class="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-gold to-champagne rounded-full flex items-center justify-center">
+                                <span class="text-4xl text-deep-blue">👑</span>
+                            </div>
+                            <h3 class="font-serif text-2xl font-bold text-gold mb-4">奢華定制</h3>
+                            <p class="text-platinum">專屬您的高端居家體驗</p>
+                        </div>
+                        <div class="absolute -top-6 -right-6 w-12 h-12 bg-gold/20 rounded-full"></div>
+                        <div class="absolute -bottom-6 -left-6 w-8 h-8 bg-champagne/30 rounded-full"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-royal-blue/10 to-transparent"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-20">
+                <div class="text-gold mb-6 text-lg font-medium tracking-widest uppercase">關於我們</div>
+                <h2 class="font-serif text-4xl md:text-6xl font-bold mb-8 elegant-underline">築宜系統傢俱</h2>
+                <p class="text-xl text-platinum max-w-4xl mx-auto leading-relaxed">
+                    承襲歐洲精工傳統，融合現代設計美學，為追求品味生活的您，<br>
+                    創造兼具功能性與藝術性的頂級居家環境
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="luxury-card p-10 text-center group">
+                    <div class="w-20 h-20 mx-auto mb-8 bg-gradient-to-br from-gold to-champagne rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <span class="text-3xl text-deep-blue">💎</span>
+                    </div>
+                    <h3 class="font-serif text-2xl font-bold mb-6 text-gold">精工工藝</h3>
+                    <p class="text-platinum leading-relaxed">
+                        採用頂級材料與精密工藝，每一件作品都是藝術品級的完美呈現，展現無與倫比的質感與耐久性
+                    </p>
+                </div>
+                
+                <div class="luxury-card p-10 text-center group" style="animation-delay: 0.2s;">
+                    <div class="w-20 h-20 mx-auto mb-8 bg-gradient-to-br from-gold to-champagne rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <span class="text-3xl text-deep-blue">✨</span>
+                    </div>
+                    <h3 class="font-serif text-2xl font-bold mb-6 text-gold">個人定制</h3>
+                    <p class="text-platinum leading-relaxed">
+                        深度了解您的生活方式與美學偏好，量身打造專屬設計方案，讓每個空間都成為您品味的延伸
+                    </p>
+                </div>
+                
+                <div class="luxury-card p-10 text-center group" style="animation-delay: 0.4s;">
+                    <div class="w-20 h-20 mx-auto mb-8 bg-gradient-to-br from-gold to-champagne rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <span class="text-3xl text-deep-blue">🏆</span>
+                    </div>
+                    <h3 class="font-serif text-2xl font-bold mb-6 text-gold">卓越服務</h3>
+                    <p class="text-platinum leading-relaxed">
+                        從設計諮詢到完工交付，提供全程專業服務，確保每個細節都符合您的期待，超越您的想像
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews" class="py-24 bg-gradient-to-br from-deep-blue via-navy-blue to-royal-blue relative">
+        <div class="absolute inset-0 bg-black/20"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-20">
+                <div class="text-gold mb-6 text-lg font-medium tracking-widest uppercase">客戶見證</div>
+                <h2 class="font-serif text-4xl md:text-6xl font-bold mb-8 elegant-underline">尊貴體驗</h2>
+                <p class="text-xl text-platinum">
+                    每一份信任，都是我們持續精進的動力
+                </p>
+            </div>
+            
+            <div id="reviews-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Reviews will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-t from-deep-blue to-transparent"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-20">
+                <div class="text-gold mb-6 text-lg font-medium tracking-widest uppercase">聯絡我們</div>
+                <h2 class="font-serif text-4xl md:text-6xl font-bold mb-8 elegant-underline">開啟對話</h2>
+                <p class="text-xl text-platinum">
+                    讓我們一起創造您夢想中的完美空間
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-16">
+                <div>
+                    <h3 class="font-serif text-3xl font-bold mb-10 text-gold">築宜系統傢俱</h3>
+                    <div class="space-y-8">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-gold/20 rounded-full flex items-center justify-center mr-6">
+                                <span class="text-gold text-xl">📍</span>
+                            </div>
+                            <div>
+                                <div class="text-platinum font-medium">展示中心</div>
+                                <div class="text-champagne">桃園市中壢區環北路390號</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-gold/20 rounded-full flex items-center justify-center mr-6">
+                                <span class="text-gold text-xl">📞</span>
+                            </div>
+                            <div>
+                                <div class="text-platinum font-medium">專線電話</div>
+                                <div class="text-champagne">03-123-4567</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-gold/20 rounded-full flex items-center justify-center mr-6">
+                                <span class="text-gold text-xl">⏰</span>
+                            </div>
+                            <div>
+                                <div class="text-platinum font-medium">營業時間</div>
+                                <div class="text-champagne">週一至週日 09:00-18:00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="luxury-card p-10">
+                    <h3 class="font-serif text-2xl font-bold mb-8 text-gold">預約專屬諮詢</h3>
+                    <form class="space-y-6">
+                        <div>
+                            <label class="block text-platinum font-medium mb-3">姓名</label>
+                            <input type="text" class="w-full p-4 bg-deep-blue/50 border border-gold/30 text-white focus:outline-none focus:border-gold transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-platinum font-medium mb-3">聯絡電話</label>
+                            <input type="tel" class="w-full p-4 bg-deep-blue/50 border border-gold/30 text-white focus:outline-none focus:border-gold transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-platinum font-medium mb-3">需求說明</label>
+                            <textarea rows="4" class="w-full p-4 bg-deep-blue/50 border border-gold/30 text-white focus:outline-none focus:border-gold transition-colors"></textarea>
+                        </div>
+                        <button type="submit" class="w-full luxury-btn text-white py-4 font-semibold tracking-wider">
+                            立即預約
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-deep-blue border-t border-gold/20 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <div class="font-serif text-2xl font-bold text-gold">築宜</div>
+                <div class="text-platinum">© 2025 築宜系統傢俱 | 品味生活，從此開始</div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../shared/utils.js"></script>
+    <script>
+        // 載入評論資料
+        async function loadReviews() {
+            const reviewManager = new ReviewManager();
+            const reviews = await reviewManager.loadReviews();
+            const container = document.getElementById('reviews-container');
+            
+            reviews.slice(0, 6).forEach((review, index) => {
+                const reviewCard = `
+                    <div class="luxury-card p-8 group animate-fade-in" style="animation-delay: ${index * 0.2}s;">
+                        <div class="flex items-center mb-6">
+                            <div class="w-14 h-14 bg-gradient-to-br from-gold to-champagne rounded-full flex items-center justify-center mr-4">
+                                <span class="text-deep-blue font-bold text-lg">${review.reviewer_name.charAt(0)}</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white">${review.reviewer_name}</h4>
+                                <div class="flex items-center mt-1">
+                                    ${reviewManager.generateStars(review.rating)}
+                                    <span class="ml-3 text-sm text-champagne">${review.review_date}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-platinum leading-relaxed mb-6">${reviewManager.truncateText(review.review_text, 120)}</p>
+                        ${review.total_images > 0 ? `
+                            <div class="grid grid-cols-2 gap-3">
+                                ${review.images.slice(0, 2).map(img => `
+                                    <div class="aspect-square bg-deep-blue/30 border border-gold/20 overflow-hidden group-hover:border-gold/40 transition-colors">
+                                        <img src="../../images/20250913_020338/${img}" alt="客戶作品" class="w-full h-full object-cover opacity-0 transition-all duration-500 hover:scale-105" data-src="../../images/20250913_020338/${img}">
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                container.innerHTML += reviewCard;
+            });
+        }
+        
+        // 頁面載入完成後執行
+        document.addEventListener('DOMContentLoaded', function() {
+            loadReviews();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fintech Modern - 金融科技美學</title>
+    <style>
+        :root {
+            --fintech-dark: #0d1421;
+            --fintech-green: #00c896;
+            --fintech-cyan: #00d4ff;
+            --fintech-white: #ffffff;
+            --fintech-gray: #8892a6;
+            --data-grid: #1a2332;
+            --accent-glow: rgba(0, 200, 150, 0.3);
+            --screen-glow: rgba(0, 212, 255, 0.2);
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+
+        body {
+            font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+            background: var(--fintech-dark);
+            color: var(--fintech-white);
+            overflow-x: hidden;
+            line-height: 1.4;
+            letter-spacing: 0.02em;
+        }
+
+        /* 數據網格背景 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, var(--data-grid) 1px, transparent 1px),
+                linear-gradient(0deg, var(--data-grid) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -2;
+            animation: data-flow 20s linear infinite;
+        }
+
+        /* 金融科技容器 */
+        .fintech-container {
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* 科技控制台風格標題區 */
+        .tech-console {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 數據流動背景 */
+        .data-streams {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .data-line {
+            position: absolute;
+            width: 1px;
+            background: linear-gradient(0deg, 
+                transparent 0%, 
+                var(--fintech-cyan) 50%, 
+                transparent 100%);
+            animation: data-stream 4s linear infinite;
+        }
+
+        .data-line:nth-child(1) { left: 20%; height: 200px; animation-delay: 0s; }
+        .data-line:nth-child(2) { left: 40%; height: 150px; animation-delay: 1s; }
+        .data-line:nth-child(3) { left: 60%; height: 250px; animation-delay: 2s; }
+        .data-line:nth-child(4) { left: 80%; height: 180px; animation-delay: 3s; }
+
+        .fintech-title {
+            font-size: clamp(3.5rem, 10vw, 8rem);
+            font-weight: 300;
+            color: var(--fintech-white);
+            margin-bottom: 30px;
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 20px var(--screen-glow);
+            animation: tech-boot 2.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .tech-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            font-weight: 400;
+            color: var(--fintech-green);
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            position: relative;
+            z-index: 2;
+            animation: tech-boot 2.5s ease-out forwards 0.5s;
+            opacity: 0;
+        }
+
+        .version-indicator {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            font-size: 0.9rem;
+            color: var(--fintech-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0;
+            animation: tech-boot 2.5s ease-out forwards 1s;
+        }
+
+        .version-indicator::before {
+            content: 'v';
+            color: var(--fintech-cyan);
+        }
+
+        /* 數據儀表板區域 */
+        .data-dashboard {
+            padding: 120px 60px;
+            background: linear-gradient(135deg, 
+                var(--fintech-dark) 0%, 
+                #162030 100%);
+            position: relative;
+        }
+
+        .dashboard-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            color: var(--fintech-white);
+            text-align: center;
+            margin-bottom: 80px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .metric-card {
+            background: rgba(26, 35, 50, 0.8);
+            border: 1px solid rgba(0, 200, 150, 0.3);
+            border-radius: 8px;
+            padding: 30px;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--fintech-green) 50%, 
+                transparent 100%);
+            animation: scan-line 3s ease-in-out infinite;
+        }
+
+        .metric-card:hover {
+            border-color: var(--fintech-cyan);
+            box-shadow: 
+                0 8px 32px rgba(0, 200, 150, 0.2),
+                inset 0 1px 0 rgba(0, 212, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .metric-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .metric-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--fintech-green), var(--fintech-cyan));
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: var(--fintech-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: var(--fintech-white);
+            margin-bottom: 10px;
+            font-family: 'SF Mono', monospace;
+        }
+
+        .metric-change {
+            font-size: 0.8rem;
+            color: var(--fintech-green);
+            display: flex;
+            align-items: center;
+        }
+
+        .metric-change::before {
+            content: '↗';
+            margin-right: 5px;
+            font-size: 1rem;
+        }
+
+        /* 數據可視化區域 */
+        .data-visualization {
+            padding: 100px 60px;
+            background: var(--fintech-dark);
+            position: relative;
+        }
+
+        .viz-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            color: var(--fintech-white);
+            text-align: center;
+            margin-bottom: 80px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .chart-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+
+        .chart-panel {
+            background: rgba(26, 35, 50, 0.6);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 12px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            color: var(--fintech-white);
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .chart-display {
+            height: 200px;
+            background: 
+                linear-gradient(45deg, 
+                    transparent 0%, 
+                    rgba(0, 200, 150, 0.1) 50%, 
+                    transparent 100%),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 20px,
+                    rgba(0, 212, 255, 0.1) 20px,
+                    rgba(0, 212, 255, 0.1) 21px
+                );
+            border: 1px solid rgba(0, 200, 150, 0.3);
+            border-radius: 6px;
+            position: relative;
+            display: flex;
+            align-items: end;
+            justify-content: space-around;
+            padding: 20px;
+        }
+
+        .chart-bar {
+            width: 30px;
+            background: linear-gradient(0deg, 
+                var(--fintech-green) 0%, 
+                var(--fintech-cyan) 100%);
+            border-radius: 2px 2px 0 0;
+            animation: chart-grow 2s ease-out forwards;
+            transform: scaleY(0);
+            transform-origin: bottom;
+        }
+
+        .chart-bar:nth-child(1) { height: 60%; animation-delay: 0.2s; }
+        .chart-bar:nth-child(2) { height: 85%; animation-delay: 0.4s; }
+        .chart-bar:nth-child(3) { height: 45%; animation-delay: 0.6s; }
+        .chart-bar:nth-child(4) { height: 95%; animation-delay: 0.8s; }
+        .chart-bar:nth-child(5) { height: 70%; animation-delay: 1s; }
+
+        /* 浮動數據元素 */
+        .floating-data {
+            position: fixed;
+            z-index: -1;
+            opacity: 0.3;
+            font-family: 'SF Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--fintech-green);
+        }
+
+        .data-1 {
+            top: 20%;
+            right: 10%;
+            animation: data-float 8s ease-in-out infinite;
+        }
+
+        .data-2 {
+            bottom: 30%;
+            left: 15%;
+            animation: data-float 10s ease-in-out infinite reverse;
+        }
+
+        /* 動畫定義 */
+        @keyframes tech-boot {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+                filter: blur(2px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes data-flow {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(40px); }
+        }
+
+        @keyframes data-stream {
+            0% { 
+                top: -200px; 
+                opacity: 0; 
+            }
+            10%, 90% { 
+                opacity: 1; 
+            }
+            100% { 
+                top: 100vh; 
+                opacity: 0; 
+            }
+        }
+
+        @keyframes scan-line {
+            0%, 100% { left: -100%; }
+            50% { left: 100%; }
+        }
+
+        @keyframes chart-grow {
+            to { transform: scaleY(1); }
+        }
+
+        @keyframes data-float {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(-15px) scale(1.1);
+                opacity: 0.6;
+            }
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .tech-console {
+                padding: 40px 20px;
+            }
+
+            .data-dashboard {
+                padding: 80px 30px;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .data-visualization {
+                padding: 80px 30px;
+            }
+
+            .chart-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .floating-data {
+                display: none;
+            }
+
+            .version-indicator {
+                top: 20px;
+                right: 20px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* 實時數據效果 */
+        .real-time-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 8px;
+            height: 8px;
+            background: var(--fintech-green);
+            border-radius: 50%;
+            animation: real-time-pulse 2s ease-in-out infinite;
+        }
+
+        .real-time-indicator::after {
+            content: 'LIVE';
+            position: absolute;
+            right: 15px;
+            top: -3px;
+            font-size: 0.7rem;
+            color: var(--fintech-green);
+            white-space: nowrap;
+        }
+
+        @keyframes real-time-pulse {
+            0%, 100% {
+                opacity: 1;
+                box-shadow: 0 0 5px var(--fintech-green);
+            }
+            50% {
+                opacity: 0.6;
+                box-shadow: 0 0 15px var(--fintech-green);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 浮動數據元素 -->
+    <div class="floating-data data-1">$1,247,832.45</div>
+    <div class="floating-data data-2">+2.47% ↗</div>
+
+    <div class="fintech-container">
+        <!-- 科技控制台風格標題區 -->
+        <section class="tech-console">
+            <div class="version-indicator">2024.1.0</div>
+            <div class="data-streams">
+                <div class="data-line"></div>
+                <div class="data-line"></div>
+                <div class="data-line"></div>
+                <div class="data-line"></div>
+            </div>
+            <h1 class="fintech-title">FINTECH<br>MODERN</h1>
+            <p class="tech-subtitle">DATA · PRECISION · INNOVATION</p>
+        </section>
+
+        <!-- 數據儀表板區域 -->
+        <section class="data-dashboard">
+            <h2 class="dashboard-title">REAL-TIME METRICS</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="real-time-indicator"></div>
+                    <div class="metric-header">
+                        <div class="metric-icon">💰</div>
+                        <div class="metric-label">Total Assets</div>
+                    </div>
+                    <div class="metric-value">$2.4B</div>
+                    <div class="metric-change">+12.5% from last quarter</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="real-time-indicator"></div>
+                    <div class="metric-header">
+                        <div class="metric-icon">📊</div>
+                        <div class="metric-label">Active Transactions</div>
+                    </div>
+                    <div class="metric-value">847K</div>
+                    <div class="metric-change">+8.3% this month</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="real-time-indicator"></div>
+                    <div class="metric-header">
+                        <div class="metric-icon">🚀</div>
+                        <div class="metric-label">Growth Rate</div>
+                    </div>
+                    <div class="metric-value">15.7%</div>
+                    <div class="metric-change">+2.1% vs projection</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="real-time-indicator"></div>
+                    <div class="metric-header">
+                        <div class="metric-icon">🔒</div>
+                        <div class="metric-label">Security Score</div>
+                    </div>
+                    <div class="metric-value">99.9%</div>
+                    <div class="metric-change">Enterprise grade</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 數據可視化區域 -->
+        <section class="data-visualization">
+            <h2 class="viz-title">DATA ANALYTICS</h2>
+            <div class="chart-container">
+                <div class="chart-panel">
+                    <h3 class="chart-title">Revenue Trends</h3>
+                    <div class="chart-display">
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                    </div>
+                </div>
+
+                <div class="chart-panel">
+                    <h3 class="chart-title">Market Performance</h3>
+                    <div class="chart-display">
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // 金融科技互動系統
+        document.addEventListener('DOMContentLoaded', () => {
+            // 實時數據更新模擬
+            const metricValues = document.querySelectorAll('.metric-value');
+            
+            setInterval(() => {
+                metricValues.forEach(value => {
+                    if (Math.random() < 0.3) {
+                        simulateDataUpdate(value);
+                    }
+                });
+            }, 5000);
+
+            // 數據卡片的科技感交互
+            const metricCards = document.querySelectorAll('.metric-card');
+            metricCards.forEach((card, index) => {
+                card.addEventListener('mouseenter', () => {
+                    createDataPulse(card);
+                });
+
+                card.addEventListener('click', () => {
+                    createDataBurst(card);
+                });
+
+                // 延遲載入動畫
+                setTimeout(() => {
+                    card.style.transform = 'translateY(20px)';
+                    card.style.opacity = '0';
+                    card.style.transition = 'all 0.6s ease';
+                    
+                    setTimeout(() => {
+                        card.style.transform = 'translateY(0)';
+                        card.style.opacity = '1';
+                    }, 100);
+                }, index * 200);
+            });
+
+            // 圖表條的動態效果
+            const chartBars = document.querySelectorAll('.chart-bar');
+            
+            setInterval(() => {
+                chartBars.forEach(bar => {
+                    if (Math.random() < 0.2) {
+                        animateChartBar(bar);
+                    }
+                });
+            }, 8000);
+
+            // 鼠標追蹤數據線
+            document.addEventListener('mousemove', (e) => {
+                createDataTrail(e.clientX, e.clientY);
+            });
+
+            // 滾動時的數據流效果
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const dataStreams = document.querySelectorAll('.data-line');
+                
+                dataStreams.forEach((stream, index) => {
+                    const speed = (index + 1) * 0.1;
+                    stream.style.transform = `translateY(${scrolled * speed}px)`;
+                });
+            });
+        });
+
+        function simulateDataUpdate(element) {
+            const originalText = element.textContent;
+            element.style.color = 'var(--fintech-cyan)';
+            element.style.transform = 'scale(1.05)';
+            
+            // 模擬數據閃爍更新
+            let flashCount = 0;
+            const flashInterval = setInterval(() => {
+                element.style.opacity = element.style.opacity === '0.5' ? '1' : '0.5';
+                flashCount++;
+                
+                if (flashCount >= 6) {
+                    clearInterval(flashInterval);
+                    element.style.opacity = '1';
+                    element.style.color = 'var(--fintech-white)';
+                    element.style.transform = 'scale(1)';
+                }
+            }, 150);
+        }
+
+        function createDataPulse(card) {
+            const pulse = document.createElement('div');
+            pulse.style.cssText = `
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: radial-gradient(circle, rgba(0, 200, 150, 0.1) 0%, transparent 70%);
+                pointer-events: none;
+                z-index: 1;
+                animation: data-pulse 1s ease-out forwards;
+                border-radius: inherit;
+            `;
+            
+            card.appendChild(pulse);
+            setTimeout(() => pulse.remove(), 1000);
+        }
+
+        function createDataBurst(card) {
+            // 創造多個數據粒子
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    width: 4px;
+                    height: 4px;
+                    background: var(--fintech-cyan);
+                    border-radius: 50%;
+                    transform: translate(-50%, -50%);
+                    pointer-events: none;
+                    z-index: 10;
+                    animation: data-particle ${1 + Math.random()}s ease-out forwards;
+                `;
+                
+                // 隨機方向
+                particle.style.setProperty('--angle', Math.random() * 360 + 'deg');
+                particle.style.setProperty('--distance', 50 + Math.random() * 50 + 'px');
+                
+                card.appendChild(particle);
+                setTimeout(() => particle.remove(), 1500);
+            }
+        }
+
+        function animateChartBar(bar) {
+            const originalHeight = bar.style.height;
+            const newHeight = Math.random() * 80 + 20 + '%';
+            
+            bar.style.transition = 'height 0.8s ease';
+            bar.style.height = newHeight;
+            
+            setTimeout(() => {
+                bar.style.height = originalHeight;
+            }, 2000);
+        }
+
+        function createDataTrail(x, y) {
+            // 限制生成頻率
+            if (Math.random() < 0.1) {
+                const trail = document.createElement('div');
+                trail.style.cssText = `
+                    position: fixed;
+                    left: ${x}px;
+                    top: ${y}px;
+                    width: 2px;
+                    height: 2px;
+                    background: var(--fintech-green);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: 1000;
+                    animation: data-trail-fade 2s ease-out forwards;
+                `;
+                
+                document.body.appendChild(trail);
+                setTimeout(() => trail.remove(), 2000);
+            }
+        }
+
+        // 動態樣式
+        const dynamicStyles = document.createElement('style');
+        dynamicStyles.textContent = `
+            @keyframes data-pulse {
+                0% { opacity: 0; transform: scale(1); }
+                50% { opacity: 1; transform: scale(1.02); }
+                100% { opacity: 0; transform: scale(1.05); }
+            }
+
+            @keyframes data-particle {
+                0% { 
+                    opacity: 1; 
+                    transform: translate(-50%, -50%) rotate(var(--angle)) translateX(0);
+                }
+                100% { 
+                    opacity: 0; 
+                    transform: translate(-50%, -50%) rotate(var(--angle)) translateX(var(--distance));
+                }
+            }
+
+            @keyframes data-trail-fade {
+                0% { opacity: 0.8; transform: scale(1); }
+                100% { opacity: 0; transform: scale(3); }
+            }
+        `;
+        document.head.appendChild(dynamicStyles);
+
+        console.log('💹 Fintech Modern loaded - Data-driven excellence');
+    </script>
+</body>
+</html>

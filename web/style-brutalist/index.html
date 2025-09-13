@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nick - 築宜系統傢俱設計師 | 粗野主義美學</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800;900&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brutalist-black: #000000;
+            --brutalist-white: #ffffff;
+            --brutalist-red: #ff0000;
+            --brutalist-gray: #666666;
+            --brutalist-light-gray: #cccccc;
+            --brutalist-concrete: #8c8c8c;
+            --grid-size: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--brutalist-white);
+            color: var(--brutalist-black);
+            overflow-x: hidden;
+            cursor: crosshair;
+            line-height: 1.2;
+        }
+
+        /* Grid Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, var(--brutalist-light-gray) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--brutalist-light-gray) 1px, transparent 1px);
+            background-size: var(--grid-size) var(--grid-size);
+            opacity: 0.1;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Header Navigation */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 4px solid var(--brutalist-black);
+        }
+
+        .nav-strip {
+            background: var(--brutalist-black);
+            color: var(--brutalist-white);
+            padding: 16px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-size: 18px;
+            font-weight: 900;
+            text-decoration: none;
+            color: var(--brutalist-white);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 0;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: var(--brutalist-white);
+            text-decoration: none;
+            border: 2px solid transparent;
+            padding: 12px 20px;
+            transition: all 0.2s ease;
+            font-weight: 600;
+        }
+
+        .nav-menu a:hover {
+            border: 2px solid var(--brutalist-white);
+            background: var(--brutalist-white);
+            color: var(--brutalist-black);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: 2px solid var(--brutalist-white);
+            color: var(--brutalist-white);
+            padding: 8px 12px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 24px 80px;
+            text-align: left;
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero-title {
+            font-size: clamp(5rem, 15vw, 15rem);
+            font-weight: 900;
+            line-height: 0.75;
+            letter-spacing: -0.04em;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            position: relative;
+        }
+
+        .hero-title::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: 40px;
+            bottom: 40px;
+            border: 8px solid var(--brutalist-red);
+            z-index: -1;
+        }
+
+        .designer-label {
+            display: block;
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            background: var(--brutalist-black);
+            color: var(--brutalist-white);
+            padding: 20px 40px;
+            width: fit-content;
+            margin: 40px 0;
+            font-weight: 700;
+        }
+
+        .hero-meta {
+            font-size: 16px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 40px;
+            border-left: 8px solid var(--brutalist-red);
+            padding-left: 20px;
+        }
+
+        .hero-description {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-bottom: 60px;
+            color: var(--brutalist-gray);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 0;
+            margin-top: 40px;
+        }
+
+        .btn-primary {
+            background: var(--brutalist-black);
+            color: var(--brutalist-white);
+            padding: 20px 40px;
+            text-decoration: none;
+            font-family: inherit;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 4px solid var(--brutalist-black);
+            transition: all 0.2s ease;
+            cursor: crosshair;
+        }
+
+        .btn-secondary {
+            background: var(--brutalist-white);
+            color: var(--brutalist-black);
+            padding: 20px 40px;
+            text-decoration: none;
+            font-family: inherit;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 4px solid var(--brutalist-black);
+            transition: all 0.2s ease;
+            cursor: crosshair;
+        }
+
+        .btn-primary:hover {
+            background: var(--brutalist-red);
+            border-color: var(--brutalist-red);
+        }
+
+        .btn-secondary:hover {
+            background: var(--brutalist-red);
+            color: var(--brutalist-white);
+            border-color: var(--brutalist-red);
+        }
+
+        /* Decorative Elements */
+        .hero-accent {
+            position: absolute;
+            top: 100px;
+            right: 100px;
+            width: 200px;
+            height: 200px;
+            background: var(--brutalist-red);
+            z-index: -1;
+        }
+
+        .hero-accent-2 {
+            position: absolute;
+            bottom: 200px;
+            left: -50px;
+            width: 100px;
+            height: 300px;
+            background: var(--brutalist-concrete);
+            z-index: -1;
+        }
+
+        /* About Section */
+        .about-section {
+            background: var(--brutalist-concrete);
+            color: var(--brutalist-white);
+            padding: 120px 24px;
+            position: relative;
+        }
+
+        .about-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            color: var(--brutalist-red);
+        }
+
+        .section-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 0.9;
+            margin-bottom: 60px;
+            border-bottom: 8px solid var(--brutalist-red);
+            padding-bottom: 20px;
+        }
+
+        .section-description {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 80px;
+            max-width: 800px;
+        }
+
+        .manifesto-blocks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 0;
+            margin-top: 60px;
+        }
+
+        .manifesto-block {
+            background: var(--brutalist-black);
+            color: var(--brutalist-white);
+            padding: 60px 40px;
+            border: 4px solid var(--brutalist-white);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .manifesto-block:nth-child(even) {
+            background: var(--brutalist-white);
+            color: var(--brutalist-black);
+        }
+
+        .manifesto-block:hover {
+            transform: translate(8px, -8px);
+            box-shadow: -8px 8px 0 var(--brutalist-red);
+        }
+
+        .block-number {
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            background: var(--brutalist-red);
+            color: var(--brutalist-white);
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        .block-title {
+            font-size: 24px;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .block-description {
+            font-size: 14px;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+
+        /* Reviews Section */
+        .reviews-section {
+            background: var(--brutalist-white);
+            padding: 120px 24px;
+            position: relative;
+        }
+
+        .reviews-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 0;
+            margin-top: 80px;
+            border: 4px solid var(--brutalist-black);
+        }
+
+        .review-card {
+            background: var(--brutalist-white);
+            color: var(--brutalist-black);
+            padding: 40px;
+            border-right: 4px solid var(--brutalist-black);
+            border-bottom: 4px solid var(--brutalist-black);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .review-card:nth-child(odd) {
+            background: var(--brutalist-light-gray);
+        }
+
+        .review-card:hover {
+            background: var(--brutalist-red);
+            color: var(--brutalist-white);
+            transform: translate(-4px, -4px);
+            box-shadow: 4px 4px 0 var(--brutalist-black);
+        }
+
+        .reviewer-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .reviewer-avatar {
+            width: 60px;
+            height: 60px;
+            background: var(--brutalist-black);
+            color: var(--brutalist-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 24px;
+            margin-right: 20px;
+            border: 4px solid var(--brutalist-black);
+        }
+
+        .review-card:hover .reviewer-avatar {
+            background: var(--brutalist-white);
+            color: var(--brutalist-black);
+        }
+
+        .reviewer-info h4 {
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .review-rating {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 8px;
+        }
+
+        .star {
+            color: var(--brutalist-red);
+            font-size: 16px;
+            font-weight: 900;
+        }
+
+        .review-date {
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .review-text {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .review-images {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .review-image {
+            aspect-ratio: 1;
+            background: var(--brutalist-concrete);
+            border: 2px solid var(--brutalist-black);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .review-image:hover {
+            border-color: var(--brutalist-red);
+            transform: scale(1.05);
+        }
+
+        .review-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: var(--brutalist-black);
+            color: var(--brutalist-white);
+            padding: 120px 24px;
+            position: relative;
+        }
+
+        .contact-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            margin-top: 80px;
+        }
+
+        .contact-info h3 {
+            font-size: 32px;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            border-bottom: 4px solid var(--brutalist-red);
+            padding-bottom: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            border: 2px solid var(--brutalist-gray);
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            border-color: var(--brutalist-red);
+            background: var(--brutalist-red);
+        }
+
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--brutalist-red);
+            color: var(--brutalist-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-right: 25px;
+            flex-shrink: 0;
+            border: 2px solid var(--brutalist-white);
+        }
+
+        .contact-details h4 {
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .contact-details p {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        .contact-form {
+            background: var(--brutalist-white);
+            color: var(--brutalist-black);
+            padding: 60px;
+            border: 8px solid var(--brutalist-red);
+            position: relative;
+        }
+
+        .contact-form::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: 20px;
+            bottom: 20px;
+            border: 4px solid var(--brutalist-white);
+            z-index: -1;
+        }
+
+        .contact-form h3 {
+            font-size: 24px;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            color: var(--brutalist-black);
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 3px solid var(--brutalist-black);
+            background: var(--brutalist-white);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--brutalist-red);
+            background: var(--brutalist-light-gray);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-btn {
+            background: var(--brutalist-black);
+            color: var(--brutalist-white);
+            padding: 20px 40px;
+            border: 3px solid var(--brutalist-black);
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: crosshair;
+            transition: all 0.2s ease;
+            width: 100%;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            background: var(--brutalist-red);
+            border-color: var(--brutalist-red);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--brutalist-white);
+            border-top: 8px solid var(--brutalist-black);
+            padding: 40px 24px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--brutalist-black);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero {
+                padding: 100px 20px 60px;
+            }
+
+            .about-section,
+            .reviews-section,
+            .contact-section {
+                padding: 80px 20px;
+            }
+
+            .contact-grid {
+                gap: 50px;
+            }
+
+            .hero-accent {
+                right: 20px;
+                width: 150px;
+                height: 150px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero {
+                padding: 80px 16px 40px;
+                text-align: left;
+            }
+
+            .about-section,
+            .reviews-section,
+            .contact-section {
+                padding: 60px 16px;
+            }
+
+            .footer {
+                padding: 30px 16px;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .manifesto-blocks {
+                grid-template-columns: 1fr;
+            }
+
+            .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .contact-form {
+                padding: 40px 30px;
+            }
+
+            .hero-accent {
+                display: none;
+            }
+
+            .hero-accent-2 {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <div class="header">
+        <div class="nav-strip">
+            <a href="#" class="nav-brand">築宜</a>
+            <ul class="nav-menu">
+                <li><a href="#home">首頁</a></li>
+                <li><a href="#about">關於</a></li>
+                <li><a href="#reviews">評價</a></li>
+                <li><a href="#contact">聯絡</a></li>
+            </ul>
+            <button class="mobile-menu-btn">MENU</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <h1 class="hero-title">NICK</h1>
+        <div class="designer-label">DESIGNER</div>
+        <div class="hero-meta">築宜系統傢俱 / 桃園店 / 系統傢俱設計師</div>
+        <p class="hero-description">
+            以粗野主義的力量美學為設計語言，追求原始、純粹、不加修飾的空間表達。
+            拒絕華麗裝飾，專注於材質的真實性與功能的直接性，
+            創造充滿工業力量感與現代精神的居住環境。
+        </p>
+        <div class="cta-buttons">
+            <a href="#reviews" class="btn-primary">VIEW WORKS</a>
+            <a href="#contact" class="btn-secondary">CONTACT</a>
+        </div>
+
+        <!-- Decorative Elements -->
+        <div class="hero-accent"></div>
+        <div class="hero-accent-2"></div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="about-container">
+            <div class="section-label">01 - DESIGN PHILOSOPHY</div>
+            <h2 class="section-title">BRUTAL<br>AESTHETICS</h2>
+            <p class="section-description">
+                粗野主義不是野蠻，而是對真實的追求。我們相信建築與設計應該誠實地展現材料的本質，
+                拒絕虛假的裝飾，追求功能與形式的直接表達。每一個設計決定都來自於對使用需求的深度思考。
+            </p>
+
+            <div class="manifesto-blocks">
+                <div class="manifesto-block">
+                    <div class="block-number">01</div>
+                    <h3 class="block-title">RAW MATERIALS</h3>
+                    <p class="block-description">
+                        崇尚材料的原始美感，混凝土、鋼材、原木等天然材質的直接運用，
+                        不經過過度加工，保持其最真實的質感與紋理。
+                    </p>
+                </div>
+
+                <div class="manifesto-block">
+                    <div class="block-number">02</div>
+                    <h3 class="block-title">GEOMETRIC POWER</h3>
+                    <p class="block-description">
+                        運用強烈的幾何形狀和銳利的線條，創造視覺衝擊力。
+                        大膽的對比與不對稱的構圖，展現現代設計的力量感。
+                    </p>
+                </div>
+
+                <div class="manifesto-block">
+                    <div class="block-number">03</div>
+                    <h3 class="block-title">FUNCTIONAL TRUTH</h3>
+                    <p class="block-description">
+                        每個設計元素都有其存在的理由，功能性是設計的首要考量。
+                        拒絕無意義的裝飾，追求空間使用效率的最大化。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews" class="reviews-section">
+        <div class="reviews-container">
+            <div class="section-label">02 - CLIENT TESTIMONIALS</div>
+            <h2 class="section-title">RAW<br>FEEDBACK</h2>
+            <p class="section-description">
+                每一個真實的回饋都是對粗野主義設計理念的最佳驗證
+            </p>
+
+            <div id="reviews-container" class="reviews-grid">
+                <!-- Reviews will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="contact-container">
+            <div class="section-label" style="color: var(--brutalist-red);">03 - GET IN TOUCH</div>
+            <h2 class="section-title" style="color: var(--brutalist-white);">START<br>PROJECT</h2>
+            <p class="section-description" style="color: var(--brutalist-light-gray);">
+                準備好體驗粗野主義的設計力量了嗎？讓我們開始創造屬於你的空間宣言
+            </p>
+
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h3>築宜系統傢俱</h3>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">📍</div>
+                        <div class="contact-details">
+                            <h4>SHOWROOM</h4>
+                            <p>桃園市中壢區環北路390號</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">📞</div>
+                        <div class="contact-details">
+                            <h4>PHONE</h4>
+                            <p>03-123-4567</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">⏰</div>
+                        <div class="contact-details">
+                            <h4>HOURS</h4>
+                            <p>MON-SUN 09:00-18:00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <h3>DESIGN CONSULTATION</h3>
+                    <form>
+                        <div class="form-group">
+                            <label for="name">NAME</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">PHONE</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">PROJECT DETAILS</label>
+                            <textarea id="message" name="message" required></textarea>
+                        </div>
+
+                        <button type="submit" class="submit-btn">SUBMIT REQUEST</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-text">© 2025 築宜系統傢俱 | BRUTAL AESTHETICS, FUNCTIONAL DESIGN</p>
+        </div>
+    </footer>
+
+    <script src="../shared/utils.js"></script>
+    <script>
+        // 載入評論資料
+        async function loadReviews() {
+            const reviewManager = new ReviewManager();
+            const reviews = await reviewManager.loadReviews();
+            const container = document.getElementById('reviews-container');
+            
+            reviews.slice(0, 6).forEach((review, index) => {
+                const reviewCard = `
+                    <div class="review-card" style="animation: brutalist-slide 0.6s ease ${index * 0.1}s both;">
+                        <div class="reviewer-header">
+                            <div class="reviewer-avatar">${review.reviewer_name.charAt(0)}</div>
+                            <div class="reviewer-info">
+                                <h4>${review.reviewer_name}</h4>
+                                <div class="review-rating">
+                                    ${reviewManager.generateStars(review.rating).replace(/text-yellow-400/g, 'star')}
+                                </div>
+                                <div class="review-date">${review.review_date}</div>
+                            </div>
+                        </div>
+                        <p class="review-text">${reviewManager.truncateText(review.review_text, 120)}</p>
+                        ${review.total_images > 0 ? `
+                            <div class="review-images">
+                                ${review.images.slice(0, 3).map(img => `
+                                    <div class="review-image">
+                                        <img src="../../images/20250913_020338/${img}" alt="客戶作品" data-src="../../images/20250913_020338/${img}">
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                container.innerHTML += reviewCard;
+            });
+
+            // 初始化懶加載
+            setupLazyLoading();
+        }
+
+        // 平滑滾動導航
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 頁面載入完成後執行
+        document.addEventListener('DOMContentLoaded', function() {
+            loadReviews();
+        });
+
+        // 添加粗野主義風格動畫
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes brutalist-slide {
+                from {
+                    opacity: 0;
+                    transform: translateX(-50px) rotateY(20deg);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0) rotateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

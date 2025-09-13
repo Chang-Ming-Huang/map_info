@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>築宜系統傢俱 - Nick 設計師 | 金融科技美學</title>
+    <style>
+        :root {
+            --fintech-dark: #0d1421;
+            --fintech-green: #00c896;
+            --fintech-cyan: #00d4ff;
+            --fintech-white: #ffffff;
+            --fintech-gray: #8892a6;
+            --data-grid: #1a2332;
+            --accent-glow: rgba(0, 200, 150, 0.3);
+            --screen-glow: rgba(0, 212, 255, 0.2);
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+
+        body {
+            font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+            background: var(--fintech-dark);
+            color: var(--fintech-white);
+            overflow-x: hidden;
+            line-height: 1.4;
+            letter-spacing: 0.02em;
+        }
+
+        /* 數據網格背景 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, var(--data-grid) 1px, transparent 1px),
+                linear-gradient(0deg, var(--data-grid) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -2;
+            animation: data-flow 20s linear infinite;
+        }
+
+        /* 導航區域 */
+        .fintech-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 40px;
+            background: rgba(13, 20, 33, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--data-grid);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: var(--fintech-white);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--fintech-gray);
+            font-weight: 300;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--fintech-green);
+            transition: width 0.4s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--fintech-green);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* 科技控制台風格標題區 */
+        .tech-console {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 數據流動背景 */
+        .data-streams {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .data-line {
+            position: absolute;
+            width: 1px;
+            background: linear-gradient(0deg, 
+                transparent 0%, 
+                var(--fintech-cyan) 50%, 
+                transparent 100%);
+            animation: data-stream 4s linear infinite;
+        }
+
+        .data-line:nth-child(1) { left: 20%; height: 200px; animation-delay: 0s; }
+        .data-line:nth-child(2) { left: 40%; height: 150px; animation-delay: 1s; }
+        .data-line:nth-child(3) { left: 60%; height: 250px; animation-delay: 2s; }
+        .data-line:nth-child(4) { left: 80%; height: 180px; animation-delay: 3s; }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 300;
+            color: var(--fintech-white);
+            margin-bottom: 30px;
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 20px var(--screen-glow);
+            animation: tech-boot 2.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            font-weight: 400;
+            color: var(--fintech-green);
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            position: relative;
+            z-index: 2;
+            margin-bottom: 40px;
+            animation: tech-boot 2.5s ease-out forwards 0.5s;
+            opacity: 0;
+        }
+
+        .hero-description {
+            font-size: 1rem;
+            color: var(--fintech-gray);
+            max-width: 600px;
+            margin: 0 auto 60px;
+            line-height: 1.6;
+            font-weight: 300;
+            animation: tech-boot 2.5s ease-out forwards 1s;
+            opacity: 0;
+        }
+
+
+        .version-indicator {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            font-size: 0.9rem;
+            color: var(--fintech-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0;
+            animation: tech-boot 2.5s ease-out forwards 1.5s;
+        }
+
+        .version-indicator::before {
+            content: 'v';
+            color: var(--fintech-cyan);
+        }
+
+        /* About 區域 */
+        .about-section {
+            padding: 120px 60px;
+            background: linear-gradient(135deg, 
+                var(--fintech-dark) 0%, 
+                #162030 100%);
+            position: relative;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 300;
+            color: var(--fintech-white);
+            text-align: center;
+            margin-bottom: 80px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .about-card {
+            background: rgba(26, 35, 50, 0.8);
+            border: 1px solid rgba(0, 200, 150, 0.3);
+            border-radius: 8px;
+            padding: 40px 30px;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+
+        .about-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--fintech-green) 50%, 
+                transparent 100%);
+            animation: scan-line 3s ease-in-out infinite;
+        }
+
+        .about-card:hover {
+            border-color: var(--fintech-cyan);
+            box-shadow: 
+                0 8px 32px rgba(0, 200, 150, 0.2),
+                inset 0 1px 0 rgba(0, 212, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .about-card h3 {
+            font-size: 1.3rem;
+            color: var(--fintech-white);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 400;
+        }
+
+        .about-card p {
+            font-size: 0.95rem;
+            color: var(--fintech-gray);
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        /* Reviews 區域 */
+        .reviews-section {
+            padding: 120px 60px;
+            background: var(--fintech-dark);
+            position: relative;
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1400px;
+            margin: 80px auto 0;
+        }
+
+        .review-card {
+            background: rgba(26, 35, 50, 0.6);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 8px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .review-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--fintech-cyan);
+            box-shadow: 0 15px 30px rgba(0, 200, 150, 0.2);
+        }
+
+        .review-stars {
+            color: var(--fintech-green);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .review-text {
+            font-size: 0.95rem;
+            color: var(--fintech-white);
+            line-height: 1.6;
+            margin-bottom: 25px;
+            font-weight: 300;
+        }
+
+        .review-author {
+            font-size: 0.85rem;
+            color: var(--fintech-gray);
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .real-time-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 6px;
+            height: 6px;
+            background: var(--fintech-green);
+            border-radius: 50%;
+            animation: real-time-pulse 2s ease-in-out infinite;
+        }
+
+        /* Contact 區域 */
+        .contact-section {
+            padding: 120px 60px;
+            background: linear-gradient(135deg, 
+                var(--fintech-dark) 0%, 
+                #162030 100%);
+            text-align: center;
+        }
+
+        .contact-info {
+            max-width: 600px;
+            margin: 80px auto 0;
+        }
+
+        .contact-item {
+            margin-bottom: 30px;
+            font-size: 1rem;
+            color: var(--fintech-gray);
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .contact-item strong {
+            color: var(--fintech-white);
+            font-weight: 400;
+        }
+
+        /* 浮動數據元素 */
+        .floating-data {
+            position: fixed;
+            z-index: -1;
+            opacity: 0.3;
+            font-family: 'SF Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--fintech-green);
+        }
+
+        .data-1 {
+            top: 20%;
+            right: 10%;
+            animation: data-float 8s ease-in-out infinite;
+        }
+
+        .data-2 {
+            bottom: 30%;
+            left: 15%;
+            animation: data-float 10s ease-in-out infinite reverse;
+        }
+
+        /* 動畫定義 */
+        @keyframes tech-boot {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+                filter: blur(2px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes data-flow {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(40px); }
+        }
+
+        @keyframes data-stream {
+            0% { 
+                top: -200px; 
+                opacity: 0; 
+            }
+            10%, 90% { 
+                opacity: 1; 
+            }
+            100% { 
+                top: 100vh; 
+                opacity: 0; 
+            }
+        }
+
+        @keyframes scan-line {
+            0%, 100% { left: -100%; }
+            50% { left: 100%; }
+        }
+
+        @keyframes data-float {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(-15px) scale(1.1);
+                opacity: 0.6;
+            }
+        }
+
+        @keyframes real-time-pulse {
+            0%, 100% {
+                opacity: 1;
+                box-shadow: 0 0 5px var(--fintech-green);
+            }
+            50% {
+                opacity: 0.6;
+                box-shadow: 0 0 15px var(--fintech-green);
+            }
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .fintech-nav {
+                padding: 15px 30px;
+            }
+
+            .nav-links {
+                gap: 20px;
+            }
+
+            .tech-console {
+                padding: 40px 20px;
+            }
+
+            .about-section,
+            .reviews-section,
+            .contact-section {
+                padding: 80px 30px;
+            }
+
+            .about-grid,
+            .reviews-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .floating-data {
+                display: none;
+            }
+
+            .version-indicator {
+                top: 20px;
+                right: 20px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 浮動數據元素 -->
+    <div class="floating-data data-1">設計項目: 127+</div>
+    <div class="floating-data data-2">滿意度: 98.7% ↗</div>
+
+    <!-- 導航 -->
+    <nav class="fintech-nav">
+        <div class="nav-content">
+            <div class="logo">築宜 · NICK</div>
+            <ul class="nav-links">
+                <li><a href="#home">首頁</a></li>
+                <li><a href="#about">關於</a></li>
+                <li><a href="#reviews">評價</a></li>
+                <li><a href="#contact">聯絡</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="fintech-container">
+        <!-- Hero 區域 -->
+        <section id="home" class="tech-console">
+            <div class="version-indicator">2024.1.0</div>
+            <div class="data-streams">
+                <div class="data-line"></div>
+                <div class="data-line"></div>
+                <div class="data-line"></div>
+                <div class="data-line"></div>
+            </div>
+            <h1 class="hero-title">系統<br>傢俱</h1>
+            <p class="hero-subtitle">數據 · 精準 · 創新</p>
+            <p class="hero-description">
+                以數據驅動設計，用精準詮釋美學。築宜系統傢俱專業設計師 Nick，
+                運用科技思維打造每一個收納空間。
+            </p>
+        </section>
+
+        <!-- About 區域 -->
+        <section id="about" class="about-section">
+            <h2 class="section-title">設計系統</h2>
+            <div class="about-grid">
+                <div class="about-card">
+                    <h3>數據分析</h3>
+                    <p>深入分析每個空間的使用數據，運用精確測量與需求評估，為每位客戶量身打造最優化的收納解決方案。</p>
+                </div>
+
+                <div class="about-card">
+                    <h3>系統整合</h3>
+                    <p>整合多元化的系統傢俱模組，透過精密的設計演算，創造出既美觀又實用的完整空間系統。</p>
+                </div>
+
+                <div class="about-card">
+                    <h3>效能監控</h3>
+                    <p>持續監控設計效能，確保每個項目都達到最高品質標準。從規劃到完工，全程數據化管控。</p>
+                </div>
+
+                <div class="about-card">
+                    <h3>創新科技</h3>
+                    <p>運用最新的設計軟體與製程技術，結合傳統工藝與現代科技，打造未來感十足的生活空間。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reviews 區域 */
+        <section id="reviews" class="reviews-section">
+            <h2 class="section-title">客戶評價系統</h2>
+            <div class="reviews-grid" id="reviewsContainer">
+                <!-- 評論將透過 JavaScript 載入 -->
+            </div>
+        </section>
+
+        <!-- Contact 區域 -->
+        <section id="contact" class="contact-section">
+            <h2 class="section-title">聯絡系統</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <strong>設計師：</strong>Nick
+                </div>
+                <div class="contact-item">
+                    <strong>公司：</strong>築宜系統傢俱 桃園店
+                </div>
+                <div class="contact-item">
+                    <strong>專業領域：</strong>系統傢俱設計、數據化空間規劃
+                </div>
+                <div class="contact-item">
+                    <strong>設計風格：</strong>科技感、現代簡約、數據美學
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="../shared/utils.js"></script>
+    <script>
+        // 金融科技互動系統
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // 載入評論數據
+                const reviewManager = new ReviewManager();
+                const reviews = await reviewManager.loadReviews();
+                reviewManager.displayReviews(reviews, 'reviewsContainer');
+                
+                console.log('💹 Fintech Modern loaded - Data-driven excellence');
+            } catch (error) {
+                console.error('載入評論時出錯:', error);
+                displayDefaultReviews();
+            }
+
+            // 數據卡片的科技感交互
+            const aboutCards = document.querySelectorAll('.about-card');
+            aboutCards.forEach((card, index) => {
+                card.addEventListener('mouseenter', () => {
+                    createDataPulse(card);
+                });
+
+                // 延遲載入動畫
+                setTimeout(() => {
+                    card.style.transform = 'translateY(20px)';
+                    card.style.opacity = '0';
+                    card.style.transition = 'all 0.6s ease';
+                    
+                    setTimeout(() => {
+                        card.style.transform = 'translateY(0)';
+                        card.style.opacity = '1';
+                    }, 100);
+                }, index * 200);
+            });
+
+            // 鼠標追蹤數據線
+            document.addEventListener('mousemove', (e) => {
+                createDataTrail(e.clientX, e.clientY);
+            });
+
+            // 滾動時的數據流效果
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const dataStreams = document.querySelectorAll('.data-line');
+                
+                dataStreams.forEach((stream, index) => {
+                    const speed = (index + 1) * 0.1;
+                    stream.style.transform = `translateY(${scrolled * speed}px)`;
+                });
+            });
+        });
+
+        // 平滑滾動
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        function createDataPulse(card) {
+            const pulse = document.createElement('div');
+            pulse.style.cssText = `
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: radial-gradient(circle, rgba(0, 200, 150, 0.1) 0%, transparent 70%);
+                pointer-events: none;
+                z-index: 1;
+                animation: data-pulse 1s ease-out forwards;
+                border-radius: inherit;
+            `;
+            
+            card.appendChild(pulse);
+            setTimeout(() => pulse.remove(), 1000);
+        }
+
+        function createDataTrail(x, y) {
+            if (Math.random() < 0.05) {
+                const trail = document.createElement('div');
+                trail.style.cssText = `
+                    position: fixed;
+                    left: ${x}px;
+                    top: ${y}px;
+                    width: 2px;
+                    height: 2px;
+                    background: var(--fintech-green);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: 1000;
+                    animation: data-trail-fade 2s ease-out forwards;
+                `;
+                
+                document.body.appendChild(trail);
+                setTimeout(() => trail.remove(), 2000);
+            }
+        }
+
+        function displayDefaultReviews() {
+            const defaultReviews = [
+                {
+                    author_name: "陳先生",
+                    rating: 5,
+                    text: "Nick 設計師的數據化分析很專業，整個系統櫃的規劃非常精準，收納效率大幅提升。",
+                    relative_time_description: "2 個月前"
+                },
+                {
+                    author_name: "林小姐",
+                    rating: 5,
+                    text: "很滿意這種科技感的設計風格，既現代又實用，完全符合我們的需求。",
+                    relative_time_description: "1 個月前"
+                },
+                {
+                    author_name: "王太太",
+                    rating: 5,
+                    text: "設計師很用心地分析我們的使用習慣，最終的成果非常滿意，科技感十足。",
+                    relative_time_description: "3 週前"
+                }
+            ];
+
+            const container = document.getElementById('reviewsContainer');
+            container.innerHTML = defaultReviews.map(review => `
+                <div class="review-card">
+                    <div class="real-time-indicator"></div>
+                    <div class="review-stars">${'★'.repeat(review.rating)}</div>
+                    <p class="review-text">${review.text}</p>
+                    <div class="review-author">${review.author_name} · ${review.relative_time_description}</div>
+                </div>
+            `).join('');
+        }
+
+        // 動態樣式
+        const dynamicStyles = document.createElement('style');
+        dynamicStyles.textContent = `
+            @keyframes data-pulse {
+                0% { opacity: 0; transform: scale(1); }
+                50% { opacity: 1; transform: scale(1.02); }
+                100% { opacity: 0; transform: scale(1.05); }
+            }
+
+            @keyframes data-trail-fade {
+                0% { opacity: 0.8; transform: scale(1); }
+                100% { opacity: 0; transform: scale(3); }
+            }
+        `;
+        document.head.appendChild(dynamicStyles);
+    </script>
+</body>
+</html>

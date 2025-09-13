@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nick - 築宜系統傢俱設計師</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mocha': '#A0826D',
+                        'cream': '#F5F1EB',
+                        'forest': '#2D5016',
+                        'warm-brown': '#8B4513',
+                        'soft-white': '#FEFCF8'
+                    },
+                    fontFamily: {
+                        'serif': ['Playfair Display', 'serif'],
+                        'sans': ['Nunito', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700&display=swap');
+        
+        .organic-shape {
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        }
+        
+        .warm-gradient {
+            background: linear-gradient(135deg, #F5F1EB 0%, #E8DDD4 100%);
+        }
+        
+        .card-warm {
+            background: rgba(245, 241, 235, 0.8);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+        }
+        
+        .card-warm:hover {
+            transform: translateY(-12px) rotate(1deg);
+            box-shadow: 0 25px 50px rgba(160, 130, 109, 0.15);
+        }
+        
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        
+        .btn-warm {
+            background: linear-gradient(45deg, #A0826D, #8B4513);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-warm:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(160, 130, 109, 0.4);
+        }
+        
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="font-sans bg-soft-white text-gray-800">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-soft-white/95 backdrop-blur-md z-50 border-b border-mocha/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="font-serif text-2xl font-bold text-warm-brown">Nick</div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="text-gray-600 hover:text-warm-brown transition-colors">首頁</a>
+                    <a href="#about" class="text-gray-600 hover:text-warm-brown transition-colors">關於我們</a>
+                    <a href="#reviews" class="text-gray-600 hover:text-warm-brown transition-colors">客戶評價</a>
+                    <a href="#contact" class="text-gray-600 hover:text-warm-brown transition-colors">聯絡我們</a>
+                </div>
+                <button class="md:hidden">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-16 min-h-screen flex items-center warm-gradient relative overflow-hidden">
+        <!-- Floating organic shapes -->
+        <div class="absolute top-20 left-10 w-32 h-32 bg-mocha/10 organic-shape animate-float"></div>
+        <div class="absolute bottom-20 right-10 w-24 h-24 bg-forest/10 organic-shape animate-float" style="animation-delay: -3s;"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="animate-on-scroll">
+                    <h1 class="font-serif text-4xl md:text-6xl font-bold text-warm-brown mb-6 leading-tight text-shadow">
+                        溫暖居家<br>
+                        <span class="text-forest">美學設計</span>
+                    </h1>
+                    <p class="text-xl text-gray-700 mb-8 leading-relaxed">
+                        築宜系統傢俱 - Nick<br>
+                        用心傾聽每個家庭的故事，創造充滿溫度與美感的生活空間，讓家成為最舒適的避風港。
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button class="btn-warm text-white px-8 py-4 rounded-full font-semibold shadow-lg">
+                            探索作品
+                        </button>
+                        <button class="border-2 border-warm-brown text-warm-brown px-8 py-4 rounded-full font-semibold hover:bg-warm-brown hover:text-white transition-all">
+                            預約諮詢
+                        </button>
+                    </div>
+                </div>
+                <div class="animate-on-scroll">
+                    <div class="relative">
+                        <div class="w-full h-96 bg-gradient-to-br from-mocha/30 to-forest/20 organic-shape flex items-center justify-center">
+                            <div class="text-6xl text-warm-brown/60">🏠</div>
+                        </div>
+                        <div class="absolute -bottom-8 -right-8 w-32 h-32 bg-mocha/20 organic-shape"></div>
+                        <div class="absolute -top-8 -left-8 w-20 h-20 bg-forest/20 organic-shape"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-soft-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 animate-on-scroll">
+                <h2 class="font-serif text-3xl md:text-5xl font-bold text-warm-brown mb-6">關於築宜系統傢俱</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                    我們相信每個家都有屬於自己的故事，透過專業的設計與用心的服務，為您編織溫暖的居家夢想
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center p-8 rounded-3xl card-warm animate-on-scroll">
+                    <div class="w-20 h-20 bg-mocha/20 organic-shape flex items-center justify-center mx-auto mb-6">
+                        <span class="text-3xl">🎨</span>
+                    </div>
+                    <h3 class="font-serif text-2xl font-bold mb-4 text-warm-brown">美學設計</h3>
+                    <p class="text-gray-600 leading-relaxed">融合現代美學與實用機能，為每個空間注入獨特的生活品味與溫度</p>
+                </div>
+                
+                <div class="text-center p-8 rounded-3xl card-warm animate-on-scroll" style="animation-delay: 0.2s;">
+                    <div class="w-20 h-20 bg-forest/20 organic-shape flex items-center justify-center mx-auto mb-6">
+                        <span class="text-3xl">🤝</span>
+                    </div>
+                    <h3 class="font-serif text-2xl font-bold mb-4 text-warm-brown">貼心服務</h3>
+                    <p class="text-gray-600 leading-relaxed">從初步諮詢到完工交付，全程陪伴，用心聆聽每個需求與想法</p>
+                </div>
+                
+                <div class="text-center p-8 rounded-3xl card-warm animate-on-scroll" style="animation-delay: 0.4s;">
+                    <div class="w-20 h-20 bg-mocha/30 organic-shape flex items-center justify-center mx-auto mb-6">
+                        <span class="text-3xl">✨</span>
+                    </div>
+                    <h3 class="font-serif text-2xl font-bold mb-4 text-warm-brown">品質承諾</h3>
+                    <p class="text-gray-600 leading-relaxed">嚴選環保材質，精工細作，為您打造經得起時間考驗的居家空間</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews" class="py-20 warm-gradient">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 animate-on-scroll">
+                <h2 class="font-serif text-3xl md:text-5xl font-bold text-warm-brown mb-6">客戶的溫暖回饋</h2>
+                <p class="text-xl text-gray-600">
+                    每一份信任都是我們前進的動力
+                </p>
+            </div>
+            
+            <div id="reviews-container" class="grid md:grid-cols-2 gap-8">
+                <!-- Reviews will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-forest text-white relative overflow-hidden">
+        <!-- Organic background shapes -->
+        <div class="absolute top-0 left-0 w-64 h-64 bg-mocha/10 organic-shape -translate-x-32 -translate-y-32"></div>
+        <div class="absolute bottom-0 right-0 w-48 h-48 bg-white/5 organic-shape translate-x-24 translate-y-24"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="font-serif text-3xl md:text-5xl font-bold mb-6">開始您的居家之旅</h2>
+                <p class="text-xl text-green-100">
+                    讓我們一起為您的家注入溫暖與美好
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="font-serif text-2xl font-bold mb-8 text-mocha">築宜系統傢俱 桃園店</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-mocha/20 rounded-full flex items-center justify-center mr-4">
+                                <span class="text-mocha">📍</span>
+                            </div>
+                            <span class="text-lg">桃園市中壢區環北路390號</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-mocha/20 rounded-full flex items-center justify-center mr-4">
+                                <span class="text-mocha">📞</span>
+                            </div>
+                            <span class="text-lg">03-123-4567</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-mocha/20 rounded-full flex items-center justify-center mr-4">
+                                <span class="text-mocha">🕒</span>
+                            </div>
+                            <span class="text-lg">週一至週日 09:00-18:00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white/10 p-8 rounded-3xl backdrop-blur-sm">
+                    <h3 class="font-serif text-2xl font-bold mb-6 text-mocha">免費諮詢預約</h3>
+                    <form class="space-y-6">
+                        <input type="text" placeholder="您的姓名" class="w-full p-4 rounded-2xl bg-white/20 border border-white/30 text-white placeholder-green-200 focus:outline-none focus:ring-2 focus:ring-mocha">
+                        <input type="tel" placeholder="聯絡電話" class="w-full p-4 rounded-2xl bg-white/20 border border-white/30 text-white placeholder-green-200 focus:outline-none focus:ring-2 focus:ring-mocha">
+                        <textarea placeholder="告訴我們您的需求與想法" rows="4" class="w-full p-4 rounded-2xl bg-white/20 border border-white/30 text-white placeholder-green-200 focus:outline-none focus:ring-2 focus:ring-mocha"></textarea>
+                        <button type="submit" class="w-full btn-warm text-white py-4 rounded-2xl font-semibold text-lg">
+                            預約免費諮詢
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-warm-brown text-cream py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="font-serif text-2xl font-bold mb-4">Nick</div>
+            <p class="text-mocha/80">&copy; 2025 築宜系統傢俱. 用心打造每個溫暖的家</p>
+        </div>
+    </footer>
+
+    <script src="../shared/utils.js"></script>
+    <script>
+        // 載入評論資料
+        async function loadReviews() {
+            const reviewManager = new ReviewManager();
+            const reviews = await reviewManager.loadReviews();
+            const container = document.getElementById('reviews-container');
+            
+            reviews.forEach((review, index) => {
+                const reviewCard = `
+                    <div class="bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-lg card-warm animate-on-scroll" style="animation-delay: ${index * 0.2}s;">
+                        <div class="flex items-center mb-6">
+                            <div class="w-16 h-16 bg-mocha/20 organic-shape flex items-center justify-center mr-4">
+                                <span class="text-warm-brown font-bold text-lg">${review.reviewer_name.charAt(0)}</span>
+                            </div>
+                            <div>
+                                <h4 class="font-serif text-xl font-bold text-warm-brown">${review.reviewer_name}</h4>
+                                <div class="flex items-center mt-1">
+                                    ${reviewManager.generateStars(review.rating)}
+                                    <span class="ml-3 text-sm text-gray-500 bg-cream px-2 py-1 rounded-full">${review.review_date}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-6 leading-relaxed">${reviewManager.truncateText(review.review_text, 120)}</p>
+                        ${review.total_images > 0 ? `
+                            <div class="grid grid-cols-3 gap-3">
+                                ${review.images.slice(0, 3).map(img => `
+                                    <div class="aspect-square bg-cream rounded-2xl overflow-hidden">
+                                        <img src="../../images/20250913_020338/${img}" alt="客戶作品" class="w-full h-full object-cover opacity-0 transition-opacity duration-500 hover:scale-110 transition-transform" data-src="../../images/20250913_020338/${img}">
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                container.innerHTML += reviewCard;
+            });
+        }
+        
+        // 頁面載入完成後執行
+        document.addEventListener('DOMContentLoaded', function() {
+            loadReviews();
+        });
+    </script>
+</body>
+</html>

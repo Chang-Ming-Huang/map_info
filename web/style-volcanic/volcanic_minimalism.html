@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌋 Volcanic Minimalism - AI 創意實驗室</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --volcanic-black: #1c1c1c;
+            --molten-orange: #ff4500;
+            --lava-red: #dc143c;
+            --ash-gray: #2c2c2c;
+            --ember-yellow: #ffa500;
+            --pure-white: #ffffff;
+            --volcanic-texture: #252525;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: var(--volcanic-black);
+            color: var(--pure-white);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* 火山背景紋理 */
+        .volcanic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255, 69, 0, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(220, 20, 60, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 165, 0, 0.05) 0%, transparent 50%);
+            z-index: -1;
+            animation: volcanoGlow 8s ease-in-out infinite;
+        }
+        
+        @keyframes volcanoGlow {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        /* 熔岩流動效果 */
+        .lava-flow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                transparent 0%, 
+                rgba(255, 69, 0, 0.1) 25%, 
+                rgba(220, 20, 60, 0.15) 50%, 
+                rgba(255, 165, 0, 0.1) 75%, 
+                transparent 100%);
+            animation: lavaFlow 12s linear infinite;
+            z-index: -1;
+        }
+        
+        @keyframes lavaFlow {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100vw) rotate(45deg); }
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 80px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* 導航樣式 */
+        .navbar {
+            padding: 40px 0;
+            border-bottom: 1px solid rgba(255, 69, 0, 0.2);
+        }
+        
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--pure-white);
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .nav-brand:hover {
+            color: var(--molten-orange);
+            text-shadow: 0 0 20px rgba(255, 69, 0, 0.5);
+        }
+        
+        /* Hero 區塊 */
+        .hero {
+            padding: 200px 0 150px 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero-title {
+            font-size: clamp(4rem, 12vw, 10rem);
+            font-weight: 200;
+            color: var(--pure-white);
+            margin-bottom: 60px;
+            letter-spacing: -0.03em;
+            line-height: 0.9;
+            position: relative;
+        }
+        
+        .hero-title::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--molten-orange), var(--lava-red), transparent);
+            transform: translateX(-50%);
+            animation: emberPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes emberPulse {
+            0%, 100% { opacity: 0.5; width: 200px; }
+            50% { opacity: 1; width: 300px; }
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 80px;
+            letter-spacing: 0.5px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-description {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto 100px auto;
+            line-height: 1.8;
+        }
+        
+        /* 卡片設計 */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 80px;
+            margin: 150px 0;
+        }
+        
+        .volcanic-card {
+            background: linear-gradient(135deg, var(--ash-gray), var(--volcanic-texture));
+            padding: 80px 60px;
+            border: 1px solid rgba(255, 69, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .volcanic-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 69, 0, 0.1), 
+                rgba(220, 20, 60, 0.15),
+                transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .volcanic-card:hover::before {
+            left: 100%;
+        }
+        
+        .volcanic-card:hover {
+            transform: translateY(-20px);
+            border-color: var(--molten-orange);
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.3),
+                0 0 40px rgba(255, 69, 0, 0.2);
+        }
+        
+        .card-icon {
+            font-size: 4rem;
+            color: var(--molten-orange);
+            margin-bottom: 40px;
+            display: block;
+            filter: drop-shadow(0 0 20px rgba(255, 69, 0, 0.3));
+        }
+        
+        .card-title {
+            font-size: 2rem;
+            font-weight: 300;
+            color: var(--pure-white);
+            margin-bottom: 30px;
+            letter-spacing: 0.5px;
+        }
+        
+        .card-description {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+        }
+        
+        /* 按鈕樣式 */
+        .volcanic-btn {
+            display: inline-block;
+            padding: 25px 60px;
+            background: transparent;
+            border: 2px solid var(--molten-orange);
+            color: var(--molten-orange);
+            text-decoration: none;
+            font-weight: 300;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            margin-top: 40px;
+        }
+        
+        .volcanic-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--molten-orange);
+            border-radius: 50%;
+            transition: all 0.4s ease;
+            transform: translate(-50%, -50%);
+        }
+        
+        .volcanic-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .volcanic-btn:hover {
+            color: var(--volcanic-black);
+            border-color: var(--lava-red);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255, 69, 0, 0.3);
+        }
+        
+        .volcanic-btn span {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* 火山玻璃質感效果 */
+        .volcanic-glass {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.05) 0%,
+                rgba(255, 255, 255, 0.02) 50%,
+                rgba(255, 69, 0, 0.05) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* 岩漿脈動動畫 */
+        .magma-pulse {
+            animation: magmaPulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes magmaPulse {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(255, 69, 0, 0.3);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 40px rgba(255, 69, 0, 0.6);
+                transform: scale(1.02);
+            }
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 80px 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 69, 0, 0.2);
+            margin-top: 150px;
+        }
+        
+        .footer-text {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+        }
+        
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 40px;
+            }
+            
+            .hero {
+                padding: 120px 0 100px 0;
+            }
+            
+            .hero-title {
+                font-size: clamp(2.5rem, 10vw, 6rem);
+                margin-bottom: 40px;
+            }
+            
+            .hero-subtitle {
+                font-size: clamp(1.2rem, 5vw, 2rem);
+                margin-bottom: 60px;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                margin: 100px 0;
+            }
+            
+            .volcanic-card {
+                padding: 60px 40px;
+            }
+            
+            .volcanic-btn {
+                padding: 20px 40px;
+                font-size: 1rem;
+            }
+        }
+        
+        /* 特殊效果：火山粒子 */
+        .volcanic-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--ember-yellow);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat 6s linear infinite;
+        }
+        
+        @keyframes particleFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) translateX(0);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-10px) translateX(100px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="volcanic-bg"></div>
+    <div class="lava-flow"></div>
+    
+    <!-- 火山粒子效果 -->
+    <div class="volcanic-particles" id="particles"></div>
+    
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <a href="../index.html" class="nav-brand">🌋 Volcanic Minimalism</a>
+        </nav>
+        
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1 class="hero-title">原始力量</h1>
+            <h2 class="hero-subtitle">極簡美學</h2>
+            <p class="hero-description">
+                融合火山熔岩的原始能量與現代極簡設計哲學，創造出既強烈又寧靜、既狂野又精緻的獨特視覺體驗。
+            </p>
+            <a href="#content" class="volcanic-btn">
+                <span>探索深度</span>
+            </a>
+        </section>
+        
+        <!-- Content Section -->
+        <section id="content" class="content-grid">
+            <div class="volcanic-card volcanic-glass magma-pulse">
+                <span class="card-icon">🔥</span>
+                <h3 class="card-title">熔岩智慧</h3>
+                <p class="card-description">
+                    如同地底深處的岩漿蘊含著地球的原始能量，真正的智慧往往來自於生活的熔煉與淬鍊。在極簡的表面下，藏著最深刻的洞察。
+                </p>
+            </div>
+            
+            <div class="volcanic-card volcanic-glass">
+                <span class="card-icon">⛰️</span>
+                <h3 class="card-title">堅韌品格</h3>
+                <p class="card-description">
+                    火山岩經過千萬年的冷卻凝固，形成堅不可摧的品格。人生亦是如此，經歷烈火試煉後，才能鍛造出真正的品格與力量。
+                </p>
+            </div>
+            
+            <div class="volcanic-card volcanic-glass">
+                <span class="card-icon">💎</span>
+                <h3 ="card-title">創造新生</h3>
+                <p class="card-description">
+                    火山爆發毀滅舊世界，同時也創造新土地。破壞與創造並存，這是宇宙的基本法則。在極簡中找到重生的力量。
+                </p>
+            </div>
+            
+            <div class="volcanic-card volcanic-glass">
+                <span class="card-icon">🌋</span>
+                <h3 class="card-title">內在火焰</h3>
+                <p class="card-description">
+                    每個人內心都有一座火山，蘊含著無限的創造潛能。關鍵不是壓抑這股力量，而是學會如何優雅地釋放與引導。
+                </p>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="footer-text">
+                © 2024 Volcanic Minimalism | 在極簡中發現原始力量
+            </p>
+        </footer>
+    </div>
+    
+    <script>
+        // 創建火山粒子效果
+        function createParticles() {
+            const particleContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 6 + 's';
+                    particle.style.animationDuration = (4 + Math.random() * 4) + 's';
+                    
+                    particleContainer.appendChild(particle);
+                    
+                    // 移除粒子以避免內存泄漏
+                    setTimeout(() => {
+                        if (particle.parentNode) {
+                            particle.parentNode.removeChild(particle);
+                        }
+                    }, 8000);
+                }, i * 200);
+            }
+        }
+        
+        // 平滑滾動
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // 啟動粒子效果
+        createParticles();
+        setInterval(createParticles, 12000); // 每12秒重新生成粒子
+        
+        // 載入完成提示
+        window.addEventListener('load', function() {
+            console.log('🌋 Volcanic Minimalism 已載入完成');
+            console.log('原始力量與極簡美學的完美融合');
+        });
+    </script>
+</body>
+</html>
