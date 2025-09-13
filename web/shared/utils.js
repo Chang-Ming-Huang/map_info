@@ -268,7 +268,7 @@ function initializeLightbox() {
 
 // 評論文字截斷與展開功能
 function setupReviewTruncation(containerElement) {
-    const TRUNCATE_CHAR_LIMIT = 100; // 可調整的字元限制
+    const TRUNCATE_CHAR_LIMIT = 80; // 可調整的字元限制
 
     containerElement.querySelectorAll('.review-text').forEach(textElement => {
         // 如果已經處理過，則跳過

@@ -56,12 +56,19 @@
         .review-stars {
             color: #ffc107;
             font-size: 1.2rem;
-            margin-bottom: 10px;
         }
         
         .review-text {
             margin: 15px 0;
             line-height: 1.6;
+        }
+
+        .review-text.truncated {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
         }
         
         .review-author {
@@ -287,7 +294,7 @@
                 if (review.images && review.images.length > 0) {
                     const imagesToShow = review.images.slice(0, 3);
                     const imageElements = imagesToShow.map(imgSrc => `
-                        <img src="${imgSrc}" alt="評論圖片" style="max-width: 32%; height: auto; border-radius: 8px; display: inline-block;" 
+                        <img src="${imgSrc}" alt="評論圖片" style="max-width: 32%; height: auto; border-radius: 8px; display: inline-block;"
                              onerror="this.style.display='none';">
                     `).join('');
 
@@ -301,16 +308,15 @@
                 
                 return `
                     <div class="review-card" data-review-id="sample-${index}">
-                        <h3>樣本 ${index + 1}</h3>
-                        <div class="review-stars">${stars}</div>
+                        <div style="font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">
+                            ${review.reviewer_name || review.author_name || 'Anonymous'}
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; color: #666; font-size: 0.9em;">
+                            <div class="review-stars">${stars}</div>
+                            <span>${review.review_date || review.relative_time_description || '未知'}</span>
+                        </div>
                         <p class="review-text">${review.review_text || review.text || '無評論內容'}</p>
                         ${imageHtml}
-                        <div class="review-author">
-                            <strong>評論者:</strong> ${review.reviewer_name || review.author_name || 'Anonymous'}<br>
-                            <strong>日期:</strong> ${review.review_date || review.relative_time_description || '未知'}<br>
-                            <strong>評分:</strong> ${review.rating || 'N/A'}/5<br>
-                            <strong>圖片數量:</strong> ${review.total_images || 0}
-                        </div>
                     </div>
                 `;
             }).join('');
