@@ -173,6 +173,25 @@
                 font-size: 1.1rem;
                 line-height: 1.6;
             }
+
+            /* 手機版隱藏裝飾元素避免水平滾動 */
+            .ornament {
+                display: none;
+            }
+
+            /* 確保沒有水平溢出 */
+            html, body {
+                overflow-x: hidden;
+                width: 100%;
+                max-width: 100vw;
+            }
+
+            /* 修正可能造成水平滾動的元素 */
+            .max-w-7xl {
+                max-width: 100%;
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
         }
 
         @media (min-width: 641px) and (max-width: 1024px) {
@@ -227,11 +246,11 @@
 
     <!-- Hero Section -->
     <section id="home" class="pt-20 min-h-screen flex items-center relative overflow-hidden">
-        <!-- Decorative elements -->
-        <div class="absolute top-32 left-20 w-32 h-32 ornament rounded-full floating-animation"></div>
-        <div class="absolute bottom-40 right-32 w-24 h-24 ornament rounded-full floating-animation" style="animation-delay: 2s;"></div>
-        <div class="absolute top-1/2 left-1/4 w-2 h-2 bg-gold rounded-full animate-pulse"></div>
-        <div class="absolute top-1/3 right-1/4 w-1 h-1 bg-champagne rounded-full animate-pulse" style="animation-delay: 1s;"></div>
+        <!-- Decorative elements - 響應式位置 -->
+        <div class="absolute top-32 left-8 sm:left-20 w-16 sm:w-32 h-16 sm:h-32 ornament rounded-full floating-animation"></div>
+        <div class="absolute bottom-40 right-8 sm:right-32 w-12 sm:w-24 h-12 sm:h-24 ornament rounded-full floating-animation" style="animation-delay: 2s;"></div>
+        <div class="hidden sm:block absolute top-1/2 left-1/4 w-2 h-2 bg-gold rounded-full animate-pulse"></div>
+        <div class="hidden sm:block absolute top-1/3 right-1/4 w-1 h-1 bg-champagne rounded-full animate-pulse" style="animation-delay: 1s;"></div>
         
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
             <div class="grid md:grid-cols-2 gap-16 items-center">
@@ -252,23 +271,23 @@
                         <button class="luxury-btn text-white px-10 py-4 font-semibold tracking-wider relative">
                             查看作品集
                         </button>
-                        <button class="border-2 border-gold text-gold px-10 py-4 font-semibold tracking-wider hover:bg-gold hover:text-deep-blue transition-all">
+                        <button onclick="scrollToConsultation()" class="border-2 border-gold text-gold px-10 py-4 font-semibold tracking-wider hover:bg-gold hover:text-deep-blue transition-all">
                             預約諮詢
                         </button>
                     </div>
                 </div>
                 <div class="animate-fade-in" style="animation-delay: 0.3s;">
                     <div class="relative">
-                        <div class="luxury-card p-12 text-center">
-                            <div class="w-40 h-40 mx-auto mb-8 rounded-full overflow-hidden border-4 border-gold/30 shadow-2xl profile-image">
+                        <div class="luxury-card p-6 sm:p-12 text-center">
+                            <div class="w-32 h-32 sm:w-40 sm:h-40 mx-auto mb-8 rounded-full overflow-hidden border-4 border-gold/30 shadow-2xl profile-image">
                                 <img src="../assets/profile.jpg" alt="Nick - 築宜系統傢俱設計師" class="w-full h-full object-cover object-center">
                             </div>
-                            <h3 class="font-serif text-2xl font-bold text-gold mb-4">專業設計師</h3>
+                            <h3 class="font-serif text-xl sm:text-2xl font-bold text-gold mb-4">專業設計師</h3>
                             <p class="text-platinum">Nick</p>
                             <p class="text-champagne text-sm mt-2">超過 30 位客戶一致推薦</p>
                         </div>
-                        <div class="absolute -top-6 -right-6 w-12 h-12 bg-gold/20 rounded-full"></div>
-                        <div class="absolute -bottom-6 -left-6 w-8 h-8 bg-champagne/30 rounded-full"></div>
+                        <div class="hidden sm:block absolute -top-6 -right-6 w-12 h-12 bg-gold/20 rounded-full"></div>
+                        <div class="hidden sm:block absolute -bottom-6 -left-6 w-8 h-8 bg-champagne/30 rounded-full"></div>
                     </div>
                 </div>
             </div>
@@ -396,7 +415,7 @@
                 </div>
                 
                 <div class="luxury-card p-10">
-                    <h3 class="font-serif text-2xl font-bold mb-8 text-gold">預約專屬諮詢</h3>
+                    <h3 id="consultation-form" class="font-serif text-2xl font-bold mb-8 text-gold">預約諮詢</h3>
                     <form class="space-y-6">
                         <div>
                             <label class="block text-platinum font-medium mb-3">姓名</label>
@@ -588,6 +607,27 @@
                 };
             }
         });
+
+        // 平滑滾動到預約諮詢表單
+        function scrollToConsultation() {
+            const consultationForm = document.getElementById('consultation-form');
+            if (consultationForm) {
+                consultationForm.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+
+                // 可選：添加焦點效果
+                setTimeout(() => {
+                    consultationForm.style.color = '#F59E0B';
+                    consultationForm.style.transition = 'color 0.5s ease';
+
+                    setTimeout(() => {
+                        consultationForm.style.color = '';
+                    }, 1000);
+                }, 500);
+            }
+        }
 
         // 頁面載入完成後執行
         document.addEventListener('DOMContentLoaded', function() {
