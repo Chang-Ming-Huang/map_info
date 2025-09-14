@@ -812,15 +812,14 @@
                     // 發送到 Google Apps Script
                     const response = await fetch(this.SCRIPT_URL, {
                         method: 'POST',
-                        mode: 'no-cors', // 改為 no-cors 模式
                         headers: {
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify(formData)
                     });
 
-                    // 由於 no-cors 模式無法讀取回應，我們假設成功
-                    const result = { status: 'success', message: '預約申請已提交，請稍後查看 Google Sheets 確認' };
+                    // 讀取實際的服務器回應
+                    const result = await response.json();
                     console.log('服務器回應:', result);
 
                     if (result.status === 'success') {

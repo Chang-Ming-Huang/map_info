@@ -77,7 +77,7 @@ function doPost(e) {
 
       return createResponse({
         status: 'success',
-        message: '預約申請已成功提交！我們會儘快與您聯繫。',
+        message: '我們會儘快與您聯繫，感謝您的耐心等待。',
         data: {
           name: cleanData.name,
           submissionTime: cleanData.timestamp.toLocaleString('zh-TW')
