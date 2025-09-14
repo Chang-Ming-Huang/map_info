@@ -416,22 +416,37 @@
                 
                 <div id="consultation-card" class="luxury-card p-10">
                     <h3 id="consultation-form" class="font-serif text-2xl font-bold mb-8 text-gold">預約諮詢</h3>
-                    <form class="space-y-6">
+                    <form id="consultation-form-element" class="space-y-6">
                         <div>
-                            <label class="block text-platinum font-medium mb-3">姓名</label>
-                            <input type="text" class="w-full px-4 py-3 bg-deep-blue/50 border border-gold/30 text-white focus:outline-none focus:border-gold transition-colors">
+                            <label for="customer-name" class="block text-platinum font-medium mb-3">姓名 <span class="text-gold">*</span></label>
+                            <input type="text" id="customer-name" name="name" required
+                                   class="w-full px-4 py-3 bg-deep-blue/50 border border-gold/30 text-white focus:outline-none focus:border-gold transition-colors"
+                                   placeholder="請輸入您的姓名">
                         </div>
                         <div>
-                            <label class="block text-platinum font-medium mb-3">聯絡電話</label>
-                            <input type="tel" class="w-full px-4 py-3 bg-deep-blue/50 border border-gold/30 text-white focus:outline-none focus:border-gold transition-colors">
+                            <label for="customer-phone" class="block text-platinum font-medium mb-3">聯絡電話 <span class="text-gold">*</span></label>
+                            <input type="tel" id="customer-phone" name="phone" required
+                                   class="w-full px-4 py-3 bg-deep-blue/50 border border-gold/30 text-white focus:outline-none focus:border-gold transition-colors"
+                                   placeholder="請輸入您的聯絡電話">
                         </div>
                         <div>
-                            <label class="block text-platinum font-medium mb-3">需求說明</label>
-                            <textarea rows="4" class="w-full p-4 bg-deep-blue/50 border border-gold/30 text-white focus:outline-none focus:border-gold transition-colors"></textarea>
+                            <label for="customer-message" class="block text-platinum font-medium mb-3">需求說明 <span class="text-gold">*</span></label>
+                            <textarea id="customer-message" name="message" rows="4" required
+                                      class="w-full p-4 bg-deep-blue/50 border border-gold/30 text-white focus:outline-none focus:border-gold transition-colors"
+                                      placeholder="請描述您的裝潢需求或想諮詢的內容"></textarea>
                         </div>
-                        <button type="submit" class="w-full luxury-btn text-white py-4 font-semibold tracking-wider">
-                            立即預約
+                        <button type="submit" id="submit-btn" class="w-full luxury-btn text-white py-4 font-semibold tracking-wider relative overflow-hidden">
+                            <span id="submit-text">立即預約</span>
+                            <div id="loading-spinner" class="hidden absolute inset-0 flex items-center justify-center">
+                                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                                <span class="ml-2">提交中...</span>
+                            </div>
                         </button>
+
+                        <!-- 提交狀態訊息 -->
+                        <div id="form-message" class="hidden p-4 rounded-lg text-center">
+                            <div id="form-message-content"></div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -443,7 +458,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center">
                 <div class="font-serif text-2xl font-bold text-gold">築宜</div>
-                <div class="text-platinum">© 2025 築宜系統傢俱 | 品味生活，從此開始</div>
+                <div class="text-platinum">© 築宜系統傢俱 | 品味生活，從此開始</div>
             </div>
         </div>
     </footer>
@@ -666,12 +681,246 @@
             }
         }
 
+        // 表單處理功能
+        class ConsultationFormHandler {
+            constructor() {
+                this.form = null;
+                this.submitBtn = null;
+                this.submitText = null;
+                this.loadingSpinner = null;
+                this.messageContainer = null;
+                this.messageContent = null;
+
+                // ⚠️ 請將此 URL 替換為您的 Google Apps Script Web App URL
+                this.SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwBMFpRukd-RnHx9aK96KJDyaDTtSpM1zTg3XgojxPCMZyfHOywuqjquGRvEwve3ERU/exec';
+            }
+
+            init() {
+                this.form = document.getElementById('consultation-form-element');
+                this.submitBtn = document.getElementById('submit-btn');
+                this.submitText = document.getElementById('submit-text');
+                this.loadingSpinner = document.getElementById('loading-spinner');
+                this.messageContainer = document.getElementById('form-message');
+                this.messageContent = document.getElementById('form-message-content');
+
+                if (this.form) {
+                    this.form.addEventListener('submit', this.handleSubmit.bind(this));
+                    this.setupInputValidation();
+                }
+            }
+
+            setupInputValidation() {
+                const inputs = this.form.querySelectorAll('input, textarea');
+                inputs.forEach(input => {
+                    input.addEventListener('blur', this.validateField.bind(this));
+                    input.addEventListener('input', this.clearFieldError.bind(this));
+                });
+            }
+
+            validateField(event) {
+                const field = event.target;
+                const value = field.value.trim();
+
+                // 清除之前的錯誤樣式
+                field.classList.remove('border-red-500');
+
+                // 驗證必填欄位
+                if (field.hasAttribute('required') && !value) {
+                    this.showFieldError(field, '此欄位為必填');
+                    return false;
+                }
+
+                // 電話號碼驗證
+                if (field.type === 'tel' && value) {
+                    const phoneRegex = /^[\d\-\(\)\s\+]+$/;
+                    if (!phoneRegex.test(value)) {
+                        this.showFieldError(field, '請輸入有效的電話號碼');
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            showFieldError(field, message) {
+                field.classList.add('border-red-500');
+
+                // 移除現有的錯誤訊息
+                const existingError = field.parentNode.querySelector('.field-error');
+                if (existingError) {
+                    existingError.remove();
+                }
+
+                // 添加錯誤訊息
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'field-error text-red-400 text-sm mt-1';
+                errorDiv.textContent = message;
+                field.parentNode.appendChild(errorDiv);
+            }
+
+            clearFieldError(event) {
+                const field = event.target;
+                field.classList.remove('border-red-500');
+
+                const errorDiv = field.parentNode.querySelector('.field-error');
+                if (errorDiv) {
+                    errorDiv.remove();
+                }
+            }
+
+            validateForm() {
+                const inputs = this.form.querySelectorAll('input[required], textarea[required]');
+                let isValid = true;
+
+                inputs.forEach(input => {
+                    if (!this.validateField({ target: input })) {
+                        isValid = false;
+                    }
+                });
+
+                return isValid;
+            }
+
+            async handleSubmit(event) {
+                event.preventDefault();
+
+                // 檢查是否已設置 Script URL
+                if (this.SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') {
+                    this.showMessage('請先設置 Google Apps Script Web App URL', 'error');
+                    return;
+                }
+
+                // 驗證表單
+                if (!this.validateForm()) {
+                    this.showMessage('請填寫所有必填欄位', 'error');
+                    return;
+                }
+
+                // 設置提交狀態
+                this.setSubmitState(true);
+                this.hideMessage();
+
+                try {
+                    // 收集表單資料
+                    const formData = {
+                        name: document.getElementById('customer-name').value.trim(),
+                        phone: document.getElementById('customer-phone').value.trim(),
+                        message: document.getElementById('customer-message').value.trim()
+                    };
+
+                    console.log('提交表單資料:', formData);
+
+                    // 發送到 Google Apps Script
+                    const response = await fetch(this.SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors', // 改為 no-cors 模式
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    });
+
+                    // 由於 no-cors 模式無法讀取回應，我們假設成功
+                    const result = { status: 'success', message: '預約申請已提交，請稍後查看 Google Sheets 確認' };
+                    console.log('服務器回應:', result);
+
+                    if (result.status === 'success') {
+                        this.showMessage(result.message, 'success');
+                        this.resetForm();
+
+                        // 可選：追蹤成功提交事件（Google Analytics）
+                        if (typeof gtag !== 'undefined') {
+                            gtag('event', 'form_submit', {
+                                'event_category': 'engagement',
+                                'event_label': 'consultation_form'
+                            });
+                        }
+                    } else {
+                        this.showMessage(result.message || '提交失敗，請稍後再試', 'error');
+                    }
+
+                } catch (error) {
+                    console.error('表單提交錯誤:', error);
+                    this.showMessage('網路連線錯誤，請檢查網路連線後再試', 'error');
+                } finally {
+                    this.setSubmitState(false);
+                }
+            }
+
+            setSubmitState(isSubmitting) {
+                if (isSubmitting) {
+                    this.submitBtn.disabled = true;
+                    this.submitText.classList.add('hidden');
+                    this.loadingSpinner.classList.remove('hidden');
+                } else {
+                    this.submitBtn.disabled = false;
+                    this.submitText.classList.remove('hidden');
+                    this.loadingSpinner.classList.add('hidden');
+                }
+            }
+
+            showMessage(message, type = 'info') {
+                this.messageContainer.classList.remove('hidden');
+                this.messageContent.textContent = message;
+
+                // 移除所有樣式類別
+                this.messageContainer.classList.remove('bg-green-100', 'border-green-500', 'text-green-700');
+                this.messageContainer.classList.remove('bg-red-100', 'border-red-500', 'text-red-700');
+                this.messageContainer.classList.remove('bg-blue-100', 'border-blue-500', 'text-blue-700');
+
+                // 根據類型添加樣式
+                switch (type) {
+                    case 'success':
+                        this.messageContainer.classList.add('bg-green-100', 'border-green-500', 'text-green-700', 'border-l-4');
+                        break;
+                    case 'error':
+                        this.messageContainer.classList.add('bg-red-100', 'border-red-500', 'text-red-700', 'border-l-4');
+                        break;
+                    default:
+                        this.messageContainer.classList.add('bg-blue-100', 'border-blue-500', 'text-blue-700', 'border-l-4');
+                }
+
+                // 自動隱藏成功訊息
+                if (type === 'success') {
+                    setTimeout(() => {
+                        this.hideMessage();
+                    }, 5000);
+                }
+            }
+
+            hideMessage() {
+                this.messageContainer.classList.add('hidden');
+            }
+
+            resetForm() {
+                this.form.reset();
+
+                // 清除所有錯誤狀態
+                const inputs = this.form.querySelectorAll('input, textarea');
+                inputs.forEach(input => {
+                    input.classList.remove('border-red-500');
+                });
+
+                // 移除所有錯誤訊息
+                const errorMessages = this.form.querySelectorAll('.field-error');
+                errorMessages.forEach(error => error.remove());
+            }
+        }
+
+        // 全域表單處理器實例
+        let consultationFormHandler;
+
         // 頁面載入完成後執行
         document.addEventListener('DOMContentLoaded', function() {
             // 初始化 utils.js 中的功能（包含「看全文」事件監聽器）
             if (typeof initializeApp === 'function') {
                 initializeApp();
             }
+
+            // 初始化表單處理器
+            consultationFormHandler = new ConsultationFormHandler();
+            consultationFormHandler.init();
+
             loadReviews();
             initMobileMenu();
         });
