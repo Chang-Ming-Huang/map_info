@@ -263,12 +263,12 @@
                     <div class="w-24 h-1 gold-gradient mb-8"></div>
                     <p class="text-xl text-platinum mb-10 balanced-text">
                         築宜系統傢俱 桃園店<br>
-                        超過 30 位客戶一致推薦的匠心設計師<br>
-                        以敏銳洞察力與細膩美感，精心雕琢每個空間細節<br>
-                        創造超越期待的品味居家體驗
+                        超過 30 位客戶推薦<br>
+                        敏銳洞察與細膩美感<br>
+                        精心雕琢每個空間細節
                     </p>
                     <div class="flex flex-col sm:flex-row gap-6">
-                        <button class="luxury-btn text-white px-10 py-4 font-semibold tracking-wider relative">
+                        <button onclick="scrollToReviews()" class="luxury-btn text-white px-10 py-4 font-semibold tracking-wider relative">
                             查看作品集
                         </button>
                         <button onclick="scrollToConsultation()" class="border-2 border-gold text-gold px-10 py-4 font-semibold tracking-wider hover:bg-gold hover:text-deep-blue transition-all">
@@ -306,7 +306,7 @@
                     專業設計師 Nick 帶領築宜團隊<br>
                     憑藉深厚美學涵養與精湛工藝<br>
                     為追求品味生活的您<br>
-                    打造兼具美感與機能的頂級居家藝術品
+                    打造美感與機能兼具的居家體驗
                 </p>
             </div>
             
@@ -414,16 +414,16 @@
                     </div>
                 </div>
                 
-                <div class="luxury-card p-10">
+                <div id="consultation-card" class="luxury-card p-10">
                     <h3 id="consultation-form" class="font-serif text-2xl font-bold mb-8 text-gold">預約諮詢</h3>
                     <form class="space-y-6">
                         <div>
                             <label class="block text-platinum font-medium mb-3">姓名</label>
-                            <input type="text" class="w-full p-4 bg-deep-blue/50 border border-gold/30 text-white focus:outline-none focus:border-gold transition-colors">
+                            <input type="text" class="w-full px-4 py-3 bg-deep-blue/50 border border-gold/30 text-white focus:outline-none focus:border-gold transition-colors">
                         </div>
                         <div>
                             <label class="block text-platinum font-medium mb-3">聯絡電話</label>
-                            <input type="tel" class="w-full p-4 bg-deep-blue/50 border border-gold/30 text-white focus:outline-none focus:border-gold transition-colors">
+                            <input type="tel" class="w-full px-4 py-3 bg-deep-blue/50 border border-gold/30 text-white focus:outline-none focus:border-gold transition-colors">
                         </div>
                         <div>
                             <label class="block text-platinum font-medium mb-3">需求說明</label>
@@ -608,24 +608,61 @@
             }
         });
 
-        // 平滑滾動到預約諮詢表單
-        function scrollToConsultation() {
-            const consultationForm = document.getElementById('consultation-form');
-            if (consultationForm) {
-                consultationForm.scrollIntoView({
+        // 平滑滾動到客戶見證區塊
+        function scrollToReviews() {
+            const reviewsSection = document.getElementById('reviews');
+            if (reviewsSection) {
+                reviewsSection.scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
                 });
 
-                // 可選：添加焦點效果
-                setTimeout(() => {
-                    consultationForm.style.color = '#F59E0B';
-                    consultationForm.style.transition = 'color 0.5s ease';
-
+                // 可選：添加焦點效果到標題
+                const reviewsTitle = reviewsSection.querySelector('h2');
+                if (reviewsTitle) {
                     setTimeout(() => {
-                        consultationForm.style.color = '';
-                    }, 1000);
-                }, 500);
+                        reviewsTitle.style.color = '#F59E0B';
+                        reviewsTitle.style.transition = 'color 0.5s ease';
+
+                        setTimeout(() => {
+                            reviewsTitle.style.color = '';
+                        }, 1000);
+                    }, 500);
+                }
+            }
+        }
+
+        // 平滑滾動到預約諮詢表單，對齊 nav bar 下緣
+        function scrollToConsultation() {
+            const consultationCard = document.getElementById('consultation-card');
+            const consultationForm = document.getElementById('consultation-form');
+
+            if (consultationCard) {
+                // 計算表單容器的位置
+                const cardRect = consultationCard.getBoundingClientRect();
+                const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+                // nav bar 高度是 80px (h-20)，需要讓表單容器頂部對齊 nav bar 下緣
+                const navBarHeight = 80;
+                const targetScrollTop = currentScrollTop + cardRect.top - navBarHeight;
+
+                // 平滑滾動到目標位置
+                window.scrollTo({
+                    top: targetScrollTop,
+                    behavior: 'smooth'
+                });
+
+                // 可選：添加焦點效果到標題
+                if (consultationForm) {
+                    setTimeout(() => {
+                        consultationForm.style.color = '#F59E0B';
+                        consultationForm.style.transition = 'color 0.5s ease';
+
+                        setTimeout(() => {
+                            consultationForm.style.color = '';
+                        }, 1000);
+                    }, 500);
+                }
             }
         }
 
