@@ -809,42 +809,21 @@
 
                     console.log('提交表單資料:', formData);
 
-                    // 嘗試使用 CORS 模式發送到 Google Apps Script
-                    let result;
-                    try {
-                        const response = await fetch(this.SCRIPT_URL, {
-                            method: 'POST',
-                            mode: 'cors',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(formData)
-                        });
+                    // 使用 no-cors 模式發送到 Google Apps Script
+                    await fetch(this.SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    });
 
-                        if (response.ok) {
-                            result = await response.json();
-                        } else {
-                            throw new Error('CORS request failed');
-                        }
-                    } catch (corsError) {
-                        console.log('CORS 模式失敗，嘗試 no-cors 模式:', corsError);
-
-                        // 備用方案：使用 no-cors 模式
-                        await fetch(this.SCRIPT_URL, {
-                            method: 'POST',
-                            mode: 'no-cors',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(formData)
-                        });
-
-                        // no-cors 模式無法讀取回應，假設成功並使用預設訊息
-                        result = {
-                            status: 'success',
-                            message: '我們會儘快與您聯繫，感謝您的耐心等待。'
-                        };
-                    }
+                    // no-cors 模式無法讀取回應，使用預設成功訊息
+                    const result = {
+                        status: 'success',
+                        message: '我們會儘快與您聯繫，感謝您的耐心等待。'
+                    };
 
                     console.log('服務器回應:', result);
 
