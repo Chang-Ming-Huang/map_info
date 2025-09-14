@@ -55,7 +55,7 @@ class DataAPI {
             }
 
             // 嘗試載入 JSON 檔案
-            const response = await fetch(`../../${this.latestJsonFile}`);
+            const response = await fetch(`../data/${this.latestJsonFile}`);
             
             if (!response.ok) {
                 throw new Error(`載入 JSON 檔案失敗: ${response.status}`);
@@ -118,11 +118,11 @@ class DataAPI {
             // 從 web/style-*/ 到 root 的路徑是 ../../
             // 圖片在 images/timestamp/ 目錄下
             if (imageDirectory) {
-                return `../../${imageDirectory}/${imageName}`;
+                return `../${imageDirectory}/${imageName}`;
             } else {
                 // 如果沒有明確的目錄，嘗試從時間戳記推斷
                 const timestamp = this.extractTimestamp(this.latestJsonFile || '');
-                return `../../images/${timestamp}/${imageName}`;
+                return `../images/${timestamp}/${imageName}`;
             }
         });
     }
