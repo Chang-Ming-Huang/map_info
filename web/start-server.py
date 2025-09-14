@@ -24,26 +24,26 @@ class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         super().end_headers()
 
 if __name__ == "__main__":
-    # 切换到 web 目录的父目录，这样可以访问 JSON 文件
-    os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    
+    # 保持在 web 目录，这样 shared/ 下的文件可以直接访问
+    # 同时通过相对路径访问上级目录的 data/ 和 images/
+
     with socketserver.TCPServer(("", PORT), MyHTTPRequestHandler) as httpd:
         print(f"🚀 服务器启动成功！")
         print(f"📡 服务器地址: http://localhost:{PORT}")
-        print(f"🧪 测试页面: http://localhost:{PORT}/web/test-dataapi.html")
+        print(f"🧪 测试页面: http://localhost:{PORT}/shared/test-dataapi.html")
         print(f"🎨 样式页面:")
-        
+
         # 列出所有样式页面
-        style_dirs = [d for d in os.listdir('web') if d.startswith('style-') and os.path.isdir(f'web/{d}')]
+        style_dirs = [d for d in os.listdir('.') if d.startswith('style-') and os.path.isdir(d)]
         for style_dir in sorted(style_dirs):
-            print(f"   - http://localhost:{PORT}/web/{style_dir}/")
-        
+            print(f"   - http://localhost:{PORT}/{style_dir}/")
+
         print(f"✋ 按 Ctrl+C 停止服务器")
         print(f"🔄 正在启动...")
-        
+
         try:
             # 自动打开测试页面
-            webbrowser.open(f'http://localhost:{PORT}/web/test-dataapi.html')
+            webbrowser.open(f'http://localhost:{PORT}/shared/test-dataapi.html')
             httpd.serve_forever()
         except KeyboardInterrupt:
             print("\n👋 服务器已停止")

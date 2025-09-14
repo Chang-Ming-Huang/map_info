@@ -6,14 +6,19 @@
 
 ```
 map_info/
-├── google_reviews_scraper.py    # 主要爬蟲程式
-├── image_handler.py             # 圖片處理模組
+├── src/                         # Python 程式碼目錄
+│   ├── google_reviews_scraper.py    # 主要爬蟲程式
+│   ├── image_handler.py             # 圖片處理模組
+│   └── __pycache__/                 # Python 快取目錄
+├── web/                         # 網站檔案目錄
+│   ├── data/                        # JSON 數據目錄
+│   │   └── YYYYMMDD_HHMMSS.json     # 評論數據輸出檔案
+│   ├── images/                      # 統一圖片存放目錄
+│   │   └── YYYYMMDD_HHMMSS/         # 按時間戳記分類的圖片
+│   └── [其他網站檔案]             # 評論展示系統
 ├── requirements.txt             # 依賴套件清單
 ├── 使用說明.md                  # 完整使用說明
-├── CLAUDE.md                    # 本開發記錄
-├── images/                      # 圖片下載目錄
-│   └── YYYYMMDD_HHMMSS/         # 按時間戳記分類的圖片
-└── YYYYMMDD_HHMMSS.json         # 評論數據輸出檔案
+└── CLAUDE.md                    # 本開發記錄
 ```
 
 ## 核心功能
@@ -28,16 +33,14 @@ map_info/
 
 ### 執行爬蟲
 ```bash
+# 進入程式碼目錄
+cd src
+
+# 執行爬蟲程式
 python3 google_reviews_scraper.py
-```
 
-### 快速執行
-```bash
-# Windows PowerShell
-python google_reviews_scraper.py
-
-# 配置調整 (可選)
-# 在程式中修改 UserConfig 和 ScrapingConfig
+# 或者使用管道輸入選擇預設模式
+echo "0" | python3 google_reviews_scraper.py
 ```
 
 ## 技術亮點
@@ -71,8 +74,8 @@ python google_reviews_scraper.py
 
 ### 輸出檔案
 ```
-YYYYMMDD_HHMMSS.json              # 評論數據 (例如: 20250913_012613.json)
-images/YYYYMMDD_HHMMSS/           # 圖片目錄 (例如: images/20250913_012613/)
+web/data/YYYYMMDD_HHMMSS.json     # 評論數據 (例如: 20250913_012613.json)
+web/images/YYYYMMDD_HHMMSS/       # 圖片目錄 (例如: web/images/20250913_012613/)
 ├── review_001_img_01.jpg ~ review_XXX_img_YY.jpg
 ```
 
@@ -86,10 +89,15 @@ images/YYYYMMDD_HHMMSS/           # 圖片目錄 (例如: images/20250913_012613
 - 新增 `image_handler.py` 模組
 - 圖片自動下載和去重
 
-### v3.0 - 前置滾動優化 (當前版本)
+### v3.0 - 前置滾動優化
 - 30次前置滾動機制
 - 每次滾動後檢查「更多評論」按鈕
 - 交替執行邏輯優化
+
+### v4.0 - 檔案結構重組 & 圖片去重優化 (當前版本)
+- 重新整理專案檔案結構：Python 檔案移至 `src/`，JSON 和圖片統一放在 `web/`
+- 修正圖片重複下載問題：新增 URL 去重機制，避免相同圖片重複下載
+- 更新所有路徑引用：確保 Python 和網站系統正確指向新的檔案位置
 
 ## 技術棧
 
@@ -102,3 +110,28 @@ images/YYYYMMDD_HHMMSS/           # 圖片目錄 (例如: images/20250913_012613
 ## 專案狀態
 
 ✅ **生產就緒** - 程式穩定運行，功能完整，已通過多次測試驗證
+
+## 最新更新 (2025-09-14)
+
+### v4.0 更新內容
+1. **檔案結構重組**
+   - Python 程式碼移至 `src/` 目錄
+   - JSON 數據移至 `web/data/` 目錄
+   - 統一使用 `web/images/` 作為圖片存放位置
+
+2. **圖片去重優化**
+   - 新增 URL 級別的去重機制
+   - 解決評論只有1張圖片卻重複下載3次的問題
+   - 確保實際有幾張不同圖片就下載幾張
+
+3. **路徑引用更新**
+   - 修正 `google_reviews_scraper.py` 中的圖片和 JSON 路徑
+   - 更新 `web/shared/dataAPI.js` 的資源路徑
+   - 修正 HTML 檔案中的圖片引用
+
+### 執行方式變更
+現在需要進入 `src/` 目錄後執行：
+```bash
+cd src
+python3 google_reviews_scraper.py
+```

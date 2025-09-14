@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>築宜系統傢俱 - 客戶評論系統</title>
+    <meta name="description" content="築宜系統傢俱桃園店客戶評論展示系統，瀏覽真實客戶回饋與作品圖片。">
+    <meta name="keywords" content="築宜系統傢俱,桃園,客戶評論,系統傢俱,室內設計">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 3rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 600px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .option-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+
+        .option-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .option-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .option-desc {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin: 0;
+        }
+
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            opacity: 0.6;
+        }
+
+        .redirect-message {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+                padding: 2rem;
+            }
+
+            .logo {
+                font-size: 2.5rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">築宜</div>
+        <h1>客戶評論系統</h1>
+        <p>歡迎瀏覽築宜系統傢俱桃園店的客戶評論與作品展示</p>
+
+        <div class="options">
+            <a href="web/shared/test-dataapi.html" class="option-card">
+                <div class="option-title">🧪 系統測試頁面</div>
+                <p class="option-desc">測試評論數據載入與功能驗證</p>
+            </a>
+
+            <a href="web/shared/reviews.html" class="option-card">
+                <div class="option-title">📝 客戶評論展示</div>
+                <p class="option-desc">瀏覽客戶真實評論與作品圖片</p>
+            </a>
+
+            <a href="web/style-dark-blue/index.html" class="option-card">
+                <div class="option-title">🎨 深藍主題頁面</div>
+                <p class="option-desc">精緻的深藍色設計主題展示</p>
+            </a>
+
+            <a href="web/style-dark-blue/index_optimized.html" class="option-card">
+                <div class="option-title">⚡ 優化版主題頁面</div>
+                <p class="option-desc">性能優化的深藍色主題版本</p>
+            </a>
+        </div>
+
+        <div class="footer">
+            © 2025 築宜系統傢俱 | 品味生活，從此開始
+        </div>
+
+        <div class="redirect-message" id="redirect-info" style="display: none;">
+            <strong>GitHub Pages 部署提醒：</strong><br>
+            如果你看到這個頁面，表示你正在使用<strong>整個倉庫為根目錄</strong>的部署模式。
+            <br>實際 GitHub Pages URL 會是：<code>https://username.github.io/repo-name/web/...</code>
+        </div>
+    </div>
+
+    <script>
+        // 檢測是否在 GitHub Pages 環境
+        if (window.location.hostname.includes('github.io') ||
+            window.location.pathname.includes('/map_info/')) {
+            document.getElementById('redirect-info').style.display = 'block';
+        }
+
+        // 自動重定向邏輯（可選）
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectTo = urlParams.get('redirect');
+
+        if (redirectTo) {
+            setTimeout(() => {
+                window.location.href = `web/${redirectTo}`;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

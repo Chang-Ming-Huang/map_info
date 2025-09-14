@@ -81,17 +81,29 @@ class ReviewImageHandler:
             # 簡化版本：直接從前3個按鈕提取background-image URL
             print("\n=== 直接提取前3張圖片的URL ===")
             
-            # 過濾出有效的圖片按鈕（不包含展開按鈕）
+            # 過濾出有效的圖片按鈕（不包含展開按鈕）並去重
             valid_buttons = []
+            seen_urls = set()  # 用於去重的URL集合
+
             for button in photo_buttons:
                 try:
                     jsaction = button.get_attribute('jsaction')
                     style = button.get_attribute('style')
-                    
+
                     # 只要真正的圖片按鈕（不是展開按鈕）
                     if (jsaction and 'openPhoto' in jsaction and 'showMorePhotos' not in jsaction and
                         style and 'background-image' in style and 'geougc' in style):
-                        valid_buttons.append(button)
+
+                        # 提取background-image URL進行去重檢查
+                        import re
+                        url_match = re.search(r'background-image:\s*url\("([^"]+)"\)', style)
+                        if url_match:
+                            bg_url = url_match.group(1)
+                            # 只添加未見過的URL對應的按鈕
+                            if bg_url not in seen_urls:
+                                seen_urls.add(bg_url)
+                                valid_buttons.append(button)
+
                 except:
                     continue
             

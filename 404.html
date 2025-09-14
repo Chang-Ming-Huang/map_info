@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>找不到頁面 - 築宜系統傢俱</title>
+    <meta name="description" content="抱歉，您要找的頁面不存在。請返回築宜系統傢俱客戶評論系統。">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 3rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 600px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+
+        .error-code {
+            font-size: 8rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+            display: block;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .primary-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            opacity: 0.6;
+        }
+
+        .github-info {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+                padding: 2rem;
+            }
+
+            .error-code {
+                font-size: 6rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error-code">404</div>
+        <div class="logo">築宜</div>
+        <h1>找不到頁面</h1>
+        <p>抱歉，您要找的頁面可能已經移動或不存在。<br>
+        讓我們幫您找到正確的路徑！</p>
+
+        <div class="actions">
+            <a href="/" class="action-btn primary-btn">
+                🏠 返回首頁
+            </a>
+
+            <a href="/web/shared/reviews.html" class="action-btn">
+                📝 客戶評論展示
+            </a>
+
+            <a href="/web/style-dark-blue/index.html" class="action-btn">
+                🎨 深藍主題頁面
+            </a>
+
+            <a href="/web/shared/test-dataapi.html" class="action-btn">
+                🧪 系統測試頁面
+            </a>
+        </div>
+
+        <div class="github-info">
+            <strong>GitHub Pages 提醒：</strong><br>
+            如果您在 GitHub Pages 上看到此頁面，可能是路徑配置問題。<br>
+            請嘗試在 URL 前加上專案名稱，例如：<br>
+            <code>/map_info/web/shared/reviews.html</code>
+        </div>
+
+        <div class="footer">
+            © 2025 築宜系統傢俱 | 品味生活，從此開始
+        </div>
+    </div>
+
+    <script>
+        // 智能路徑檢測與修正
+        function detectAndFixPaths() {
+            const currentPath = window.location.pathname;
+            const hostname = window.location.hostname;
+
+            // GitHub Pages 路徑修正
+            if (hostname.includes('github.io')) {
+                const links = document.querySelectorAll('a[href^="/"]');
+                links.forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (href.startsWith('/') && !href.startsWith('/map_info')) {
+                        // 如果是 GitHub Pages 且路徑不包含專案名稱，添加它
+                        if (currentPath.includes('/map_info/')) {
+                            link.setAttribute('href', '/map_info' + href);
+                        }
+                    }
+                });
+            }
+        }
+
+        // 自動重試邏輯
+        function tryAlternativePaths() {
+            const currentPath = window.location.pathname;
+            const possiblePaths = [
+                '/web/shared/reviews.html',
+                '/shared/reviews.html',
+                '/map_info/web/shared/reviews.html'
+            ];
+
+            // 如果當前路徑看起來像是想要訪問評論頁面，嘗試重定向
+            if (currentPath.includes('review') || currentPath.includes('comment')) {
+                const testPath = possiblePaths[0];
+                const redirectInfo = document.createElement('div');
+                redirectInfo.className = 'github-info';
+                redirectInfo.innerHTML = `
+                    <strong>自動重定向提示：</strong><br>
+                    偵測到您可能想要訪問評論頁面，<a href="${testPath}" style="color: #FFD700;">點此前往</a>
+                `;
+                document.querySelector('.container').appendChild(redirectInfo);
+            }
+        }
+
+        // DOM 載入完成後執行
+        document.addEventListener('DOMContentLoaded', function() {
+            detectAndFixPaths();
+            tryAlternativePaths();
+
+            // 記錄 404 錯誤（用於調試）
+            console.log('404 Error - Path:', window.location.pathname);
+            console.log('404 Error - Referrer:', document.referrer);
+        });
+    </script>
+</body>
+</html>

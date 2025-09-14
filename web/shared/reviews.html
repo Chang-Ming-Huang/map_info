@@ -193,6 +193,10 @@
 
         // 頁面載入完成後執行
         document.addEventListener('DOMContentLoaded', function() {
+            // 初始化 utils.js 中的功能（包含「看全文」事件監聽器）
+            if (typeof initializeApp === 'function') {
+                initializeApp();
+            }
             loadReviews();
         });
     </script>

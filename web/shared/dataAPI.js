@@ -15,8 +15,10 @@ class DataAPI {
         
         // 根據已知的檔案模式生成可能的檔案名稱
         const possibleFiles = [
+            `20250914_115841.json`,
+            `20250914_115151.json`,
             `20250913_020338.json`,
-            `20250913_015556.json`, 
+            `20250913_015556.json`,
             `20250913_012613.json`,
             // 可以添加更多已知的檔案
         ];
@@ -54,7 +56,7 @@ class DataAPI {
                 throw new Error('沒有找到可用的 JSON 檔案');
             }
 
-            // 嘗試載入 JSON 檔案
+            // 嘗試載入 JSON 檔案 - 從 shared/ 到 data/ 的路徑
             const response = await fetch(`../data/${this.latestJsonFile}`);
             
             if (!response.ok) {
@@ -115,10 +117,16 @@ class DataAPI {
         const imageDirectory = review.image_directory || '';
         
         return review.images.map(imageName => {
-            // 從 web/style-*/ 到 root 的路徑是 ../../
-            // 圖片在 images/timestamp/ 目錄下
+            // 從 web/shared/ 到 web/images/ 的路徑（服務器根目錄是 web/）
             if (imageDirectory) {
-                return `../${imageDirectory}/${imageName}`;
+                // 處理 imageDirectory 路徑：移除多餘的 "../web/" 前綴
+                let cleanImageDir = imageDirectory;
+                if (cleanImageDir.startsWith('../web/')) {
+                    cleanImageDir = cleanImageDir.replace('../web/', '');
+                } else if (cleanImageDir.startsWith('web/')) {
+                    cleanImageDir = cleanImageDir.replace('web/', '');
+                }
+                return `../${cleanImageDir}/${imageName}`;
             } else {
                 // 如果沒有明確的目錄，嘗試從時間戳記推斷
                 const timestamp = this.extractTimestamp(this.latestJsonFile || '');
